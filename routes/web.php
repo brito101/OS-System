@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AcademicController;
 use App\Http\Controllers\Admin\ACL\PermissionController;
 use App\Http\Controllers\Admin\ACL\RoleController;
+use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Site\SiteController;
@@ -30,6 +31,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
         Route::get('/users/destroy/{id}', [UserController::class, 'destroy']);
         Route::resource('users', UserController::class);
+
+        /** Activities */
+        Route::get('/activities/destroy/{id}', [ActivityController::class, 'destroy']);
+        Route::resource('activities', ActivityController::class);
 
         /**
          * ACL

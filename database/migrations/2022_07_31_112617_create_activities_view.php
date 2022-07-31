@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersView extends Migration
+class CreateActivitiesView extends Migration
 {
     /**
      * Run the migrations.
@@ -15,12 +15,10 @@ class CreateUsersView extends Migration
     public function up()
     {
         DB::statement("
-        CREATE OR REPLACE VIEW `users_view` AS
-        SELECT u.id, u.name, u.email, mr.role_id, r.name as type
-        FROM users as u
-        LEFT JOIN model_has_roles as mr ON mr.model_id = u.id
-        LEFT JOIN roles as r ON r.id = mr.role_id
-        WHERE u.deleted_at IS NULL
+        CREATE OR REPLACE VIEW `activities_view` AS
+        SELECT a.id, a.name, a.duration
+        FROM activities as a
+        WHERE a.deleted_at IS NULL
         ");
     }
 
@@ -31,6 +29,6 @@ class CreateUsersView extends Migration
      */
     public function down()
     {
-        DB::statement("DROP VIEW users_view");
+        DB::statement("DROP VIEW activities_view");
     }
 }

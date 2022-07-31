@@ -2,10 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVisitorsView extends Migration
+class CreateActivitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +13,13 @@ class CreateVisitorsView extends Migration
      */
     public function up()
     {
-        DB::statement("
-        CREATE OR REPLACE VIEW `visitors_view` AS
-        SELECT v.id, v.url, v.method, v.created_at
-        FROM shetabit_visits as v
-        ");
+        Schema::create('activities', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->time('duration');
+            $table->softDeletes();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -28,6 +29,6 @@ class CreateVisitorsView extends Migration
      */
     public function down()
     {
-        DB::statement("DROP VIEW visitors_view");
+        Schema::dropIfExists('activities');
     }
 }

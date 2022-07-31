@@ -264,6 +264,26 @@ return [
             ],
         ],
         [
+            'text'        => 'Atividades',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-clipboard-list',
+            'can'         => 'Acessar Atividades',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Atividades',
+                    'url'  => 'admin/activities',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Atividades',
+                ],
+                [
+                    'text' => 'Cadastro de Atividades',
+                    'url'  => 'admin/activities/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Atividades',
+                ],
+            ],
+        ],
+        [
             'text'    => 'ACL',
             'icon'    => 'fas fa-fw fa-user-shield',
             'can'     => 'Acessar ACL',
