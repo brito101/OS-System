@@ -264,6 +264,26 @@ return [
             ],
         ],
         [
+            'text'        => 'Filiais',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-building',
+            'can'         => 'Acessar Filiais',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Filiais',
+                    'url'  => 'admin/subsidiaries',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Filiais',
+                ],
+                [
+                    'text' => 'Cadastro de Filial',
+                    'url'  => 'admin/subsidiaries/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Filiais',
+                ],
+            ],
+        ],
+        [
             'text'        => 'Atividades',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-clipboard-list',

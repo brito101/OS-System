@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ACL\PermissionController;
 use App\Http\Controllers\Admin\ACL\RoleController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\SubsidiaryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Site\SiteController;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +36,10 @@ Route::group(['middleware' => ['auth']], function () {
         /** Activities */
         Route::get('/activities/destroy/{id}', [ActivityController::class, 'destroy']);
         Route::resource('activities', ActivityController::class);
+
+        /** Subsidiaries */
+        Route::get('/subsidiaries/destroy/{id}', [SubsidiaryController::class, 'destroy']);
+        Route::resource('subsidiaries', SubsidiaryController::class);
 
         /**
          * ACL

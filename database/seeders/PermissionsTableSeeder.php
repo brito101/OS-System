@@ -131,6 +131,32 @@ class PermissionsTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
+            /** Activities 23 to 27 */
+            [
+                'name' => 'Acessar Filiais',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Listar Filiais',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Criar Filiais',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Editar Filiais',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Excluir Filiais',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
         ]);
     }
 }
