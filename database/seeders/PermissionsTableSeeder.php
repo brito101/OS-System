@@ -131,7 +131,7 @@ class PermissionsTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
-            /** Activities 23 to 27 */
+            /** Activities 23 to 29 */
             [
                 'name' => 'Acessar Filiais',
                 'guard_name' => 'web',
@@ -154,6 +154,16 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Excluir Filiais',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Acessar Colaboradores',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Listar Colaboradores',
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],

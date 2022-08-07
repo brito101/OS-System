@@ -17,4 +17,10 @@ class Subsidiary extends Model
         'email', 'telephone', 'cell', 'zipcode', 'street', 'number', 'complement',
         'neighborhood', 'state', 'city'
     ];
+
+    /** Relationships */
+    public function collaborators()
+    {
+        return $this->hasMany(Collaborator::class);
+    }
 }

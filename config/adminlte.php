@@ -281,6 +281,12 @@ return [
                     'icon' => 'fas fa-fw fa-chevron-right',
                     'can'  => 'Criar Filiais',
                 ],
+                [
+                    'text' => 'Colaboradores',
+                    'url'  => 'admin/subsidiaries/collaborators',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Colaboradores',
+                ],
             ],
         ],
         [
@@ -524,6 +530,22 @@ return [
                     'type' => 'css',
                     'asset' => true,
                     'location' => 'vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css',
+                ],
+            ],
+        ],
+
+        'BootstrapSelect' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/bootstrap-select-1.13.14/dist/css/bootstrap-select.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/bootstrap-select-1.13.14/dist/js/bootstrap-select.min.js',
                 ],
             ],
         ],

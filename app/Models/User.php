@@ -51,4 +51,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /** Relationships */
+    public function collaborators()
+    {
+        return $this->hasMany(Collaborator::class);
+    }
 }

@@ -1,6 +1,7 @@
 @extends('adminlte::page')
 @section('plugins.select2', true)
 @section('plugins.BsCustomFileInput', true)
+@section('plugins.BootstrapSelect', true)
 
 @section('title', '- Edição de Filial')
 
@@ -140,6 +141,32 @@
                                         <label for="state">Estado</label>
                                         <input type="text" class="form-control" id="state" placeholder="UF"
                                             name="state" value="{{ old('state') ?? $subsidiary->state }}" required>
+                                    </div>
+                                </div>
+
+                                @php
+                                    $config = [
+                                        'title' => 'Selecione múltiplos colaboradores...',
+                                        'liveSearch' => true,
+                                        'liveSearchPlaceholder' => 'Pesquisar...',
+                                        'showTick' => true,
+                                        'actionsBox' => true,
+                                    ];
+                                @endphp
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 form-group px-0">
+                                        <x-adminlte-select-bs id="collaborators" name="collaborators[]"
+                                            label="Colaboradores" label-class="text-dark" igroup-size="md"
+                                            :config="$config" multiple class="border">
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}"
+                                                    {{ in_array($user->id, $subsidiary->collaborators->pluck('user_id')->toArray()) ? 'selected' : '' }}>
+                                                    {{ $user->name }}
+                                                    ({{ $user->email }})
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select-bs>
                                     </div>
                                 </div>
                             </div>
