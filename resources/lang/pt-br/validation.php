@@ -223,6 +223,7 @@ return [
         'activities' => 'atividades',
         'photo' => 'foto',
         'duration' => 'duração',
+        'observations' => 'observações',
     ],
 
 ];

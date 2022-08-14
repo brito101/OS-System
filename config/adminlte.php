@@ -290,6 +290,26 @@ return [
             ],
         ],
         [
+            'text'        => 'Clientes',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-user-plus',
+            'can'         => 'Acessar Clientes',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Clientes',
+                    'url'  => 'admin/clients',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Clientes',
+                ],
+                [
+                    'text' => 'Cadastro de Clientes',
+                    'url'  => 'admin/clients/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Clientes',
+                ],
+            ],
+        ],
+        [
             'text'        => 'Atividades',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-clipboard-list',

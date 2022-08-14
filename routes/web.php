@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ACL\PermissionController;
 use App\Http\Controllers\Admin\ACL\RoleController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\SubsidiaryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Site\SiteController;
@@ -42,6 +43,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/subsidiaries/collaborators', [SubsidiaryController::class, 'collaborators'])->name('collaborators.search');
         Route::get('/subsidiaries/destroy/{id}', [SubsidiaryController::class, 'destroy']);
         Route::resource('subsidiaries', SubsidiaryController::class);
+
+        /** Clients */
+        Route::get('/clients/destroy/{id}', [ClientController::class, 'destroy']);
+        Route::resource('clients', ClientController::class);
 
         /**
          * ACL

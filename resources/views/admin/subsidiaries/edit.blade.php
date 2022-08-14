@@ -129,7 +129,7 @@
                                             placeholder="Bairro" name="neighborhood"
                                             value="{{ old('neighborhood') ?? $subsidiary->neighborhood }}" required>
                                     </div>
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
+                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="city">Cidade</label>
                                         <input type="text" class="form-control" id="city" placeholder="Cidade"
                                             name="city" value="{{ old('city') ?? $subsidiary->city }}" required>
