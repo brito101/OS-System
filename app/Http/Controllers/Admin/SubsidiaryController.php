@@ -40,7 +40,7 @@ class SubsidiaryController extends Controller
                 ->make(true);
         }
 
-        return view('admin.subsidiaries.index', compact('subsidiaries'));
+        return view('admin.subsidiaries.index');
     }
 
     /**

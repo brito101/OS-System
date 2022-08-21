@@ -255,6 +255,47 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 34,
                 'role_id' => 2
             ],
+            /** Service Orders 35 to 39 (programmer, administrator ) */
+            [
+                'permission_id' => 35,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 35,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 36,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 36,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 37,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 37,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 38,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 38,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 39,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 39,
+                'role_id' => 2
+            ],
         ]);
     }
 }

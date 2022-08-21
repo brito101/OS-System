@@ -330,6 +330,26 @@ return [
             ],
         ],
         [
+            'text'        => 'Ordens de Serviço',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-list',
+            'can'         => 'Acessar Ordens de Serviço',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de O. S.',
+                    'url'  => 'admin/service-orders',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Ordens de Serviço',
+                ],
+                [
+                    'text' => 'Cadastro de de O. S.',
+                    'url'  => 'admin/service-orders/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Ordens de Serviço',
+                ],
+            ],
+        ],
+        [
             'text'    => 'ACL',
             'icon'    => 'fas fa-fw fa-user-shield',
             'can'     => 'Acessar ACL',

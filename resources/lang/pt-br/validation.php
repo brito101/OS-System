@@ -224,6 +224,13 @@ return [
         'photo' => 'foto',
         'duration' => 'duração',
         'observations' => 'observações',
+        'activity_id' => 'atividade',
+        'client_id' => 'cliente',
+        'collaborator_id' => 'colaborador',
+        'execution_date' => 'data de execução',
+        'priority' => 'prioridade',
+        'deadline' => 'prazo',
+        'appraisal' => 'avaliação',
     ],
 
 ];

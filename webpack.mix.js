@@ -20,6 +20,7 @@ mix.js("resources/js/app.js", "public/js")
     .scripts(["resources/js/address.js"], "public/js/address.js")
     .scripts(["resources/js/phone.js"], "public/js/phone.js")
     .scripts(["resources/js/document-person.js"], "public/js/document-person.js")
+    .scripts(["resources/js/date.js"], "public/js/date.js")
     .options({
         processCssUrls: false,
     })

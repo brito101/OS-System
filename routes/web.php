@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ACL\RoleController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\ServiceOrderController;
 use App\Http\Controllers\Admin\SubsidiaryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Site\SiteController;
@@ -47,6 +48,10 @@ Route::group(['middleware' => ['auth']], function () {
         /** Clients */
         Route::get('/clients/destroy/{id}', [ClientController::class, 'destroy']);
         Route::resource('clients', ClientController::class);
+
+        /** Service Orders */
+        Route::get('/clients/service-orders/{id}', [ServiceOrderController::class, 'destroy']);
+        Route::resource('service-orders', ServiceOrderController::class);
 
         /**
          * ACL

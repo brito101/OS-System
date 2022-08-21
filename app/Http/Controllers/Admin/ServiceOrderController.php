@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ClientRequest;
+use App\Http\Requests\Admin\ServiceOrderRequest;
+use App\Models\Activity;
 use App\Models\Client;
-use App\Models\Views\Client as ViewsClient;
+use App\Models\ServiceOrder;
+use App\Models\User;
+use App\Models\Views\ServiceOrder as ViewsServiceOrder;
 use Illuminate\Http\Request;
-use DataTables;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use DataTables;
 
-class ClientController extends Controller
+class ServiceOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,24 +22,24 @@ class ClientController extends Controller
      */
     public function index(Request $request)
     {
-        if (!Auth::user()->hasPermissionTo('Listar Clientes')) {
+        if (!Auth::user()->hasPermissionTo('Listar Ordens de Serviço')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $clients = ViewsClient::all();
+        $serviceOrders = ViewsServiceOrder::all();
 
         if ($request->ajax()) {
-            return Datatables::of($clients)
+            return Datatables::of($serviceOrders)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="clients/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="clients/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste cliente?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+                    $btn = '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="service-orders/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="service-orders/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão desta ordem de serviço?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
 
-        return view('admin.clients.index');
+        return view('admin.service_order.index');
     }
 
     /**
@@ -47,11 +49,14 @@ class ClientController extends Controller
      */
     public function create()
     {
-        if (!Auth::user()->hasPermissionTo('Criar Clientes')) {
+        if (!Auth::user()->hasPermissionTo('Criar Ordens de Serviço')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.clients.create');
+        $activities = Activity::all();
+        $clients = Client::all();
+        $collaborators = User::role('Colaborador')->get();
+        return view('admin.service_order.create', compact('activities', 'clients', 'collaborators'));
     }
 
     /**
@@ -60,9 +65,9 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ClientRequest $request)
+    public function store(ServiceOrderRequest $request)
     {
-        if (!Auth::user()->hasPermissionTo('Criar Clientes')) {
+        if (!Auth::user()->hasPermissionTo('Criar Ordens de Serviço')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -92,11 +97,11 @@ class ClientController extends Controller
         $observations = $dom->saveHTML();
         $data['observations'] = $observations;
 
-        $client = Client::create($data);
+        $serviceOrder = ServiceOrder::create($data);
 
-        if ($client->save()) {
+        if ($serviceOrder->save()) {
             return redirect()
-                ->route('admin.clients.index')
+                ->route('admin.service-orders.index')
                 ->with('success', 'Cadastro realizado!');
         } else {
             return redirect()
@@ -114,17 +119,21 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
-        if (!Auth::user()->hasPermissionTo('Editar Clientes')) {
+        if (!Auth::user()->hasPermissionTo('Editar Ordens de Serviço')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $client = Client::find($id);
+        $serviceOrder = ServiceOrder::find($id);
 
-        if (!$client) {
+        if (!$serviceOrder) {
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.clients.edit', compact('client'));
+        $activities = Activity::all();
+        $clients = Client::all();
+        $collaborators = User::role('Colaborador')->get();
+
+        return view('admin.service_order.edit', compact('serviceOrder', 'activities', 'clients', 'collaborators'));
     }
 
     /**
@@ -134,15 +143,15 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ClientRequest $request, $id)
+    public function update(ServiceOrderRequest $request, $id)
     {
-        if (!Auth::user()->hasPermissionTo('Editar Clientes')) {
+        if (!Auth::user()->hasPermissionTo('Editar Ordens de Serviço')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $client = Client::find($id);
+        $serviceOrder = ServiceOrder::find($id);
 
-        if (!$client) {
+        if (!$serviceOrder) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -172,9 +181,9 @@ class ClientController extends Controller
         $observations = $dom->saveHTML();
         $data['observations'] = $observations;
 
-        if ($client->update($data)) {
+        if ($serviceOrder->update($data)) {
             return redirect()
-                ->route('admin.clients.index')
+                ->route('admin.service-orders.index')
                 ->with('success', 'Atualização realizada!');
         } else {
             return redirect()
@@ -192,19 +201,19 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        if (!Auth::user()->hasPermissionTo('Excluir Clientes')) {
+        if (!Auth::user()->hasPermissionTo('Excluir Ordens de Serviço')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $client = Client::find($id);
+        $serviceOrder = ServiceOrder::find($id);
 
-        if (!$client) {
+        if (!$serviceOrder) {
             abort(403, 'Acesso não autorizado');
         }
 
-        if ($client->delete()) {
+        if ($serviceOrder->delete()) {
             return redirect()
-                ->route('admin.clients.index')
+                ->route('admin.service-orders.index')
                 ->with('success', 'Exclusão realizada!');
         } else {
             return redirect()

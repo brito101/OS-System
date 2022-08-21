@@ -36,7 +36,7 @@ class ActivityController extends Controller
                 ->make(true);
         }
 
-        return view('admin.activities.index', compact('activities'));
+        return view('admin.activities.index');
     }
 
     /**
