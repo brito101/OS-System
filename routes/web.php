@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth']], function () {
         /** Clients */
         Route::get('/clients/destroy/{id}', [ClientController::class, 'destroy']);
         Route::resource('clients', ClientController::class);
+        Route::post('clients-import', [ClientController::class, 'fileImport'])->name('clients.import');
 
         /** Service Orders */
         Route::get('/clients/service-orders/{id}', [ServiceOrderController::class, 'destroy']);

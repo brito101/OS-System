@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ClientRequest;
+use App\Imports\ClientImport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Client;
 use App\Models\Views\Client as ViewsClient;
 use Illuminate\Http\Request;
@@ -211,5 +213,21 @@ class ClientController extends Controller
                 ->back()
                 ->with('error', 'Erro ao excluir!');
         }
+    }
+
+    public function fileImport(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Criar Clientes')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->file()) {
+            return redirect()
+                ->back()
+                ->with('error', 'Nenhum arquivo selecionado!');
+        }
+
+        Excel::import(new ClientImport, $request->file('file')->store('temp'));
+        return back()->with('success', 'Importação realizada!');
     }
 }

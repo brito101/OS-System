@@ -231,6 +231,9 @@ return [
         'priority' => 'prioridade',
         'deadline' => 'prazo',
         'appraisal' => 'avaliação',
+        'type' => 'tipo',
+        'trade_status' => 'status da negociação',
+        'service' => 'serviço',
     ],
 
 ];

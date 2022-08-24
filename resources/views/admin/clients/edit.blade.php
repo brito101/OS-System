@@ -1,5 +1,6 @@
 @extends('adminlte::page')
 @section('plugins.Summernote', true)
+@section('plugins.select2', true)
 
 @section('title', '- Edição de Cliente')
 
@@ -41,19 +42,40 @@
                             <div class="card-body">
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-8 form-group px-0 pr-md-2">
+                                    <div class="col-12 col-md-4 form-group px-0 pr-md-2">
                                         <label for="name">Nome</label>
                                         <input type="text" class="form-control" id="name"
                                             placeholder="Nome Completo" name="name"
                                             value="{{ old('name') ?? $client->name }}" required>
                                     </div>
-                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2">
+                                    <div class="col-12 col-md-4 form-group px-0 px-md-2">
                                         <label for="document_person">CPF</label>
                                         <input type="text" class="form-control" id="document_person" placeholder="CPF"
                                             name="document_person"
                                             value="{{ old('document_person') ?? $client->document_person }}" required>
                                     </div>
+                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2 mb-0">
+                                        <label for="type">Tipo de Cliente</label>
+                                        <x-adminlte-select2 name="type" required>
+                                            <option
+                                                {{ old('type') == 'Cliente Padrão' ? 'selected' : ($client->type == 'Cliente Padrão' ? 'selected' : '') }}
+                                                value="Cliente Padrão">Cliente Padrão
+                                            </option>
+                                            <option
+                                                {{ old('type') == 'Lead' ? 'selected' : ($client->type == 'Lead' ? 'selected' : '') }}
+                                                value="Lead">Lead
+                                            </option>
+                                        </x-adminlte-select2>
+                                    </div>
+                                </div>
 
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 form-group px-0">
+                                        <label for="trade_status">Status da Negociação</label>
+                                        <input type="text" class="form-control" id="trade_status"
+                                            placeholder="Andamento da negociação" name="trade_status"
+                                            value="{{ old('trade_status') ?? $client->trade_status }}">
+                                    </div>
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
@@ -96,8 +118,9 @@
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="complement">Complemento</label>
-                                        <input type="text" class="form-control" id="complement" placeholder="Complemento"
-                                            name="complement" value="{{ old('complement') ?? $client->complement }}">
+                                        <input type="text" class="form-control" id="complement"
+                                            placeholder="Complemento" name="complement"
+                                            value="{{ old('complement') ?? $client->complement }}">
                                     </div>
                                 </div>
 
@@ -125,8 +148,17 @@
 
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 form-group px-0">
+                                        <label for="service">Serviço</label>
+                                        <textarea name="service" rows="2" class="form-control" id="service"
+                                            placeholder="Tipo de serviço disponibilizado">{{ old('service') ?? $client->service }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 form-group px-0">
                                         <label for="company">Empresa</label>
-                                        <textarea name="company" rows="2" class="form-control" id="company">{{ old('company') ?? $client->company }}</textarea>
+                                        <textarea name="company" rows="2" class="form-control" id="company"
+                                            placeholder="Dados sobre a empresa do cliente caso exista">{{ old('company') ?? $client->company }}</textarea>
                                     </div>
                                 </div>
 
