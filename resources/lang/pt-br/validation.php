@@ -121,7 +121,6 @@ return [
     'uploaded'             => 'Ocorreu uma falha no upload do campo :attribute.',
     'url'                  => 'O campo :attribute tem um formato inválido.',
     'uuid' => 'O campo :attribute deve ser um UUID válido.',
-
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -205,7 +204,7 @@ return [
         'civil_status' => 'estado civil',
         'children' => 'filhos',
         'nationality' => 'nacionalidade',
-        'document_person' => "CPF",
+        'document_person' => "CPF/CNPJ",
         'document_registry' => "RG",
         'issuer' => 'emissor',
         'date_issue' => 'data de emissão',
@@ -232,8 +231,10 @@ return [
         'deadline' => 'prazo',
         'appraisal' => 'avaliação',
         'type' => 'tipo',
-        'trade_status' => 'status da negociação',
+        'trade_status' => 'status',
         'service' => 'serviço',
+        'origin' => 'origem',
+        'apartments' => 'nº de apartamentos',
     ],
 
 ];

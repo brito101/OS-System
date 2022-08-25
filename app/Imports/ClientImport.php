@@ -5,9 +5,9 @@ namespace App\Imports;
 use App\Models\Client;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class ClientImport implements ToModel, WithHeadingRow
+class ClientImport implements ToModel, WithHeadingRow, WithValidation
 {
     /**
      * @param array $row
@@ -17,23 +17,50 @@ class ClientImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return new Client([
-            'name' => Str::limit($row['nome'] ?? 'Não informado', 100),
-            'document_person' => Str::limit($row['cpf'], 20),
-            'email' => Str::limit($row['e_mail'], 100),
-            'telephone' => Str::limit($row['telefone'], 25),
-            'cell' => Str::limit($row['celular'], 25),
-            'zipcode' => Str::limit($row['cep'], 13),
-            'street' => Str::limit($row['rua'], 100),
-            'number' => Str::limit($row['numero'], 100),
-            'complement' => Str::limit($row['complemento'], 100),
-            'neighborhood' => Str::limit($row['bairro'], 100),
-            'city' => Str::limit($row['cidade'], 100),
-            'state' => Str::limit($row['uf'], 2),
-            'company' => Str::limit($row['empresa'], 65000),
-            'observations' => '<p>' . Str::limit($row['observacoes'], 4000000000) . '</p>',
-            'service' => Str::limit($row['servico'], 65000),
-            'trade_status' => Str::limit($row['status_negociacao'], 191),
-            'type' => $row['tipo_cliente'] == 'Lead' ? 'Lead' : 'Cliente Padrão',
+            'name' => $row['nome'],
+            'document_person' => $row["cpf_cnpj"],
+            'email' => $row['email'],
+            'telephone' => $row['telefone'],
+            'cell' => $row['celular'],
+            'zipcode' => $row['cep'],
+            'street' => $row['rua'],
+            'number' => $row['numero'],
+            'complement' => $row['complemento'],
+            'neighborhood' => $row['bairro'],
+            'city' => $row['cidade'],
+            'state' => $row['uf'],
+            'company' => $row['empresa'],
+            'observations' => '<p>' . $row['observacoes'] . '</p>',
+            'service' => $row['servico'],
+            'trade_status' => $row['status'],
+            'type' => $row['tipo'],
+            'origin' => $row['origem'],
+            'apartments' => $row['apartamentos'] ?? 0,
         ]);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'nome' => 'required|min:2|max:100',
+            "cpf_cnpj" => 'required|min:11|max:20',
+            'email' => 'required|min:8|max:100|email',
+            'telefone' => 'required|min:8|max:25',
+            'celular' => 'nullable|max:25',
+            'cep' => 'required|min:8|max:13',
+            'rua' => 'required|min:3|max:100',
+            'numero' => 'required|min:1|max:100',
+            'complemento' => 'nullable|max:100',
+            'bairro' => 'required|max:100',
+            'uf' => 'required|min:2|max:2',
+            'cidade' => 'required|min:2|max:100',
+            'empresa' => 'required|max:65000',
+            'observacoes' => 'nullable|max:4000000000',
+            'servico' => 'nullable|max:65000',
+            'tipo' => 'required|in:Administradora,Construtora,Síndico Profissional,Condomínio Comercial,Condomínio Residencial,Síndico Orgânico,Parceiro,Indicação,Outros',
+            'status' => 'required|in:Lead,Prospect,Cliente',
+            'origem' => 'required|in:Google,oHub,SindicoNet,Cota Síndicos,Feira,Indicação,Outros',
+            'apartamentos' => 'nullable|integer|min:0|max:9999',
+        ];
     }
 }

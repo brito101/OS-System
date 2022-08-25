@@ -40,34 +40,94 @@
                             <div class="card-body">
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-4 form-group px-0 pr-md-2">
+                                    <div class="col-12 col-md-8 form-group px-0 pr-md-2">
                                         <label for="name">Nome</label>
                                         <input type="text" class="form-control" id="name"
                                             placeholder="Nome Completo" name="name" value="{{ old('name') }}" required>
                                     </div>
-                                    <div class="col-12 col-md-4 form-group px-0 px-md-2">
-                                        <label for="document_person">CPF</label>
-                                        <input type="text" class="form-control" id="document_person" placeholder="CPF"
-                                            name="document_person" value="{{ old('document_person') }}" required>
-                                    </div>
-                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2 mb-0">
-                                        <label for="type">Tipo de Cliente</label>
-                                        <x-adminlte-select2 name="type" required>
-                                            <option {{ old('type') == 'Cliente Padrão' ? 'selected' : '' }}
-                                                value="Cliente Padrão">Cliente Padrão
-                                            </option>
-                                            <option {{ old('type') == 'Lead' ? 'selected' : '' }} value="Lead">Lead
-                                            </option>
-                                        </x-adminlte-select2>
+                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2">
+                                        <label for="document_person">CPF/CNPJ</label>
+                                        <input type="text" class="form-control" id="document_person"
+                                            placeholder="CPF ou CNPJ do cliente" name="document_person"
+                                            value="{{ old('document_person') }}" required>
                                     </div>
                                 </div>
 
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 form-group px-0">
-                                        <label for="trade_status">Status da Negociação</label>
-                                        <input type="text" class="form-control" id="trade_status"
-                                            placeholder="Andamento da negociação" name="trade_status"
-                                            value="{{ old('trade_status') }}">
+                                <div class="d-flex flex-wrap justify-content-between mb-0">
+                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2 mb-0">
+                                        <label for="type">Tipo de Cliente</label>
+                                        <x-adminlte-select2 name="type" required>
+                                            <option {{ old('type') == 'Administradora' ? 'selected' : '' }}
+                                                value="Administradora">Administradora
+                                            </option>
+                                            <option {{ old('type') == 'Construtora' ? 'selected' : '' }}
+                                                value="Construtora">Construtora
+                                            </option>
+                                            <option {{ old('type') == 'Síndico Profissional' ? 'selected' : '' }}
+                                                value="Síndico Profissional">Síndico Profissional
+                                            </option>
+                                            <option {{ old('type') == 'Condomínio Comercial' ? 'selected' : '' }}
+                                                value="Condomínio Comercial">Condomínio Comercial
+                                            </option>
+                                            <option {{ old('type') == 'Condomínio Residencial' ? 'selected' : '' }}
+                                                value="Condomínio Residencial">Condomínio Residencial
+                                            </option>
+                                            <option {{ old('type') == 'Síndico Orgânico' ? 'selected' : '' }}
+                                                value="Síndico Orgânico">Síndico Orgânico
+                                            </option>
+                                            <option {{ old('type') == 'Parceiro' ? 'selected' : '' }} value="Parceiro">
+                                                Parceiro
+                                            </option>
+                                            <option {{ old('type') == 'Indicação' ? 'selected' : '' }} value="Indicação">
+                                                Indicação
+                                            </option>
+                                            <option {{ old('type') == 'Outros' ? 'selected' : '' }} value="Outros">Outros
+                                            </option>
+                                        </x-adminlte-select2>
+                                    </div>
+
+                                    <div class="col-12 col-md-4 form-group px-0 px-md-2">
+                                        <label for="trade_status">Status</label>
+                                        <x-adminlte-select2 name="trade_status" required>
+                                            <option {{ old('trade_status') == 'Lead' ? 'selected' : '' }} value="Lead">
+                                                Lead
+                                            </option>
+                                            <option {{ old('trade_status') == 'Prospect' ? 'selected' : '' }}
+                                                value="Prospect">
+                                                Prospect
+                                            </option>
+                                            <option {{ old('trade_status') == 'Cliente' ? 'selected' : '' }}
+                                                value="Cliente">
+                                                Cliente
+                                            </option>
+                                        </x-adminlte-select2>
+                                    </div>
+
+                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2">
+                                        <label for="origin">Origem</label>
+                                        <x-adminlte-select2 name="origin" required>
+                                            <option {{ old('origin') == 'Google' ? 'selected' : '' }} value="Google">
+                                                Google
+                                            </option>
+                                            <option {{ old('origin') == 'oHub' ? 'selected' : '' }} value="oHub">
+                                                oHub
+                                            </option>
+                                            <option {{ old('origin') == 'SindicoNet' ? 'selected' : '' }}
+                                                value="SindicoNet">
+                                                SindicoNet
+                                            </option>
+                                            <option {{ old('origin') == 'Cota Síndicos' ? 'selected' : '' }}
+                                                value="Cota Síndicos">
+                                                Cota Síndicos
+                                            </option>
+                                            <option {{ old('origin') == 'Feira' ? 'selected' : '' }} value="Feira">Feira
+                                            </option>
+                                            <option {{ old('origin') == 'Indicação' ? 'selected' : '' }} value="Indicação">
+                                                Indicação
+                                            </option>
+                                            <option {{ old('origin') == 'Outros' ? 'selected' : '' }} value="Outros">Outros
+                                            </option>
+                                        </x-adminlte-select2>
                                     </div>
                                 </div>
 
@@ -147,10 +207,17 @@
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 form-group px-0">
+                                    <div class="col-12 col-md-8 form-group px-0 pr-md-2">
                                         <label for="company">Empresa</label>
-                                        <textarea name="company" rows="2" class="form-control" id="company"
-                                            placeholder="Dados sobre a empresa do cliente caso exista">{{ old('company') }}</textarea>
+                                        <input type="text" class="form-control" id="company"
+                                            placeholder="Nome da Empresa" name="company" value="{{ old('company') }}"
+                                            required>
+                                    </div>
+
+                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2">
+                                        <label for="apartments">Nº de Apartamentos</label>
+                                        <input type="number" class="form-control" id="apartments" name="apartments"
+                                            min="0" value="{{ old('apartments') }}" required>
                                     </div>
                                 </div>
 
@@ -196,6 +263,5 @@
 @section('custom_js')
     <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('js/address.js') }}"></script>
-    <script src="{{ asset('js/document-person.js') }}"></script>
     <script src="{{ asset('js/phone.js') }}"></script>
 @endsection
