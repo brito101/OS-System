@@ -44,6 +44,8 @@ class ClientRequest extends FormRequest
             'trade_status' => 'required|in:Lead,Prospect,Cliente',
             'origin' => 'required|in:Google,oHub,SindicoNet,Cota Síndicos,Feira,Indicação,Outros',
             'apartments' => 'nullable|integer|min:0|max:9999',
+            'contact' => 'nullable|max:65000',
+            'subsidiary_id' => 'nullable|exists:subsidiaries,id'
         ];
     }
 }

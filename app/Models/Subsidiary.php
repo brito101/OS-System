@@ -23,4 +23,9 @@ class Subsidiary extends Model
     {
         return $this->hasMany(Collaborator::class);
     }
+
+    public function managers()
+    {
+        return $this->hasMany(Manager::class);
+    }
 }

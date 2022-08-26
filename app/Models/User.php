@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Collaborator::class);
     }
+
+    public function managers()
+    {
+        return $this->hasMany(Manager::class);
+    }
 }

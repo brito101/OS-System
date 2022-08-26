@@ -282,6 +282,12 @@ return [
                     'can'  => 'Criar Filiais',
                 ],
                 [
+                    'text' => 'Gerentes',
+                    'url'  => 'admin/subsidiaries/managers',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Gerentes',
+                ],
+                [
                     'text' => 'Colaboradores',
                     'url'  => 'admin/subsidiaries/collaborators',
                     'icon' => 'fas fa-fw fa-chevron-right',

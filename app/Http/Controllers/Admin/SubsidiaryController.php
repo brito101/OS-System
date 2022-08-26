@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SubsidiaryRequest;
 use App\Models\Collaborator;
+use App\Models\Manager;
 use App\Models\Subsidiary;
 use App\Models\User;
 use App\Models\Views\Subsidiary as ViewsSubsidiary;
@@ -54,9 +55,10 @@ class SubsidiaryController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $users = ViewsUser::whereIn('type', ['Colaborador'])->get();
+        $managers = ViewsUser::whereIn('type', ['Gerente'])->get();
+        $collaborators = ViewsUser::whereIn('type', ['Colaborador'])->get();
 
-        return view('admin.subsidiaries.create', compact('users'));
+        return view('admin.subsidiaries.create', compact('managers', 'collaborators'));
     }
 
     /**
@@ -85,9 +87,20 @@ class SubsidiaryController extends Controller
                         'subsidiary_id' => $subsidiary->id
                     ]);
                 }
-            } else {
-                $deleteCollaborators = Collaborator::where('subsidiary_id', $subsidiary->id)->delete();
             }
+
+            $managers = $request->managers;
+            if ($managers && count($managers) > 0) {
+                $users = User::whereIn('id', $managers)->pluck('id');
+                foreach ($users as $user) {
+                    $manager = new Manager();
+                    $manager->create([
+                        'user_id' => $user,
+                        'subsidiary_id' => $subsidiary->id
+                    ]);
+                }
+            }
+
             return redirect()
                 ->route('admin.subsidiaries.index')
                 ->with('success', 'Cadastro realizado!');
@@ -117,9 +130,10 @@ class SubsidiaryController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $users = ViewsUser::whereIn('type', ['Colaborador'])->get();
+        $managers = ViewsUser::whereIn('type', ['Gerente'])->get();
+        $collaborators = ViewsUser::whereIn('type', ['Colaborador'])->get();
 
-        return view('admin.subsidiaries.edit', compact('subsidiary', 'users'));
+        return view('admin.subsidiaries.edit', compact('subsidiary', 'managers', 'collaborators'));
     }
 
     /**
@@ -157,6 +171,22 @@ class SubsidiaryController extends Controller
             $deleteCollaborators = Collaborator::where('subsidiary_id', $subsidiary->id)->delete();
         }
 
+        $managers = $request->managers;
+        if ($managers && count($managers) > 0) {
+            $users = User::whereIn('id', $managers)->pluck('id');
+            $deleteManagers = Manager::whereNotIn('user_id', $users)
+                ->where('subsidiary_id', $subsidiary->id)->delete();
+            foreach ($users as $user) {
+                $manager = new Manager();
+                $manager->firstOrCreate([
+                    'user_id' => $user,
+                    'subsidiary_id' => $subsidiary->id
+                ]);
+            }
+        } else {
+            $deleteManagers = Manager::where('subsidiary_id', $subsidiary->id)->delete();
+        }
+
         if ($subsidiary->update($request->all())) {
             return redirect()
                 ->route('admin.subsidiaries.index')
@@ -189,6 +219,7 @@ class SubsidiaryController extends Controller
 
         if ($subsidiary->delete()) {
             $deleteCollaborators = Collaborator::where('subsidiary_id', $subsidiary->id)->delete();
+            $deleteManagers = Manager::where('subsidiary_id', $subsidiary->id)->delete();
             return redirect()
                 ->route('admin.subsidiaries.index')
                 ->with('success', 'Exclusão realizada!');
@@ -217,5 +248,25 @@ class SubsidiaryController extends Controller
         $collaborators = Collaborator::whereIn('subsidiary_id', $subsidiaries->pluck('id'))->get();
         $users = User::whereIn('id', $collaborators->pluck('user_id'))->paginate();
         return view('admin.subsidiaries.collaborators', compact('users'));
+    }
+
+    public function managers(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Listar Gerentes')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $subsidiaries = DB::table('subsidiaries')->where('deleted_at', null)
+            ->when($request->alias_name, function ($query, $alias_name) {
+                $query->where('alias_name', $alias_name);
+            })
+            ->when($request->city, function ($query, $city) {
+                $query->where('city', $city);
+            })
+            ->get();
+
+        $managers = Manager::whereIn('subsidiary_id', $subsidiaries->pluck('id'))->get();
+        $users = User::whereIn('id', $managers->pluck('user_id'))->paginate();
+        return view('admin.subsidiaries.managers', compact('users'));
     }
 }

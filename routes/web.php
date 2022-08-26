@@ -40,6 +40,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('activities', ActivityController::class);
 
         /** Subsidiaries */
+        Route::get('/subsidiaries/managers', [SubsidiaryController::class, 'managers']);
+        Route::post('/subsidiaries/managers', [SubsidiaryController::class, 'managers'])->name('managers.search');
         Route::get('/subsidiaries/collaborators', [SubsidiaryController::class, 'collaborators']);
         Route::post('/subsidiaries/collaborators', [SubsidiaryController::class, 'collaborators'])->name('collaborators.search');
         Route::get('/subsidiaries/destroy/{id}', [SubsidiaryController::class, 'destroy']);

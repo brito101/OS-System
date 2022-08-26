@@ -146,7 +146,7 @@
 
                                 @php
                                     $config = [
-                                        'title' => 'Selecione múltiplos colaboradores...',
+                                        'title' => 'Selecione múltiplos...',
                                         'liveSearch' => true,
                                         'liveSearchPlaceholder' => 'Pesquisar...',
                                         'showTick' => true,
@@ -156,14 +156,30 @@
 
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 form-group px-0">
+                                        <x-adminlte-select-bs id="managers" name="managers[]" label="Gerentes"
+                                            label-class="text-dark" igroup-size="md" :config="$config" multiple
+                                            class="border">
+                                            @foreach ($managers as $manager)
+                                                <option value="{{ $manager->id }}"
+                                                    {{ in_array($manager->id, $subsidiary->managers->pluck('user_id')->toArray()) ? 'selected' : '' }}>
+                                                    {{ $manager->name }}
+                                                    ({{ $manager->email }})
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select-bs>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 form-group px-0">
                                         <x-adminlte-select-bs id="collaborators" name="collaborators[]"
                                             label="Colaboradores" label-class="text-dark" igroup-size="md"
                                             :config="$config" multiple class="border">
-                                            @foreach ($users as $user)
-                                                <option value="{{ $user->id }}"
-                                                    {{ in_array($user->id, $subsidiary->collaborators->pluck('user_id')->toArray()) ? 'selected' : '' }}>
-                                                    {{ $user->name }}
-                                                    ({{ $user->email }})
+                                            @foreach ($collaborators as $collaborator)
+                                                <option value="{{ $collaborator->id }}"
+                                                    {{ in_array($collaborator->id, $subsidiary->collaborators->pluck('user_id')->toArray()) ? 'selected' : '' }}>
+                                                    {{ $collaborator->name }}
+                                                    ({{ $collaborator->email }})
                                                 </option>
                                             @endforeach
                                         </x-adminlte-select-bs>

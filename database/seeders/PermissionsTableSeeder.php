@@ -90,6 +90,7 @@ class PermissionsTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
+            /** 15 (edit own profile) */
             [
                 'name' => 'Editar Usuário',
                 'guard_name' => 'web',
@@ -216,6 +217,12 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Excluir Ordens de Serviço',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            /** List Managers 40  */
+            [
+                'name' => 'Listar Gerentes',
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],

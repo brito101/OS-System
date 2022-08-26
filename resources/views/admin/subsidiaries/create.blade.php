@@ -140,7 +140,7 @@
 
                                 @php
                                     $config = [
-                                        'title' => 'Selecione múltiplos colaboradores...',
+                                        'title' => 'Selecione múltiplos...',
                                         'liveSearch' => true,
                                         'liveSearchPlaceholder' => 'Pesquisar...',
                                         'showTick' => true,
@@ -150,13 +150,28 @@
 
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 form-group px-0">
+                                        <x-adminlte-select-bs id="managers" name="managers[]" label="Gerentes"
+                                            label-class="text-dark" igroup-size="md" :config="$config" multiple
+                                            class="border">
+                                            @foreach ($managers as $manager)
+                                                <option value="{{ $manager->id }}">
+                                                    {{ $manager->name }}
+                                                    ({{ $manager->email }})
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select-bs>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 form-group px-0">
                                         <x-adminlte-select-bs id="collaborators" name="collaborators[]"
                                             label="Colaboradores" label-class="text-dark" igroup-size="md"
                                             :config="$config" multiple class="border">
-                                            @foreach ($users as $user)
-                                                <option value="{{ $user->id }}">
-                                                    {{ $user->name }}
-                                                    ({{ $user->email }})
+                                            @foreach ($collaborators as $collaborator)
+                                                <option value="{{ $collaborator->id }}">
+                                                    {{ $collaborator->name }}
+                                                    ({{ $collaborator->email }})
                                                 </option>
                                             @endforeach
                                         </x-adminlte-select-bs>

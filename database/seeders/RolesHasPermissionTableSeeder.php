@@ -67,7 +67,7 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 2
             ],
 
-            /** Users  de 12 to 17 (programmer and administrator) */
+            /** Users  de 12 to 17 (programmer, administrator, manager) */
             [
                 'permission_id' => 12,
                 'role_id' => 1
@@ -92,6 +92,7 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 14,
                 'role_id' => 2
             ],
+            /** Profile */
             [
                 'permission_id' => 15,
                 'role_id' => 1
@@ -100,6 +101,15 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 15,
                 'role_id' => 2
             ],
+            [
+                'permission_id' => 15,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 15,
+                'role_id' => 4
+            ],
+            /** */
             [
                 'permission_id' => 16,
                 'role_id' => 1
@@ -116,7 +126,7 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 17,
                 'role_id' => 2
             ],
-            /** Activities 18 to 23 (programmer, administrator ) */
+            /** Activities 18 to 23 (programmer and administrator ) */
             [
                 'permission_id' => 18,
                 'role_id' => 1
@@ -214,7 +224,7 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 29,
                 'role_id' => 2
             ],
-            /** Clients 30 to 34 (programmer, administrator ) */
+            /** Clients 30 to 34 (programmer, administrator and managers ) */
             [
                 'permission_id' => 30,
                 'role_id' => 1
@@ -222,6 +232,10 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 30,
                 'role_id' => 2
+            ],
+            [
+                'permission_id' => 30,
+                'role_id' => 3
             ],
             [
                 'permission_id' => 31,
@@ -232,12 +246,20 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 2
             ],
             [
+                'permission_id' => 31,
+                'role_id' => 3
+            ],
+            [
                 'permission_id' => 32,
                 'role_id' => 1
             ],
             [
                 'permission_id' => 32,
                 'role_id' => 2
+            ],
+            [
+                'permission_id' => 32,
+                'role_id' => 3
             ],
             [
                 'permission_id' => 33,
@@ -248,12 +270,20 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 2
             ],
             [
+                'permission_id' => 33,
+                'role_id' => 3
+            ],
+            [
                 'permission_id' => 34,
                 'role_id' => 1
             ],
             [
                 'permission_id' => 34,
                 'role_id' => 2
+            ],
+            [
+                'permission_id' => 34,
+                'role_id' => 3
             ],
             /** Service Orders 35 to 39 (programmer, administrator ) */
             [
@@ -295,6 +325,11 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 39,
                 'role_id' => 2
+            ],
+            /** List Managers 40 (programmer, administrator ) */
+            [
+                'permission_id' => 40,
+                'role_id' => 3
             ],
         ]);
     }

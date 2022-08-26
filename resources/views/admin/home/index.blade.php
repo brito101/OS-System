@@ -54,8 +54,7 @@
                                         <span>Acessos Diários</span>
                                     </p>
                                     <p class="ml-auto d-flex flex-column text-right">
-                                        <span id="percentclass"
-                                            class="{{ $percent > 0 ? 'text-success' : 'text-danger' }}">
+                                        <span id="percentclass" class="{{ $percent > 0 ? 'text-success' : 'text-danger' }}">
                                             <i id="percenticon"
                                                 class="fas {{ $percent > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }}  mr-1"></i><span
                                                 id="percentvalue">{{ $percent }}</span>%

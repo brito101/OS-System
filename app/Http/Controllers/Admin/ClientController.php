@@ -7,6 +7,8 @@ use App\Http\Requests\Admin\ClientRequest;
 use App\Imports\ClientImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Client;
+use App\Models\Manager;
+use App\Models\Subsidiary;
 use App\Models\Views\Client as ViewsClient;
 use Illuminate\Http\Request;
 use DataTables;
@@ -26,7 +28,12 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $clients = ViewsClient::all();
+        if (Auth::user()->hasRole('Gerente')) {
+            $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+            $clients = ViewsClient::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+        } else {
+            $clients = ViewsClient::all();
+        }
 
         if ($request->ajax()) {
             return Datatables::of($clients)
@@ -53,7 +60,14 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.clients.create');
+        if (Auth::user()->hasRole('Gerente')) {
+            $managers = Auth::user()->managers->pluck('subsidiary_id');
+            $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+        } else {
+            $subsidiaries = Subsidiary::all();
+        }
+
+        return view('admin.clients.create', compact('subsidiaries'));
     }
 
     /**
@@ -69,6 +83,14 @@ class ClientController extends Controller
         }
 
         $data = $request->all();
+
+        if (Auth::user()->hasRole('Gerente')) {
+            $managers = Auth::user()->managers->pluck('subsidiary_id');
+            $subsidiary = Subsidiary::whereIn('id', $managers)->where('id', $data['subsidiary_id'])->first();
+            if (!$subsidiary) {
+                abort(403, 'Acesso não autorizado');
+            }
+        }
 
         $observations = $request->observations;
         $dom = new \DOMDocument();
@@ -120,13 +142,24 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $client = Client::find($id);
+        if (Auth::user()->hasRole('Gerente')) {
+            $managers = Auth::user()->managers->pluck('subsidiary_id');
+            $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+            $client = Client::where(function ($query) {
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $query->whereIn('subsidiary_id', $managers)
+                    ->orWhere('subsidiary_id', null);
+            })->where('id', $id)->first();
+        } else {
+            $subsidiaries = Subsidiary::all();
+            $client = Client::find($id);
+        }
 
         if (!$client) {
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.clients.edit', compact('client'));
+        return view('admin.clients.edit', compact('client', 'subsidiaries'));
     }
 
     /**
@@ -142,13 +175,29 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $client = Client::find($id);
+        if (Auth::user()->hasRole('Gerente')) {
+            $client = Client::where(function ($query) {
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $query->whereIn('subsidiary_id', $managers)
+                    ->orWhere('subsidiary_id', null);
+            })->where('id', $id)->first();
+        } else {
+            $client = Client::find($id);
+        }
 
         if (!$client) {
             abort(403, 'Acesso não autorizado');
         }
 
         $data = $request->all();
+
+        if (Auth::user()->hasRole('Gerente')) {
+            $managers = Auth::user()->managers->pluck('subsidiary_id');
+            $subsidiary = Subsidiary::whereIn('id', $managers)->where('id', $data['subsidiary_id'])->first();
+            if (!$subsidiary) {
+                abort(403, 'Acesso não autorizado');
+            }
+        }
 
         $observations = $request->observations;
         $dom = new \DOMDocument();
@@ -198,7 +247,15 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $client = Client::find($id);
+        if (Auth::user()->hasRole('Gerente')) {
+            $client = Client::where(function ($query) {
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $query->whereIn('subsidiary_id', $managers)
+                    ->orWhere('subsidiary_id', null);
+            })->where('id', $id)->first();
+        } else {
+            $client = Client::find($id);
+        }
 
         if (!$client) {
             abort(403, 'Acesso não autorizado');

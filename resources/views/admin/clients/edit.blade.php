@@ -102,7 +102,7 @@
                                         </x-adminlte-select2>
                                     </div>
 
-                                    <div class="col-12 col-md-4 form-group px-0 px-md-2">
+                                    <div class="col-12 col-md-4 form-group px-0 px-md-2 mb-0">
                                         <label for="trade_status">Status</label>
                                         <x-adminlte-select2 name="trade_status" required>
                                             <option
@@ -122,7 +122,7 @@
                                         </x-adminlte-select2>
                                     </div>
 
-                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2">
+                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2 mb-0">
                                         <label for="origin">Origem</label>
                                         <x-adminlte-select2 name="origin" required>
                                             <option
@@ -159,6 +159,14 @@
                                                 value="Outros">Outros
                                             </option>
                                         </x-adminlte-select2>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 form-group px-0 ">
+                                        <label for="contact">Dados do Contato</label>
+                                        <textarea type="text" class="form-control" id="contact" placeholder="Nome de um ou mais contatos" name="contact"
+                                            rows="1">{{ old('contact') ?? $client->contact }}</textarea>
                                     </div>
                                 </div>
 
@@ -228,6 +236,19 @@
                                         <input type="text" class="form-control" id="state" placeholder="UF"
                                             name="state" value="{{ old('state') ?? $client->state }}" required>
                                     </div>
+
+                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
+                                        <label for="subsidiary_id">Filial</label>
+                                        <x-adminlte-select2 name="subsidiary_id" required>
+                                            @foreach ($subsidiaries as $subsidiary)
+                                                <option
+                                                    {{ old('subsidiary_id') == $subsidiary->id ? 'selected' : ($client->subsidiary_id == $subsidiary->id ? 'selected' : '') }}
+                                                    value="{{ $subsidiary->id }}">{{ $subsidiary->alias_name }}
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select2>
+                                    </div>
+
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">

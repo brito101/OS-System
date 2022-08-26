@@ -235,6 +235,7 @@ return [
         'service' => 'serviço',
         'origin' => 'origem',
         'apartments' => 'nº de apartamentos',
+        'contact' => 'contato'
     ],
 
 ];
