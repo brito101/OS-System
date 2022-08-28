@@ -42,6 +42,7 @@
                         @php
                             $heads = [['label' => 'ID', 'width' => 10], 'Nome', 'Duração', ['label' => 'Ações', 'no-export' => true, 'width' => 10]];
                             $config = [
+                                'order' => [[1, 'asc']],
                                 'ajax' => url('/admin/activities'),
                                 'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'duration', 'name' => 'duration'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],

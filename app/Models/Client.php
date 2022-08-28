@@ -17,4 +17,10 @@ class Client extends Model
         'email', 'telephone', 'cell', 'zipcode', 'street', 'number', 'complement',
         'neighborhood', 'state', 'city', 'company', 'observations', 'service', 'trade_status', 'type', 'origin', 'apartments', 'contact', 'subsidiary_id'
     ];
+
+    /** Relationships */
+    public function subsidiary()
+    {
+        return $this->belongsTo(Subsidiary::class);
+    }
 }

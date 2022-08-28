@@ -29,4 +29,31 @@ class ServiceOrder extends Model
         'appraisal',
         'observations'
     ];
+
+    /** Accessor */
+    public function getExecutionDateAttribute($value)
+    {
+        return date("d/m/Y", strtotime($value));
+    }
+
+    public function getDeadlineAttribute($value)
+    {
+        return date("d/m/Y", strtotime($value));
+    }
+
+    /** Relationships */
+    public function activity()
+    {
+        return $this->belongsTo(Activity::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

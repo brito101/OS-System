@@ -39,7 +39,7 @@ class ClientController extends Controller
             return Datatables::of($clients)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="clients/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="clients/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste cliente?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+                    $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="clients/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="clients/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="clients/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste cliente?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -128,6 +128,29 @@ class ClientController extends Controller
                 ->withInput()
                 ->with('error', 'Erro ao cadastrar!');
         }
+    }
+
+    public function show($id)
+    {
+        if (!Auth::user()->hasPermissionTo('Acessar Clientes')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (Auth::user()->hasRole('Gerente')) {
+            $client = Client::where(function ($query) {
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $query->whereIn('subsidiary_id', $managers)
+                    ->orWhere('subsidiary_id', null);
+            })->where('id', $id)->first();
+        } else {
+            $client = Client::find($id);
+        }
+
+        if (!$client) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        return view('admin.clients.show', compact('client'));
     }
 
     /**
@@ -270,6 +293,29 @@ class ClientController extends Controller
                 ->back()
                 ->with('error', 'Erro ao excluir!');
         }
+    }
+
+    public function pdf($id)
+    {
+        if (!Auth::user()->hasPermissionTo('Acessar Clientes')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (Auth::user()->hasRole('Gerente')) {
+            $client = Client::where(function ($query) {
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $query->whereIn('subsidiary_id', $managers)
+                    ->orWhere('subsidiary_id', null);
+            })->where('id', $id)->first();
+        } else {
+            $client = Client::find($id);
+        }
+
+        if (!$client) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        return view('admin.clients.pdf', compact('client'));
     }
 
     public function fileImport(Request $request)

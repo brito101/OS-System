@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ServiceOrderRequest;
-use App\Models\Activity;
-use App\Models\Client;
-use App\Models\ServiceOrder;
-use App\Models\User;
-use App\Models\Views\ServiceOrder as ViewsServiceOrder;
+use App\Http\Requests\Admin\ProviderRequest;
+use App\Imports\ProviderImport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Provider;
+use App\Models\Views\Provider as ViewsProvider;
 use Illuminate\Http\Request;
+use DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use DataTables;
 
-class ServiceOrderController extends Controller
+class ProviderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,24 +22,38 @@ class ServiceOrderController extends Controller
      */
     public function index(Request $request)
     {
-        if (!Auth::user()->hasPermissionTo('Listar Ordens de Serviço')) {
+        if (!Auth::user()->hasPermissionTo('Listar Fornecedores')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrders = ViewsServiceOrder::all();
+        $providers = ViewsProvider::all();
 
-        if ($request->ajax()) {
-            return Datatables::of($serviceOrders)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="service-orders/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="service-orders/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="service-orders/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão desta ordem de serviço?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+        if (Auth::user()->hasRole(['Gerente'])) {
+            if ($request->ajax()) {
+                return Datatables::of($providers)
+                    ->addIndexColumn()
+                    ->orderColumn('alias_name')
+                    ->addColumn('action', function ($row) {
+                        $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="providers/' . $row->id . '/show"><i class="fa fa-lg fa-fw fa-eye"></i></a>';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            }
+        } else {
+            if ($request->ajax()) {
+                return Datatables::of($providers)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="providers/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="providers/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="providers/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste fornecedor?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            }
         }
 
-        return view('admin.service_order.index');
+        return view('admin.providers.index');
     }
 
     /**
@@ -50,14 +63,11 @@ class ServiceOrderController extends Controller
      */
     public function create()
     {
-        if (!Auth::user()->hasPermissionTo('Criar Ordens de Serviço')) {
+        if (!Auth::user()->hasPermissionTo('Criar Clientes')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $activities = Activity::orderBy('name')->get();
-        $clients = Client::orderBy('name')->get();
-        $participants = User::role(['Gerente', 'Colaborador'])->orderBy('name')->get();
-        return view('admin.service_order.create', compact('activities', 'clients', 'participants'));
+        return view('admin.providers.create');
     }
 
     /**
@@ -66,9 +76,9 @@ class ServiceOrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ServiceOrderRequest $request)
+    public function store(ProviderRequest $request)
     {
-        if (!Auth::user()->hasPermissionTo('Criar Ordens de Serviço')) {
+        if (!Auth::user()->hasPermissionTo('Criar Fornecedores')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -98,11 +108,11 @@ class ServiceOrderController extends Controller
         $observations = $dom->saveHTML();
         $data['observations'] = $observations;
 
-        $serviceOrder = ServiceOrder::create($data);
+        $provider = Provider::create($data);
 
-        if ($serviceOrder->save()) {
+        if ($provider->save()) {
             return redirect()
-                ->route('admin.service-orders.index')
+                ->route('admin.providers.index')
                 ->with('success', 'Cadastro realizado!');
         } else {
             return redirect()
@@ -112,19 +122,25 @@ class ServiceOrderController extends Controller
         }
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-        if (!Auth::user()->hasPermissionTo('Acessar Ordens de Serviço')) {
+        if (!Auth::user()->hasPermissionTo('Acessar Fornecedores')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrder = ServiceOrder::find($id);
+        $provider = Provider::find($id);
 
-        if (!$serviceOrder) {
+        if (!$provider) {
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.service_order.show', compact('serviceOrder'));
+        return view('admin.providers.show', compact('provider'));
     }
 
     /**
@@ -135,21 +151,17 @@ class ServiceOrderController extends Controller
      */
     public function edit($id)
     {
-        if (!Auth::user()->hasPermissionTo('Editar Ordens de Serviço')) {
+        if (!Auth::user()->hasPermissionTo('Editar Fornecedores')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrder = ServiceOrder::find($id);
+        $provider = Provider::find($id);
 
-        if (!$serviceOrder) {
+        if (!$provider) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $activities = Activity::orderBy('name')->get();
-        $clients = Client::orderBy('name')->get();
-        $participants = User::role(['Gerente', 'Colaborador'])->orderBy('name')->get();
-
-        return view('admin.service_order.edit', compact('serviceOrder', 'activities', 'clients', 'participants'));
+        return view('admin.providers.edit', compact('provider'));
     }
 
     /**
@@ -159,15 +171,15 @@ class ServiceOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ServiceOrderRequest $request, $id)
+    public function update(ProviderRequest $request, $id)
     {
-        if (!Auth::user()->hasPermissionTo('Editar Ordens de Serviço')) {
+        if (!Auth::user()->hasPermissionTo('Editar Fornecedores')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrder = ServiceOrder::find($id);
+        $provider = Provider::find($id);
 
-        if (!$serviceOrder) {
+        if (!$provider) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -197,9 +209,9 @@ class ServiceOrderController extends Controller
         $observations = $dom->saveHTML();
         $data['observations'] = $observations;
 
-        if ($serviceOrder->update($data)) {
+        if ($provider->update($data)) {
             return redirect()
-                ->route('admin.service-orders.index')
+                ->route('admin.providers.index')
                 ->with('success', 'Atualização realizada!');
         } else {
             return redirect()
@@ -217,19 +229,19 @@ class ServiceOrderController extends Controller
      */
     public function destroy($id)
     {
-        if (!Auth::user()->hasPermissionTo('Excluir Ordens de Serviço')) {
+        if (!Auth::user()->hasPermissionTo('Excluir Fornecedores')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrder = ServiceOrder::find($id);
+        $provider = Provider::find($id);
 
-        if (!$serviceOrder) {
+        if (!$provider) {
             abort(403, 'Acesso não autorizado');
         }
 
-        if ($serviceOrder->delete()) {
+        if ($provider->delete()) {
             return redirect()
-                ->route('admin.service-orders.index')
+                ->route('admin.providers.index')
                 ->with('success', 'Exclusão realizada!');
         } else {
             return redirect()
@@ -240,16 +252,32 @@ class ServiceOrderController extends Controller
 
     public function pdf($id)
     {
-        if (!Auth::user()->hasPermissionTo('Acessar Ordens de Serviço')) {
+        if (!Auth::user()->hasPermissionTo('Acessar Fornecedores')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrder = ServiceOrder::find($id);
+        $provider = Provider::find($id);
 
-        if (!$serviceOrder) {
+        if (!$provider) {
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.service_order.pdf', compact('serviceOrder'));
+        return view('admin.providers.pdf', compact('provider'));
+    }
+
+    public function fileImport(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Criar Fornecedores')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->file()) {
+            return redirect()
+                ->back()
+                ->with('error', 'Nenhum arquivo selecionado!');
+        }
+
+        Excel::import(new ProviderImport, $request->file('file')->store('temp'));
+        return back()->with('success', 'Importação realizada!');
     }
 }

@@ -134,13 +134,14 @@
 
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2 mb-0">
-                                        <label for="user_id">Colaborador</label>
+                                        <label for="user_id">Participante</label>
                                         <x-adminlte-select2 name="user_id" required>
                                             <option disabled selected value="">Selecione</option>
-                                            @foreach ($collaborators as $collaborator)
+                                            @foreach ($participants as $participant)
                                                 <option
-                                                    {{ old('user_id') == $collaborator->id ? 'selected' : ($serviceOrder->user_id == $collaborator->id ? 'selected' : '') }}
-                                                    value="{{ $collaborator->id }}">{{ $collaborator->name }}
+                                                    {{ old('user_id') == $participant->id ? 'selected' : ($serviceOrder->user_id == $participant->id ? 'selected' : '') }}
+                                                    value="{{ $participant->id }}">{{ $participant->name }}
+                                                    ({{ $participant->roles->first()->name }})
                                                 </option>
                                             @endforeach
                                         </x-adminlte-select2>
@@ -255,4 +256,5 @@
 @section('custom_js')
     <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('js/date.js') }}"></script>
+    <script src="{{ asset('js/address.js') }}"></script>
 @endsection

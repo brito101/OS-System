@@ -23,16 +23,18 @@
         </div>
     </section>
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 d-flex justify-content-end pb-4">
-                    <a class="btn btn-secondary" href="{{ Storage::url('worksheets/clients.xlsx') }}" download>Download
-                        Planilha</a>
+    @can('Criar Clientes')
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-end pb-4">
+                        <a class="btn btn-secondary" href="{{ Storage::url('worksheets/clients.xlsx') }}" download>Download
+                            Planilha</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    @endcan
 
     <section class="content">
         <div class="container-fluid">
@@ -41,21 +43,23 @@
 
                     @include('components.alert')
 
-                    <div class="card card-solid">
-                        <div class="card-header">
-                            <i class="fas fa-fw fa-upload"></i> Importação de planilha para cadastro de clientes
+                    @can('Criar Clientes')
+                        <div class="card card-solid">
+                            <div class="card-header">
+                                <i class="fas fa-fw fa-upload"></i> Importação de planilha para cadastro de clientes
+                            </div>
+                            <form action="{{ route('admin.clients.import') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="card-body pb-0">
+                                    <x-adminlte-input-file name="file" label="Arquivo" placeholder="Selecione o arquivo..."
+                                        legend="Selecionar" />
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn btn-primary">Importar</button>
+                                </div>
+                            </form>
                         </div>
-                        <form action="{{ route('admin.clients.import') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="card-body pb-0">
-                                <x-adminlte-input-file name="file" label="Arquivo" placeholder="Selecione o arquivo..."
-                                    legend="Selecionar" />
-                            </div>
-                            <div class="card-footer">
-                                <button class="btn btn-primary">Importar</button>
-                            </div>
-                        </form>
-                    </div>
+                    @endcan
 
                     <div class="card">
                         <div class="card-header">
@@ -69,8 +73,9 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 10], 'Nome', 'E-mail', 'Telefone', 'Tipo', 'Filial', ['label' => 'Ações', 'no-export' => true, 'width' => 10]];
+                            $heads = [['label' => 'ID', 'width' => 10], 'Nome', 'E-mail', 'Telefone', 'Tipo', 'Filial', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
                             $config = [
+                                'order' => [[1, 'asc']],
                                 'ajax' => url('/admin/clients'),
                                 'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'email', 'name' => 'email'], ['data' => 'telephone', 'name' => 'telephone'], ['data' => 'type', 'name' => 'type'], ['data' => 'alias_name', 'name' => 'alias_name'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],

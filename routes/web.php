@@ -1,28 +1,25 @@
 <?php
 
-use App\Http\Controllers\Admin\AcademicController;
-use App\Http\Controllers\Admin\ACL\PermissionController;
-use App\Http\Controllers\Admin\ACL\RoleController;
-use App\Http\Controllers\Admin\ActivityController;
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\ClientController;
-use App\Http\Controllers\Admin\ServiceOrderController;
-use App\Http\Controllers\Admin\SubsidiaryController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Site\SiteController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\{
+    AcademicController,
+    ActivityController,
+    AdminController,
+    ClientController,
+    ProviderController,
+    ServiceOrderController,
+    SubsidiaryController,
+    UserController,
+    SiteController,
+};
+use App\Http\Controllers\Admin\ACL\{
+    PermissionController,
+    RoleController,
+};
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Support\Facades\{
+    Auth,
+    Route
+};
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('admin', [AdminController::class, 'index'])->name('admin.home');
@@ -50,11 +47,19 @@ Route::group(['middleware' => ['auth']], function () {
         /** Clients */
         Route::get('/clients/destroy/{id}', [ClientController::class, 'destroy']);
         Route::resource('clients', ClientController::class);
+        Route::get('clients-pdf/{id}', [ClientController::class, 'pdf'])->name('clients.pdf');
         Route::post('clients-import', [ClientController::class, 'fileImport'])->name('clients.import');
+
+        /** Providers */
+        Route::get('/providers/destroy/{id}', [ProviderController::class, 'destroy']);
+        Route::resource('providers', ProviderController::class);
+        Route::get('providers-pdf/{id}', [ProviderController::class, 'pdf'])->name('providers.pdf');
+        Route::post('providers-import', [ProviderController::class, 'fileImport'])->name('providers.import');
 
         /** Service Orders */
         Route::get('/clients/service-orders/{id}', [ServiceOrderController::class, 'destroy']);
         Route::resource('service-orders', ServiceOrderController::class);
+        Route::get('service-orders-pdf/{id}', [ServiceOrderController::class, 'pdf'])->name('service-orders.pdf');
 
         /**
          * ACL

@@ -316,6 +316,26 @@ return [
             ],
         ],
         [
+            'text'        => 'Fornecedores',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-truck',
+            'can'         => 'Acessar Fornecedores',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Fornecedores',
+                    'url'  => 'admin/providers',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Fornecedores',
+                ],
+                [
+                    'text' => 'Cadastro de Fornecedor',
+                    'url'  => 'admin/providers/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Fornecedores',
+                ],
+            ],
+        ],
+        [
             'text'        => 'Atividades',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-clipboard-list',

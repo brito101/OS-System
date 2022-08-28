@@ -33,8 +33,8 @@
                             <div class="d-flex flex-wrap justify-content-between col-12 align-content-center">
                                 <h3 class="card-title align-self-center">Usuários Cadastrados</h3>
                                 @can('Criar Usuários')
-                                    <a href="{{ route('admin.users.create') }}" title="Novo Usuário"
-                                        class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Novo Usuário</a>
+                                    <a href="{{ route('admin.users.create') }}" title="Novo Usuário" class="btn btn-success"><i
+                                            class="fas fa-fw fa-plus"></i>Novo Usuário</a>
                                 @endcan
                             </div>
                         </div>
@@ -42,6 +42,7 @@
                         @php
                             $heads = [['label' => 'ID', 'width' => 10], 'Nome', 'E-mail', 'Tipo', ['label' => 'Ações', 'no-export' => true, 'width' => 10]];
                             $config = [
+                                'order' => [[1, 'asc']],
                                 'ajax' => url('/admin/users'),
                                 'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'email', 'name' => 'email'], ['data' => 'type', 'name' => 'type'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],

@@ -235,7 +235,15 @@ return [
         'service' => 'serviço',
         'origin' => 'origem',
         'apartments' => 'nº de apartamentos',
-        'contact' => 'contato'
+        'contact' => 'contato',
+        'function' => 'função',
+        'average_delivery_time' => 'tempo médio de entrega',
+        'payment_conditions' => 'condições de pagamento',
+        'discounts' => 'condições de desconto',
+        'products_offered' => 'produtos ou serviços oferecidos',
+        'promotion_funds' => 'fundo de promoções',
+        'technical_assistance' => 'assistência técninca',
+        'total_purchases_previous_year' => 'total comprado no ano anterior',
     ],
 
 ];

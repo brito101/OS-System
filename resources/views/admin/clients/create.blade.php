@@ -54,7 +54,7 @@
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between mb-0">
-                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2 mb-0">
+                                    <div class="col-12 col-md-4 form-group px-0 pr-md-2 mb-0">
                                         <label for="type">Tipo de Cliente</label>
                                         <x-adminlte-select2 name="type" required>
                                             <option {{ old('type') == 'Administradora' ? 'selected' : '' }}
@@ -132,7 +132,7 @@
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 form-group px-0 ">
+                                    <div class="col-12 form-group px-0">
                                         <label for="contact">Dados do Contato</label>
                                         <textarea type="text" class="form-control" id="contact" placeholder="Nome de um ou mais contatos" name="contact"
                                             rows="1">{{ old('contact') }}</textarea>
