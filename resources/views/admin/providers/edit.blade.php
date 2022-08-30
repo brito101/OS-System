@@ -60,7 +60,7 @@
                                         <label for="document_company">CNPJ</label>
                                         <input type="text" class="form-control" id="document_company"
                                             placeholder="CNPJ do fornecedor" name="document_company"
-                                            value="{{ old('document_company') ?? $provider->document_company }}" required>
+                                            value="{{ old('document_company') ?? $provider->document_company }}">
                                     </div>
 
                                     <div class="col-12 col-md-4 form-group px-0 px-md-2">
@@ -74,7 +74,7 @@
                                         <label for="activity">Ramo de Atividade</label>
                                         <input type="text" class="form-control" id="activity"
                                             placeholder="Atividade do fornecedor" name="activity"
-                                            value="{{ old('activity') ?? $provider->activity }}" required>
+                                            value="{{ old('activity') ?? $provider->activity }}">
                                     </div>
                                 </div>
 
@@ -83,14 +83,14 @@
                                         <label for="contact">Pessoa de Contato</label>
                                         <input type="text" class="form-control" id="contact"
                                             placeholder="Nome do contato do fornecedor" name="contact"
-                                            value="{{ old('contact') ?? $provider->contact }}" required>
+                                            value="{{ old('contact') ?? $provider->contact }}">
                                     </div>
 
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="function">Função</label>
                                         <input type="text" class="form-control" id="function"
                                             placeholder="Função/Cargo do contato" name="function"
-                                            value="{{ old('function') ?? $provider->function }}" required>
+                                            value="{{ old('function') ?? $provider->function }}">
                                     </div>
                                 </div>
 
@@ -98,14 +98,13 @@
                                     <div class="col-12 col-md-4 form-group px-0 pr-md-2">
                                         <label for="email">E-mail</label>
                                         <input type="email" class="form-control" id="email" placeholder="E-mail"
-                                            name="email" value="{{ old('email') ?? $provider->email }}" required>
+                                            name="email" value="{{ old('email') ?? $provider->email }}">
                                     </div>
 
                                     <div class="col-12 col-md-4 form-group px-0 px-md-2">
                                         <label for="telephone">Telefone</label>
                                         <input type="tel" class="form-control" id="telephone" placeholder="Telefone"
-                                            name="telephone" value="{{ old('telephone') ?? $provider->telephone }}"
-                                            required>
+                                            name="telephone" value="{{ old('telephone') ?? $provider->telephone }}">
                                     </div>
                                     <div class="col-12 col-md-4 form-group px-0 pl-md-2">
                                         <label for="cell">Celular</label>
@@ -145,7 +144,7 @@
                                         <label for="products_offered">Produtos/Serviços</label>
                                         <input type="text" class="form-control" id="products_offered"
                                             placeholder="O que é oferecido pelo fornecedor" name="products_offered"
-                                            value="{{ old('products_offered') ?? $provider->products_offered }}" required>
+                                            value="{{ old('products_offered') ?? $provider->products_offered }}">
                                     </div>
 
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
@@ -177,12 +176,12 @@
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2">
                                         <label for="zipcode">CEP</label>
                                         <input type="tel" class="form-control" id="zipcode" placeholder="CEP"
-                                            name="zipcode" value="{{ old('zipcode') ?? $provider->zipcode }}" required>
+                                            name="zipcode" value="{{ old('zipcode') ?? $provider->zipcode }}">
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="street">Rua</label>
                                         <input type="text" class="form-control" id="street" placeholder="Rua"
-                                            name="street" value="{{ old('street') ?? $provider->street }}" required>
+                                            name="street" value="{{ old('street') ?? $provider->street }}">
                                     </div>
                                 </div>
 
@@ -190,7 +189,7 @@
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2">
                                         <label for="number">Número</label>
                                         <input type="text" class="form-control" id="number" placeholder="Número"
-                                            name="number" value="{{ old('number') ?? $provider->number }}" required>
+                                            name="number" value="{{ old('number') ?? $provider->number }}">
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="complement">Complemento</label>
@@ -205,12 +204,12 @@
                                         <label for="neighborhood">Bairro</label>
                                         <input type="text" class="form-control" id="neighborhood"
                                             placeholder="Bairro" name="neighborhood"
-                                            value="{{ old('neighborhood') ?? $provider->neighborhood }}" required>
+                                            value="{{ old('neighborhood') ?? $provider->neighborhood }}">
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="city">Cidade</label>
                                         <input type="text" class="form-control" id="city" placeholder="Cidade"
-                                            name="city" value="{{ old('city') ?? $provider->city }}" required>
+                                            name="city" value="{{ old('city') ?? $provider->city }}">
                                     </div>
                                 </div>
 
@@ -218,7 +217,7 @@
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2">
                                         <label for="state">Estado</label>
                                         <input type="text" class="form-control" id="state" placeholder="UF"
-                                            name="state" value="{{ old('state') ?? $provider->state }}" required>
+                                            name="state" value="{{ old('state') ?? $provider->state }}">
                                     </div>
                                 </div>
 

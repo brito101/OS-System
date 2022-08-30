@@ -49,14 +49,14 @@
                                         <label for="document_person">CPF/CNPJ</label>
                                         <input type="text" class="form-control" id="document_person"
                                             placeholder="CPF ou CNPJ do cliente" name="document_person"
-                                            value="{{ old('document_person') }}" required>
+                                            value="{{ old('document_person') }}">
                                     </div>
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between mb-0">
                                     <div class="col-12 col-md-4 form-group px-0 pr-md-2 mb-0">
                                         <label for="type">Tipo de Cliente</label>
-                                        <x-adminlte-select2 name="type" required>
+                                        <x-adminlte-select2 name="type">
                                             <option {{ old('type') == 'Administradora' ? 'selected' : '' }}
                                                 value="Administradora">Administradora
                                             </option>
@@ -88,7 +88,7 @@
 
                                     <div class="col-12 col-md-4 form-group px-0 px-md-2 mb-0">
                                         <label for="trade_status">Status</label>
-                                        <x-adminlte-select2 name="trade_status" required>
+                                        <x-adminlte-select2 name="trade_status">
                                             <option {{ old('trade_status') == 'Lead' ? 'selected' : '' }} value="Lead">
                                                 Lead
                                             </option>
@@ -105,7 +105,7 @@
 
                                     <div class="col-12 col-md-4 form-group px-0 pl-md-2 mb-0">
                                         <label for="origin">Origem</label>
-                                        <x-adminlte-select2 name="origin" required>
+                                        <x-adminlte-select2 name="origin">
                                             <option {{ old('origin') == 'Google' ? 'selected' : '' }} value="Google">
                                                 Google
                                             </option>
@@ -143,13 +143,13 @@
                                     <div class="col-12 col-md-4 form-group px-0 pr-md-2">
                                         <label for="email">E-mail</label>
                                         <input type="email" class="form-control" id="email" placeholder="E-mail"
-                                            name="email" value="{{ old('email') }}" required>
+                                            name="email" value="{{ old('email') }}">
                                     </div>
 
                                     <div class="col-12 col-md-4 form-group px-0 px-md-2">
                                         <label for="telephone">Telefone</label>
                                         <input type="tel" class="form-control" id="telephone" placeholder="Telefone"
-                                            name="telephone" value="{{ old('telephone') }}" required>
+                                            name="telephone" value="{{ old('telephone') }}">
                                     </div>
                                     <div class="col-12 col-md-4 form-group px-0 pl-md-2">
                                         <label for="cell">Celular</label>
@@ -162,12 +162,12 @@
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2">
                                         <label for="zipcode">CEP</label>
                                         <input type="tel" class="form-control" id="zipcode" placeholder="CEP"
-                                            name="zipcode" value="{{ old('zipcode') }}" required>
+                                            name="zipcode" value="{{ old('zipcode') }}">
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="street">Rua</label>
                                         <input type="text" class="form-control" id="street" placeholder="Rua"
-                                            name="street" value="{{ old('street') }}" required>
+                                            name="street" value="{{ old('street') }}">
                                     </div>
                                 </div>
 
@@ -175,7 +175,7 @@
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2">
                                         <label for="number">Número</label>
                                         <input type="text" class="form-control" id="number" placeholder="Número"
-                                            name="number" value="{{ old('number') }}" required>
+                                            name="number" value="{{ old('number') }}">
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="complement">Complemento</label>
@@ -188,13 +188,12 @@
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2">
                                         <label for="neighborhood">Bairro</label>
                                         <input type="text" class="form-control" id="neighborhood"
-                                            placeholder="Bairro" name="neighborhood" value="{{ old('neighborhood') }}"
-                                            required>
+                                            placeholder="Bairro" name="neighborhood" value="{{ old('neighborhood') }}">
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="city">Cidade</label>
                                         <input type="text" class="form-control" id="city" placeholder="Cidade"
-                                            name="city" value="{{ old('city') }}" required>
+                                            name="city" value="{{ old('city') }}">
                                     </div>
                                 </div>
 
@@ -202,12 +201,12 @@
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2">
                                         <label for="state">Estado</label>
                                         <input type="text" class="form-control" id="state" placeholder="UF"
-                                            name="state" value="{{ old('state') }}" required>
+                                            name="state" value="{{ old('state') }}">
                                     </div>
 
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="subsidiary_id">Filial</label>
-                                        <x-adminlte-select2 name="subsidiary_id" required>
+                                        <x-adminlte-select2 name="subsidiary_id">
                                             @foreach ($subsidiaries as $subsidiary)
                                                 <option {{ old('subsidiary_id') == $subsidiary->id ? 'selected' : '' }}
                                                     value="{{ $subsidiary->id }}">{{ $subsidiary->alias_name }}
@@ -229,14 +228,13 @@
                                     <div class="col-12 col-md-8 form-group px-0 pr-md-2">
                                         <label for="company">Empresa</label>
                                         <input type="text" class="form-control" id="company"
-                                            placeholder="Nome da Empresa" name="company" value="{{ old('company') }}"
-                                            required>
+                                            placeholder="Nome da Empresa" name="company" value="{{ old('company') }}">
                                     </div>
 
                                     <div class="col-12 col-md-4 form-group px-0 pl-md-2">
                                         <label for="apartments">Nº de Apartamentos</label>
                                         <input type="number" class="form-control" id="apartments" name="apartments"
-                                            min="0" value="{{ old('apartments') }}" required>
+                                            min="0" value="{{ old('apartments') }}">
                                     </div>
                                 </div>
 

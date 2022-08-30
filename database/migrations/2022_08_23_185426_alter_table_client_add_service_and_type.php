@@ -14,7 +14,7 @@ class AlterTableClientAddServiceAndType extends Migration
     public function up()
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->string('type')->default('Cliente Padrão');
+            $table->string('type')->default('Cliente');
             $table->string('trade_status')->nullable();
             $table->text('service')->nullable();
         });

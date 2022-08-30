@@ -40,7 +40,7 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 10], 'Nome', 'Duração', ['label' => 'Ações', 'no-export' => true, 'width' => 10]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Nome', 'Duração', ['label' => 'Ações', 'no-export' => true, 'width' => 10]];
                             $config = [
                                 'order' => [[1, 'asc']],
                                 'ajax' => url('/admin/activities'),

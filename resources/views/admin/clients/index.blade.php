@@ -73,11 +73,11 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 10], 'Nome', 'E-mail', 'Telefone', 'Tipo', 'Filial', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Nome', 'E-mail', 'Telefone', 'Tipo', 'Status', 'Origem', 'Filial', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
                             $config = [
                                 'order' => [[1, 'asc']],
                                 'ajax' => url('/admin/clients'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'email', 'name' => 'email'], ['data' => 'telephone', 'name' => 'telephone'], ['data' => 'type', 'name' => 'type'], ['data' => 'alias_name', 'name' => 'alias_name'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'email', 'name' => 'email'], ['data' => 'telephone', 'name' => 'telephone'], ['data' => 'type', 'name' => 'type'], ['data' => 'trade_status', 'name' => 'trade_status'], ['data' => 'origin', 'name' => 'origin'], ['data' => 'alias_name', 'name' => 'alias_name'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,

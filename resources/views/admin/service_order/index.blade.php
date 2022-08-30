@@ -40,7 +40,7 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 10], 'Atividade', 'Cliente', 'Colaborador', 'Prioridade', 'Prazo', 'Status', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Atividade', 'Cliente', 'Participante', 'Prioridade', 'Prazo', 'Status', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
                             $config = [
                                 'ajax' => url('/admin/service-orders'),
                                 'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'activity', 'name' => 'activity'], ['data' => 'client', 'name' => 'client'], ['data' => 'collaborator', 'name' => 'collaborator'], ['data' => 'priority', 'name' => 'priority'], ['data' => 'deadline', 'name' => 'deadline'], ['data' => 'status', 'name' => 'status'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],

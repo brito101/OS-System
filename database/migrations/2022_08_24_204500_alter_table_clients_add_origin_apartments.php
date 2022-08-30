@@ -14,7 +14,7 @@ class AlterTableClientsAddOriginApartments extends Migration
     public function up()
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->string('origin');
+            $table->string('origin')->nullable();
             $table->integer('apartments')->default(0);
         });
     }

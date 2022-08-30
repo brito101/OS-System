@@ -40,7 +40,7 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 10], 'Nome', 'Telefone', 'E-mail', 'Cidade', ['label' => 'Ações', 'no-export' => true, 'width' => 10]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Nome', 'Telefone', 'E-mail', 'Cidade', ['label' => 'Ações', 'no-export' => true, 'width' => 10]];
                             $config = [
                                 'order' => [[1, 'asc']],
                                 'ajax' => url('/admin/subsidiaries'),

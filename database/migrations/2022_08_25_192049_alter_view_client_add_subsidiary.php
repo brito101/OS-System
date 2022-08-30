@@ -16,7 +16,7 @@ class AlterViewClientAddSubsidiary extends Migration
     {
         DB::statement("
         CREATE OR REPLACE VIEW `clients_view` AS
-        SELECT c.id, c.name, c.email, c.telephone, c.type, s.alias_name, c.subsidiary_id
+        SELECT c.id, c.name, c.email, c.telephone, c.type, s.alias_name, c.subsidiary_id, c.trade_status, c.origin
         FROM clients c
         LEFT JOIN subsidiaries s ON s.id = c.subsidiary_id
         WHERE c.deleted_at IS NULL AND s.deleted_at IS NULL

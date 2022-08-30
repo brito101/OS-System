@@ -73,7 +73,7 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 10], 'Nome', 'E-mail', 'Telefone', 'Ramo', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Nome', 'E-mail', 'Telefone', 'Ramo', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
                             $config = [
                                 'order' => [[1, 'asc']],
                                 'ajax' => url('/admin/providers'),
