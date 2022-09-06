@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ClientRequest;
 use App\Imports\ClientImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Client;
+use App\Models\Collaborator;
 use App\Models\Manager;
 use App\Models\Subsidiary;
 use App\Models\Views\Client as ViewsClient;
@@ -28,11 +29,20 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasRole('Gerente')) {
-            $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-            $clients = ViewsClient::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
-        } else {
-            $clients = ViewsClient::all();
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = ViewsClient::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = ViewsClient::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                break;
+            default:
+                $clients = ViewsClient::all();
+                break;
         }
 
         if ($request->ajax()) {
@@ -60,11 +70,20 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasRole('Gerente')) {
-            $managers = Auth::user()->managers->pluck('subsidiary_id');
-            $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
-        } else {
-            $subsidiaries = Subsidiary::all();
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                break;
+            case 'Gerente':
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
         }
 
         return view('admin.clients.create', compact('subsidiaries'));
@@ -84,12 +103,24 @@ class ClientController extends Controller
 
         $data = $request->all();
 
-        if (Auth::user()->hasRole('Gerente')) {
-            $managers = Auth::user()->managers->pluck('subsidiary_id');
-            $subsidiary = Subsidiary::whereIn('id', $managers)->where('id', $data['subsidiary_id'])->first();
-            if (!$subsidiary) {
-                abort(403, 'Acesso não autorizado');
-            }
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiary = Subsidiary::whereIn('id', $collaborators)->where('id', $data['subsidiary_id'])->first();
+                break;
+            case 'Gerente':
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $subsidiary = Subsidiary::whereIn('id', $managers)->where('id', $data['subsidiary_id'])->first();
+                break;
+            default:
+                $subsidiary = Subsidiary::where('id', $data['subsidiary_id'])->first();
+                break;
+        }
+
+        if (!$subsidiary) {
+            abort(403, 'Acesso não autorizado');
         }
 
         $observations = $request->observations;
@@ -136,14 +167,26 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasRole('Gerente')) {
-            $client = Client::where(function ($query) {
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
-                $query->whereIn('subsidiary_id', $managers)
-                    ->orWhere('subsidiary_id', null);
-            })->where('id', $id)->first();
-        } else {
-            $client = Client::find($id);
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $client = Client::where(function ($query) {
+                    $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $collaborators)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            case 'Gerente':
+                $client = Client::where(function ($query) {
+                    $managers = Auth::user()->managers->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $managers)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            default:
+                $client = Client::find($id);
+                break;
         }
 
         if (!$client) {
@@ -165,17 +208,31 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasRole('Gerente')) {
-            $managers = Auth::user()->managers->pluck('subsidiary_id');
-            $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
-            $client = Client::where(function ($query) {
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $client = Client::where(function ($query) {
+                    $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $collaborators)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
-                $query->whereIn('subsidiary_id', $managers)
-                    ->orWhere('subsidiary_id', null);
-            })->where('id', $id)->first();
-        } else {
-            $subsidiaries = Subsidiary::all();
-            $client = Client::find($id);
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                $client = Client::where(function ($query) {
+                    $managers = Auth::user()->managers->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $managers)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                $client = Client::find($id);
+                break;
         }
 
         if (!$client) {
@@ -198,28 +255,41 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasRole('Gerente')) {
-            $client = Client::where(function ($query) {
+        $data = $request->all();
+
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiary = Subsidiary::whereIn('id', $collaborators)->where('id', $data['subsidiary_id'])->first();
+                $client = Client::where(function ($query) {
+                    $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $collaborators)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
-                $query->whereIn('subsidiary_id', $managers)
-                    ->orWhere('subsidiary_id', null);
-            })->where('id', $id)->first();
-        } else {
-            $client = Client::find($id);
+                $subsidiary = Subsidiary::whereIn('id', $managers)->where('id', $data['subsidiary_id'])->first();
+                $client = Client::where(function ($query) {
+                    $managers = Auth::user()->managers->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $managers)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            default:
+                $subsidiary = Subsidiary::where('id', $data['subsidiary_id'])->first();
+                $client = Client::find($id);
+                break;
+        }
+
+        if (!$subsidiary) {
+            abort(403, 'Acesso não autorizado');
         }
 
         if (!$client) {
             abort(403, 'Acesso não autorizado');
-        }
-
-        $data = $request->all();
-
-        if (Auth::user()->hasRole('Gerente')) {
-            $managers = Auth::user()->managers->pluck('subsidiary_id');
-            $subsidiary = Subsidiary::whereIn('id', $managers)->where('id', $data['subsidiary_id'])->first();
-            if (!$subsidiary) {
-                abort(403, 'Acesso não autorizado');
-            }
         }
 
         $observations = $request->observations;
@@ -270,14 +340,26 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasRole('Gerente')) {
-            $client = Client::where(function ($query) {
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
-                $query->whereIn('subsidiary_id', $managers)
-                    ->orWhere('subsidiary_id', null);
-            })->where('id', $id)->first();
-        } else {
-            $client = Client::find($id);
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $client = Client::where(function ($query) {
+                    $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $collaborators)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            case 'Gerente':
+                $client = Client::where(function ($query) {
+                    $managers = Auth::user()->managers->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $managers)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            default:
+                $client = Client::find($id);
+                break;
         }
 
         if (!$client) {
@@ -301,14 +383,26 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasRole('Gerente')) {
-            $client = Client::where(function ($query) {
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
-                $query->whereIn('subsidiary_id', $managers)
-                    ->orWhere('subsidiary_id', null);
-            })->where('id', $id)->first();
-        } else {
-            $client = Client::find($id);
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $client = Client::where(function ($query) {
+                    $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $collaborators)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            case 'Gerente':
+                $client = Client::where(function ($query) {
+                    $managers = Auth::user()->managers->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $managers)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            default:
+                $client = Client::find($id);
+                break;
         }
 
         if (!$client) {

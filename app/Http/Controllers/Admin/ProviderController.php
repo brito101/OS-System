@@ -28,24 +28,21 @@ class ProviderController extends Controller
 
         $providers = ViewsProvider::all();
 
-        if (Auth::user()->hasRole(['Gerente'])) {
-            if ($request->ajax()) {
-                return Datatables::of($providers)
-                    ->addIndexColumn()
-                    ->orderColumn('alias_name')
-                    ->addColumn('action', function ($row) {
-                        $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="providers/' . $row->id . '/show"><i class="fa fa-lg fa-fw fa-eye"></i></a>';
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-            }
-        } else {
-            if ($request->ajax()) {
+        if ($request->ajax()) {
+            if (Auth::user()->hasPermissionTo('Editar Fornecedores')) {
                 return Datatables::of($providers)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
                         $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="providers/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="providers/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="providers/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste fornecedor?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            } else {
+                return Datatables::of($providers)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="providers/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>';
                         return $btn;
                     })
                     ->rawColumns(['action'])

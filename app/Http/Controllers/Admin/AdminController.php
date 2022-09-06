@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Collaborator;
+use App\Models\Manager;
 use App\Models\User;
+use App\Models\Views\Client;
+use App\Models\Views\Provider;
+use App\Models\Views\Subsidiary;
 use App\Models\Views\User as ViewsUser;
 use App\Models\Views\Visit;
 use Illuminate\Support\Arr;
@@ -14,6 +19,27 @@ class AdminController extends Controller
     public function index()
     {
         $administrators = ViewsUser::where('type', 'Administrador')->count();
+        $managers = ViewsUser::where('type', 'Gerente')->count();
+        $collaborators = ViewsUser::where('type', 'Colaborador')->count();
+
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = Client::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->count();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = Client::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->count();
+                break;
+            default:
+                $clients = Client::count();
+                break;
+        }
+
+        $providers = Provider::count();
+        $subsidiariesList = Subsidiary::count();
 
         /** Statistics */
         $statistics = $this->accessStatistics();
@@ -24,6 +50,11 @@ class AdminController extends Controller
 
         return view('admin.home.index', compact(
             'administrators',
+            'subsidiariesList',
+            'managers',
+            'collaborators',
+            'clients',
+            'providers',
             'onlineUsers',
             'percent',
             'access',

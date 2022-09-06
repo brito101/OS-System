@@ -14,7 +14,7 @@
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.clients.index') }}">Clientes</a></li>
-                        <li class="breadcrumb-item active">EdiFicha de Cliente</li>
+                        <li class="breadcrumb-item active">Ficha de Cliente</li>
                     </ol>
                 </div>
             </div>
