@@ -181,6 +181,11 @@ class UserController extends Controller
             $user = User::where('id', $id)->first();
         }
 
+        if (empty($user->id) && Auth::user()->hasPermissionTo('Editar Usuário')) {
+            $id = Auth::user()->id;
+            $user = User::where('id', $id)->first();
+        }
+
         if (empty($user->id)) {
             abort(403, 'Acesso não autorizado');
         }
@@ -223,9 +228,16 @@ class UserController extends Controller
                 $user->syncRoles($request->role);
                 $user->save();
             }
-            return redirect()
-                ->route('admin.users.index')
-                ->with('success', 'Atualização realizada!');
+
+            if (Auth::user()->hasPermissionTo('Editar Usuários')) {
+                return redirect()
+                    ->route('admin.users.index')
+                    ->with('success', 'Atualização realizada!');
+            } else {
+                return redirect()
+                    ->route('admin.user.edit')
+                    ->with('success', 'Atualização realizada!');
+            }
         } else {
             return redirect()
                 ->back()
