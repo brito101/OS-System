@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Client;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -19,9 +20,19 @@ class ServiceOrderRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        $client = Client::find($this->client_id);
+
         $this->merge([
             'execution_date' => Carbon::createFromFormat('d/m/Y', $this->execution_date)->format('Y-m-d'),
             'deadline' => Carbon::createFromFormat('d/m/Y', $this->deadline)->format('Y-m-d'),
+            'zipcode' => $this->zipcode ?? $client->zipcode,
+            'street' => $this->street ?? $client->street,
+            'number' => $this->number ?? $client->number,
+            'complement' => $this->complement ?? $client->complement,
+            'neighborhood' => $this->neighborhood ?? $client->neighborhood,
+            'state' => $this->state ?? $client->state,
+            'city' => $this->city ?? $client->city,
+            'telephone' => $this->telephone ?? $client->telephone,
         ]);
     }
 

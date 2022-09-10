@@ -73,60 +73,6 @@
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
-                                        <label for="zipcode">CEP</label>
-                                        <input type="tel" class="form-control" id="zipcode" placeholder="CEP"
-                                            name="zipcode" value="{{ old('zipcode') }}" required>
-                                    </div>
-                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
-                                        <label for="street">Rua</label>
-                                        <input type="text" class="form-control" id="street" placeholder="Rua"
-                                            name="street" value="{{ old('street') }}" required>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
-                                        <label for="number">Número</label>
-                                        <input type="text" class="form-control" id="number" placeholder="Número"
-                                            name="number" value="{{ old('number') }}" required>
-                                    </div>
-                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
-                                        <label for="complement">Complemento</label>
-                                        <input type="text" class="form-control" id="complement" placeholder="Complemento"
-                                            name="complement" value="{{ old('complement') }}">
-                                    </div>
-                                </div>
-
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
-                                        <label for="neighborhood">Bairro</label>
-                                        <input type="text" class="form-control" id="neighborhood" placeholder="Bairro"
-                                            name="neighborhood" value="{{ old('neighborhood') }}" required>
-                                    </div>
-                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
-                                        <label for="city">Cidade</label>
-                                        <input type="text" class="form-control" id="city" placeholder="Cidade"
-                                            name="city" value="{{ old('city') }}" required>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
-                                        <label for="state">Estado</label>
-                                        <input type="text" class="form-control" id="state" placeholder="UF"
-                                            name="state" value="{{ old('state') }}" required>
-                                    </div>
-
-                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
-                                        <label for="telephone">Telefone de Contato</label>
-                                        <input type="text" class="form-control" id="telephone"
-                                            placeholder="nº para contato" name="telephone"
-                                            value="{{ old('telephone') }}">
-                                    </div>
-                                </div>
-
-                                <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2 mb-0">
                                         <label for="user_id">Participante</label>
                                         <x-adminlte-select2 name="user_id" required>
@@ -180,11 +126,9 @@
                                                 Atrasado</option>
                                             <option {{ old('status') == 'Iniciado' ? 'selected' : '' }} value="Iniciado">
                                                 Iniciado</option>
-                                            <option {{ old('status') == 'Concluído' ? 'selected' : '' }}
-                                                value="Concluído">
+                                            <option {{ old('status') == 'Concluído' ? 'selected' : '' }} value="Concluído">
                                                 Concluído</option>
-                                            <option {{ old('status') == 'Cancelado' ? 'selected' : '' }}
-                                                value="Cancelado">
+                                            <option {{ old('status') == 'Cancelado' ? 'selected' : '' }} value="Cancelado">
                                                 Cancelado</option>
                                         </x-adminlte-select2>
                                     </div>

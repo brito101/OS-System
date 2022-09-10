@@ -92,7 +92,7 @@
                                                 <p class="text-muted text-sm">Telefone: {{ $user->telephone }}</p>
                                             </div>
                                             <div class="card-body pt-0">
-                                                <h3 class="lead">Vinculado as seguintes filiais:</h3>
+                                                <h3 class="lead">Vinculado às seguintes filiais:</h3>
                                                 @foreach ($user->collaborators as $collaborator)
                                                     <p class="text-muted text-sm">
                                                         {{ $collaborator->subsidiary->alias_name }} /
