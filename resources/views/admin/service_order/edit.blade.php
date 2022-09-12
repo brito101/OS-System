@@ -2,6 +2,22 @@
 @section('plugins.select2', true)
 @section('plugins.Summernote', true)
 
+@section('adminlte_css')
+    <style>
+        .kbw-signature {
+            display: inline-block;
+            -ms-touch-action: none;
+            width: 100%;
+            height: 200px;
+            border: 0;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            box-shadow: inset 0 0 0 transparent;
+            max-width: 100%;
+        }
+    </style>
+@endsection
+
 @section('title', '- Edição de Ordem de Serviço')
 
 @section('content')
@@ -15,7 +31,8 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.service-orders.index') }}">Ordens de Serviço</a>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.service-orders.index') }}">Ordens de
+                                Serviço</a>
                         </li>
                         <li class="breadcrumb-item active">Editar Ordem de Serviço</li>
                     </ol>
@@ -239,6 +256,22 @@
                                     </div>
                                 </div>
 
+                                <div class="col-12 form-group px-0">
+                                    <label>Assinatura do Cliente:</label>
+                                    @if ($serviceOrder->costumer_signature)
+                                        <p class="small text-muted mb-n2">Assinatura atual</p>
+                                        <div class="border rounded my-2">
+                                            <img id="costumer_sig_img" class="img-fluid"
+                                                src="{{ asset('storage/signatures/' . $serviceOrder->costumer_signature) }}"
+                                                alt="">
+                                        </div>
+                                    @endif
+                                    <p class="small text-muted mb-n1">Atualizar a assinatura</p>
+                                    <div id="costumer_sig"></div>
+                                    <button id="costumer_signature_clear" class="btn btn-danger btn-sm">Limpar</button>
+                                    <textarea id="costumer_signature" name="costumer_signature" style="display: none"></textarea>
+                                </div>
+
                             </div>
 
                             <div class="card-footer">
@@ -257,4 +290,7 @@
     <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('js/date.js') }}"></script>
     <script src="{{ asset('js/address.js') }}"></script>
+    <script src="{{ asset('vendor/jquery/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.signature.js') }}"></script>
+    <script src="{{ asset('js/signature.js') }}"></script>
 @endsection

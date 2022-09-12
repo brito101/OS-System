@@ -27,7 +27,9 @@ class ServiceOrder extends Model
         'status',
         'deadline',
         'appraisal',
-        'observations'
+        'observations',
+        'costumer_signature',
+        'contributor_signature'
     ];
 
     /** Accessor */

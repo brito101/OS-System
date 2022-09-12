@@ -244,6 +244,8 @@ return [
         'promotion_funds' => 'fundo de promoções',
         'technical_assistance' => 'assistência técninca',
         'total_purchases_previous_year' => 'total comprado no ano anterior',
+        'costumer_signature' => 'assinatura do cliente',
+        'contributor_signature' => 'assinatura do colaborador',
     ],
 
 ];

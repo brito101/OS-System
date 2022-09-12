@@ -62,6 +62,8 @@ class ServiceOrderRequest extends FormRequest
             'deadline' => 'nullable|date',
             'appraisal' => 'nullable|Não avaliado, Péssimo, Ruim, Regular, Bom, Ótimo',
             'observations' => 'nullable|max:4000000000',
+            'costumer_signature' => 'nullable',
+            'contributor_signature' => 'nullable',
         ];
     }
 }

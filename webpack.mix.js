@@ -21,6 +21,12 @@ mix.js("resources/js/app.js", "public/js")
     .scripts(["resources/js/phone.js"], "public/js/phone.js")
     .scripts(["resources/js/document-person.js"], "public/js/document-person.js")
     .scripts(["resources/js/date.js"], "public/js/date.js")
+    .scripts(["resources/js/date.js"], "public/js/date.js")
+
+    .copy('node_modules/jquery-ui/dist/jquery-ui.min.js', 'public/vendor/jquery/jquery-ui.min.js')
+    .scripts(["resources/js/jquery.signature.js"], "public/js/jquery.signature.js")
+    .scripts(["resources/js/signature.js"], "public/js/signature.js")
+
     .options({
         processCssUrls: false,
     })

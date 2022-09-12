@@ -76,7 +76,8 @@ class ServiceOrderController extends Controller
 
         $observations = $request->observations;
         $dom = new \DOMDocument();
-        $dom->loadHTML($observations, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $dom->encoding = 'utf-8';
+        $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
         $imageFile = $dom->getElementsByTagName('img');
 
         foreach ($imageFile as $item => $image) {
@@ -175,7 +176,8 @@ class ServiceOrderController extends Controller
 
         $observations = $request->observations;
         $dom = new \DOMDocument();
-        $dom->loadHTML($observations, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $dom->encoding = 'utf-8';
+        $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
         $imageFile = $dom->getElementsByTagName('img');
 
         foreach ($imageFile as $item => $image) {
@@ -196,6 +198,18 @@ class ServiceOrderController extends Controller
 
         $observations = $dom->saveHTML();
         $data['observations'] = $observations;
+
+        if ($request->costumer_signature) {
+            $folderPath = storage_path() . '/app/public/signatures/';
+            $image_parts = explode(";base64,", $request->costumer_signature);
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1];
+            $image_base64 = base64_decode($image_parts[1]);
+            $fileName = uniqid() . '.' . $image_type;
+            $file = $folderPath . $fileName;
+            file_put_contents($file, $image_base64);
+            $data['costumer_signature'] = $fileName;
+        }
 
         if ($serviceOrder->update($data)) {
             return redirect()

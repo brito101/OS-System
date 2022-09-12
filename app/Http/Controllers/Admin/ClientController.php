@@ -125,7 +125,8 @@ class ClientController extends Controller
 
         $observations = $request->observations;
         $dom = new \DOMDocument();
-        $dom->loadHTML($observations, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $dom->encoding = 'utf-8';
+        $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
         $imageFile = $dom->getElementsByTagName('img');
 
         foreach ($imageFile as $item => $image) {
@@ -294,7 +295,8 @@ class ClientController extends Controller
 
         $observations = $request->observations;
         $dom = new \DOMDocument();
-        $dom->loadHTML($observations, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $dom->encoding = 'utf-8';
+        $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
         $imageFile = $dom->getElementsByTagName('img');
 
         foreach ($imageFile as $item => $image) {

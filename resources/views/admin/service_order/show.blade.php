@@ -155,6 +155,18 @@
                                     </div>
                                 </div>
 
+                                @if ($serviceOrder->costumer_signature)
+                                    <div class="col-12 form-group px-0">
+                                        <label>Assinatura do Cliente:</label>
+                                        <p class="small text-muted mb-n2">Assinatura atual</p>
+                                        <div class="border rounded my-2">
+                                            <img id="costumer_sig_img" class="img-fluid"
+                                                src="{{ asset('storage/signatures/' . $serviceOrder->costumer_signature) }}"
+                                                alt="">
+                                        </div>
+                                    </div>
+                                @endif
+
                             </div>
 
                             <div class="card-footer">
