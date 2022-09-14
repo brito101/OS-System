@@ -27,16 +27,44 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrders = ViewsServiceOrder::all();
+        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
+            $serviceOrders = ViewsServiceOrder::where('user_id', Auth::user()->id)
+                ->orWhere('author_id', Auth::user()->id)->get();
+        } else {
+            $serviceOrders = ViewsServiceOrder::all();
+        }
 
         if ($request->ajax()) {
             return Datatables::of($serviceOrders)
                 ->addIndexColumn()
+                ->addColumn('priority', function ($row) {
+                    // Baixa,Média,Alta,Urgente
+                    switch ($row->priority) {
+                        case 'Baixa':
+                            $priority = '<span class="text-success fa fa-circle"></span> ' . $row->priority;
+                            break;
+                        case 'Média':
+                            $priority = '<span class="text-warning fa fa-circle"></span> ' . $row->priority;
+                            break;
+                        case 'Alta':
+                            $priority = '<span class="text-danger fa fa-circle"></span> ' . $row->priority;
+                            break;
+                        case 'Urgente':
+                            $priority = '<span class="btn btn-danger font-weight-bold">' . $row->priority . '</span>';
+                            break;
+                        default:
+                            $priority = $row->priority;
+                            break;
+                    }
+
+                    return $priority;
+                })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="service-orders/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="service-orders/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="service-orders/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão desta ordem de serviço?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+                    $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="service-orders/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="service-orders/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' .
+                        (($row->author_id == Auth::user()->id && Auth::user()->hasAnyRole('Gerente|Colaborador') || Auth::user()->hasAnyRole('Programador|Administrador')) ? '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="service-orders/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão desta ordem de serviço?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>' : '');
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['priority', 'action'])
                 ->make(true);
         }
 
@@ -74,31 +102,34 @@ class ServiceOrderController extends Controller
 
         $data = $request->all();
 
-        $observations = $request->observations;
-        $dom = new \DOMDocument();
-        $dom->encoding = 'utf-8';
-        $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
-        $imageFile = $dom->getElementsByTagName('img');
+        if ($request->observations) {
+            $observations = $request->observations;
+            $dom = new \DOMDocument();
+            $dom->encoding = 'utf-8';
+            $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+            $imageFile = $dom->getElementsByTagName('img');
 
-        foreach ($imageFile as $item => $image) {
-            $img = $image->getAttribute('src');
-            if (filter_var($img, FILTER_VALIDATE_URL) == false) {
-                list($type, $img) = explode(';', $img);
-                list(, $img) = explode(',', $img);
-                $imageData = base64_decode($img);
-                $image_name =  Str::slug($request->title) . '-' . time() . $item . '.png';
-                $path = storage_path() . '/app/public/observations/' . $image_name;
-                file_put_contents($path, $imageData);
-                $image->removeAttribute('src');
-                $image->removeAttribute('data-filename');
-                $image->setAttribute('alt', $request->title);
-                $image->setAttribute('src', url('storage/observations/' . $image_name));
+            foreach ($imageFile as $item => $image) {
+                $img = $image->getAttribute('src');
+                if (filter_var($img, FILTER_VALIDATE_URL) == false) {
+                    list($type, $img) = explode(';', $img);
+                    list(, $img) = explode(',', $img);
+                    $imageData = base64_decode($img);
+                    $image_name =  Str::slug($request->title) . '-' . time() . $item . '.png';
+                    $path = storage_path() . '/app/public/observations/' . $image_name;
+                    file_put_contents($path, $imageData);
+                    $image->removeAttribute('src');
+                    $image->removeAttribute('data-filename');
+                    $image->setAttribute('alt', $request->title);
+                    $image->setAttribute('src', url('storage/observations/' . $image_name));
+                }
             }
+
+            $observations = $dom->saveHTML();
+            $data['observations'] = $observations;
         }
 
-        $observations = $dom->saveHTML();
-        $data['observations'] = $observations;
-
+        $data['author'] = Auth::user()->id;
         $serviceOrder = ServiceOrder::create($data);
 
         if ($serviceOrder->save()) {
@@ -119,7 +150,15 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrder = ServiceOrder::find($id);
+        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
+            $serviceOrder = ServiceOrder::where('id', $id)
+                ->where(function ($query) {
+                    $query->where('user_id', Auth::user()->id)
+                        ->orWhere('author', Auth::user()->id);
+                })->first();
+        } else {
+            $serviceOrder = ServiceOrder::find($id);
+        }
 
         if (!$serviceOrder) {
             abort(403, 'Acesso não autorizado');
@@ -140,7 +179,15 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrder = ServiceOrder::find($id);
+        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
+            $serviceOrder = ServiceOrder::where('id', $id)
+                ->where(function ($query) {
+                    $query->where('user_id', Auth::user()->id)
+                        ->orWhere('author', Auth::user()->id);
+                })->first();
+        } else {
+            $serviceOrder = ServiceOrder::find($id);
+        }
 
         if (!$serviceOrder) {
             abort(403, 'Acesso não autorizado');
@@ -166,38 +213,55 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrder = ServiceOrder::find($id);
+        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
+            $serviceOrder = ServiceOrder::where('id', $id)
+                ->where(function ($query) {
+                    $query->where('user_id', Auth::user()->id)
+                        ->orWhere('author', Auth::user()->id);
+                })->first();
+        } else {
+            $serviceOrder = ServiceOrder::find($id);
+        }
 
         if (!$serviceOrder) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $data = $request->all();
-
-        $observations = $request->observations;
-        $dom = new \DOMDocument();
-        $dom->encoding = 'utf-8';
-        $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
-        $imageFile = $dom->getElementsByTagName('img');
-
-        foreach ($imageFile as $item => $image) {
-            $img = $image->getAttribute('src');
-            if (filter_var($img, FILTER_VALIDATE_URL) == false) {
-                list($type, $img) = explode(';', $img);
-                list(, $img) = explode(',', $img);
-                $imageData = base64_decode($img);
-                $image_name =  Str::slug($request->title) . '-' . time() . $item . '.png';
-                $path = storage_path() . '/app/public/observations/' . $image_name;
-                file_put_contents($path, $imageData);
-                $image->removeAttribute('src');
-                $image->removeAttribute('data-filename');
-                $image->setAttribute('alt', $request->title);
-                $image->setAttribute('src', url('storage/observations/' . $image_name));
+        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
+            if ($serviceOrder->author = Auth::user()->id) {
+                $data = $request->all();
+            } else {
+                $data = $request->only(['status', 'costumer_signature', 'readiness_date']);
             }
+        } else {
+            $data = $request->all();
         }
 
-        $observations = $dom->saveHTML();
-        $data['observations'] = $observations;
+        if ($request->observations) {
+            $observations = $request->observations;
+            $dom = new \DOMDocument();
+            $dom->encoding = 'utf-8';
+            $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+            $imageFile = $dom->getElementsByTagName('img');
+
+            foreach ($imageFile as $item => $image) {
+                $img = $image->getAttribute('src');
+                if (filter_var($img, FILTER_VALIDATE_URL) == false) {
+                    list($type, $img) = explode(';', $img);
+                    list(, $img) = explode(',', $img);
+                    $imageData = base64_decode($img);
+                    $image_name =  Str::slug($request->title) . '-' . time() . $item . '.png';
+                    $path = storage_path() . '/app/public/observations/' . $image_name;
+                    file_put_contents($path, $imageData);
+                    $image->removeAttribute('src');
+                    $image->removeAttribute('data-filename');
+                    $image->setAttribute('alt', $request->title);
+                    $image->setAttribute('src', url('storage/observations/' . $image_name));
+                }
+            }
+            $observations = $dom->saveHTML();
+            $data['observations'] = $observations;
+        }
 
         if ($request->costumer_signature) {
             $folderPath = storage_path() . '/app/public/signatures/';
@@ -235,7 +299,13 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $serviceOrder = ServiceOrder::find($id);
+        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
+            $serviceOrder = ServiceOrder::where('id', $id)
+                ->where('author', Auth::user()->id)
+                ->first();
+        } else {
+            $serviceOrder = ServiceOrder::find($id);
+        }
 
         if (!$serviceOrder) {
             abort(403, 'Acesso não autorizado');

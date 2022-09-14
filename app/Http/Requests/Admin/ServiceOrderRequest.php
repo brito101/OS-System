@@ -23,8 +23,8 @@ class ServiceOrderRequest extends FormRequest
         $client = Client::find($this->client_id);
 
         $this->merge([
-            'execution_date' => Carbon::createFromFormat('d/m/Y', $this->execution_date)->format('Y-m-d'),
-            'deadline' => Carbon::createFromFormat('d/m/Y', $this->deadline)->format('Y-m-d'),
+            'execution_date' => Carbon::createFromFormat('d/m/Y', $this->validateDate($this->execution_date))->format('Y-m-d'),
+            'deadline' => Carbon::createFromFormat('d/m/Y', $this->validateDate($this->deadline))->format('Y-m-d'),
             'zipcode' => $this->zipcode ?? $client->zipcode,
             'street' => $this->street ?? $client->street,
             'number' => $this->number ?? $client->number,
@@ -33,6 +33,7 @@ class ServiceOrderRequest extends FormRequest
             'state' => $this->state ?? $client->state,
             'city' => $this->city ?? $client->city,
             'telephone' => $this->telephone ?? $client->telephone,
+            'readiness_date' => $this->readiness_date ? Carbon::createFromFormat('d/m/Y', $this->validateDate($this->readiness_date))->format('Y-m-d') : null,
         ]);
     }
 
@@ -58,12 +59,22 @@ class ServiceOrderRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'execution_date' => 'required|date',
             'priority' => 'required|in:Baixa,Média,Alta,Urgente',
-            'status' => 'nullable|in:Não inicado, Atrasado, Iniciado, Concluído, Cancelado',
+            'status' => 'nullable|in:Não iniciado,Atrasado,Iniciado,Concluído,Cancelado',
             'deadline' => 'nullable|date',
-            'appraisal' => 'nullable|Não avaliado, Péssimo, Ruim, Regular, Bom, Ótimo',
+            'appraisal' => 'nullable|Não avaliado,Péssimo,Ruim,Regular,Bom,Ótimo',
             'observations' => 'nullable|max:4000000000',
             'costumer_signature' => 'nullable',
             'contributor_signature' => 'nullable',
+            'readiness_date' => 'nullable|required_if:status,==,Concluído|date',
         ];
+    }
+
+    public function validateDate($date)
+    {
+        if (preg_match('/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/', $date)) {
+            return $date;
+        } else {
+            return date('d/m/Y');
+        }
     }
 }

@@ -246,6 +246,8 @@ return [
         'total_purchases_previous_year' => 'total comprado no ano anterior',
         'costumer_signature' => 'assinatura do cliente',
         'contributor_signature' => 'assinatura do colaborador',
+        'readiness_date' => 'data de prontificação',
+        'user_id' => 'participante',
     ],
 
 ];

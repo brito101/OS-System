@@ -29,7 +29,9 @@ class ServiceOrder extends Model
         'appraisal',
         'observations',
         'costumer_signature',
-        'contributor_signature'
+        'contributor_signature',
+        'author',
+        'readiness_date'
     ];
 
     /** Accessor */
@@ -41,6 +43,22 @@ class ServiceOrder extends Model
     public function getDeadlineAttribute($value)
     {
         return date("d/m/Y", strtotime($value));
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return date("d/m/Y H:i", strtotime($value));
+    }
+
+    public function getAuthorAttribute($value)
+    {
+        $user = User::find($value);
+        return $user;
+    }
+
+    public function getReadinessDateAttribute($value)
+    {
+        return $value ? date("d/m/Y", strtotime($value)) : null;
     }
 
     /** Relationships */

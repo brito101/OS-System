@@ -41,7 +41,7 @@
                             <div class="card-body">
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2 mb-0">
+                                    <div class="col-12 form-group px-0 mb-0">
                                         <label for="activity_id">Atividade</label>
                                         <x-adminlte-select2 name="activity_id" required>
                                             <option disabled selected value="">Selecione</option>
@@ -51,7 +51,10 @@
                                             @endforeach
                                         </x-adminlte-select2>
                                     </div>
-                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2 mb-0">
+                                </div>
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 form-group px-0 mb-0">
                                         <label for="client_id">Cliente</label>
                                         <x-adminlte-select2 name="client_id" required>
                                             <option disabled selected value="">Selecione</option>
@@ -73,7 +76,7 @@
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2 mb-0">
+                                    <div class="col-12 form-group px-0 mb-0">
                                         <label for="user_id">Participante</label>
                                         <x-adminlte-select2 name="user_id" required>
                                             <option disabled selected value="">Selecione</option>
@@ -84,20 +87,6 @@
                                                 </option>
                                             @endforeach
                                         </x-adminlte-select2>
-                                    </div>
-
-                                    <div class="col-12 col-md-3 form-group px-0 px-md-2">
-                                        <label for="execution_date">Data de Execução</label>
-                                        <input type="text" class="form-control date" id="execution_date"
-                                            placeholder="dd/mm/yyyy" name="execution_date"
-                                            value="{{ old('execution_date') }}" required>
-                                    </div>
-
-                                    <div class="col-12 col-md-3 form-group px-0 pl-md-2">
-                                        <label for="deadline">Data Limite</label>
-                                        <input type="text" class="form-control date" id="deadline"
-                                            placeholder="dd/mm/yyyy" name="deadline" value="{{ old('deadline') }}"
-                                            required>
                                     </div>
                                 </div>
 
@@ -116,21 +105,18 @@
                                         </x-adminlte-select2>
                                     </div>
 
-                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2 mb-0">
-                                        <label for="status">Status</label>
-                                        <x-adminlte-select2 name="status" required>
-                                            <option {{ old('status') == 'Não inicado' ? 'selected' : '' }}
-                                                value="Não inicado">
-                                                Não inicado</option>
-                                            <option {{ old('status') == 'Atrasado' ? 'selected' : '' }} value="Atrasado">
-                                                Atrasado</option>
-                                            <option {{ old('status') == 'Iniciado' ? 'selected' : '' }} value="Iniciado">
-                                                Iniciado</option>
-                                            <option {{ old('status') == 'Concluído' ? 'selected' : '' }} value="Concluído">
-                                                Concluído</option>
-                                            <option {{ old('status') == 'Cancelado' ? 'selected' : '' }} value="Cancelado">
-                                                Cancelado</option>
-                                        </x-adminlte-select2>
+                                    <div class="col-12 col-md-3 form-group px-0 px-md-2">
+                                        <label for="execution_date">Data de Execução</label>
+                                        <input type="text" class="form-control date" id="execution_date"
+                                            placeholder="dd/mm/yyyy" name="execution_date"
+                                            value="{{ old('execution_date') }}" required>
+                                    </div>
+
+                                    <div class="col-12 col-md-3 form-group px-0 pl-md-2">
+                                        <label for="deadline">Data Limite</label>
+                                        <input type="text" class="form-control date" id="deadline"
+                                            placeholder="dd/mm/yyyy" name="deadline" value="{{ old('deadline') }}"
+                                            required>
                                     </div>
                                 </div>
 
@@ -152,10 +138,29 @@
                                     ];
                                 @endphp
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 form-group px-0">
+                                    <div class="col-12 form-group px-0 mb-0">
                                         <x-adminlte-text-editor name="observations" label="Observações"
                                             label-class="text-black" igroup-size="md" placeholder="Observações..."
                                             :config="$config" />
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2 mb-0">
+                                        <label for="status">Status</label>
+                                        <x-adminlte-select2 name="status" required>
+                                            <option {{ old('status') == 'Não iniciado' ? 'selected' : '' }}
+                                                value="Não iniciado">
+                                                Não iniciado</option>
+                                            <option {{ old('status') == 'Atrasado' ? 'selected' : '' }} value="Atrasado">
+                                                Atrasado</option>
+                                            <option {{ old('status') == 'Iniciado' ? 'selected' : '' }} value="Iniciado">
+                                                Iniciado</option>
+                                            <option {{ old('status') == 'Concluído' ? 'selected' : '' }} value="Concluído">
+                                                Concluído</option>
+                                            <option {{ old('status') == 'Cancelado' ? 'selected' : '' }} value="Cancelado">
+                                                Cancelado</option>
+                                        </x-adminlte-select2>
                                     </div>
                                 </div>
 

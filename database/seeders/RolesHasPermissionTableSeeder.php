@@ -305,7 +305,7 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 34,
                 'role_id' => 4
             ],
-            /** Service Orders 35 to 39 (programmer, administrator ) */
+            /** Service Orders 35 to 39 (programmer, administrator, managers, collaborator ) */
             [
                 'permission_id' => 35,
                 'role_id' => 1
@@ -313,6 +313,14 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 35,
                 'role_id' => 2
+            ],
+            [
+                'permission_id' => 35,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 35,
+                'role_id' => 4
             ],
             [
                 'permission_id' => 36,
@@ -323,12 +331,28 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 2
             ],
             [
+                'permission_id' => 36,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 36,
+                'role_id' => 4
+            ],
+            [
                 'permission_id' => 37,
                 'role_id' => 1
             ],
             [
                 'permission_id' => 37,
                 'role_id' => 2
+            ],
+            [
+                'permission_id' => 37,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 37,
+                'role_id' => 4
             ],
             [
                 'permission_id' => 38,
@@ -339,12 +363,28 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 2
             ],
             [
+                'permission_id' => 38,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 38,
+                'role_id' => 4
+            ],
+            [
                 'permission_id' => 39,
                 'role_id' => 1
             ],
             [
                 'permission_id' => 39,
                 'role_id' => 2
+            ],
+            [
+                'permission_id' => 39,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 39,
+                'role_id' => 4
             ],
             /** List Managers 40 (programmer, administrator ) */
             [

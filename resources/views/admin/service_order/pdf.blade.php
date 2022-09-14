@@ -20,16 +20,23 @@
             <h3 class="card-title">Dados Cadastrais da Ordem de Serviço</h3>
         </div>
 
+        <div class="card-body pb-0 pt-1 text-muted text-right">Criada
+            {{ isset($serviceOrder->author->name) ? 'por ' . $serviceOrder->author->name : '' }} em
+            {{ $serviceOrder->created_at }} hs.</div>
+
         <form>
             <div class="card-body">
 
                 <div class="d-flex flex-wrap justify-content-between">
-                    <div class="col-6 form-group pr-2">
+                    <div class="col-12 form-group px-0">
                         <label for="activity_id">Atividade</label>
                         <input type="text" class="form-control bg-white" id="activity_id" name="activity_id"
                             value="{{ $serviceOrder->activity->name }}" disabled>
                     </div>
-                    <div class="col-6 form-group pl-2">
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-between">
+                    <div class="col-12 form-group px-0">
                         <label for="client_id">Cliente</label>
                         <input type="text" class="form-control bg-white" id="client_id" name="client_id"
                             value="{{ $serviceOrder->client->name }}" disabled>
@@ -97,11 +104,19 @@
                 </div>
 
                 <div class="d-flex flex-wrap justify-content-between">
-                    <div class="col-6 form-group pr-2">
+                    <div class="col-12 form-group px-0">
                         <label for="user_id">Participante</label>
                         <input type="text" class="form-control bg-white" id="user_id" name="user_id"
                             value="{{ $serviceOrder->user->name }} ({{ $serviceOrder->user->roles->first()->name }})"
                             disabled>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-between">
+                    <div class="col-6 form-group pr-2">
+                        <label for="priority">Prioridade</label>
+                        <input type="text" class="form-control bg-white" id="priority" name="priority"
+                            value="{{ $serviceOrder->priority }}" disabled>
                     </div>
 
                     <div class="col-3 form-group px-2">
@@ -118,26 +133,28 @@
                 </div>
 
                 <div class="d-flex flex-wrap justify-content-between">
-                    <div class="col-6 form-group pr-2">
-                        <label for="priority">Prioridade</label>
-                        <input type="text" class="form-control bg-white" id="priority" name="priority"
-                            value="{{ $serviceOrder->priority }}" disabled>
-                    </div>
-
-                    <div class="col-6 form-group pl-2">
-                        <label for="status">Status</label>
-                        <input type="text" class="form-control bg-white" id="status" name="status"
-                            value="{{ $serviceOrder->status }}" disabled>
-                    </div>
-                </div>
-
-                <div class="d-flex flex-wrap justify-content-between">
                     <div class="col-12 form-group px-2">
                         <label for="state">Observações</label>
                         <div class="p-2 border rounded">
                             {!! $serviceOrder->observations !!}
                         </div>
                     </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-between">
+                    <div class="col-6 form-group pr-2">
+                        <label for="status">Status</label>
+                        <input type="text" class="form-control bg-white" id="status" name="status"
+                            value="{{ $serviceOrder->status }}" disabled>
+                    </div>
+
+                    @if ($serviceOrder->readiness_date)
+                        <div class="col-3 form-group pl-2">
+                            <label for="readiness_date">Data de Prontificação</label>
+                            <input type="text" class="form-control bg-white" id="readiness_date"
+                                name="readiness_date" value="{{ $serviceOrder->readiness_date }}" disabled>
+                        </div>
+                    @endif
                 </div>
 
                 @if ($serviceOrder->costumer_signature)
