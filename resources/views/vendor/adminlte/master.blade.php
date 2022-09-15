@@ -2,6 +2,10 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    <!-- PWA  -->
+    @if (Route::currentRouteName() == 'login')
+        @laravelPWA
+    @endif
 
     {{-- Base Meta Tags --}}
     <meta charset="utf-8">
@@ -51,7 +55,7 @@
 
     {{-- Favicon --}}
     @if (config('adminlte.use_ico_only'))
-        <link rel="shortcut icon" href="{{ asset('img/favicon.svg') }}" />
+        <link rel="shortcut icon" href="{{ asset('img/logo-circle.png') }}" />
     @elseif(config('adminlte.use_full_favicon'))
         <link rel="shortcut icon" href="{{ asset('favicons/favicon.ico') }}" />
         <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('favicons/apple-icon-57x57.png') }}">

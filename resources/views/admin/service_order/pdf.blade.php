@@ -13,8 +13,10 @@
 
     <div class="card">
         <div class="d-flex flex-wrap justify-content-center">
-            {{-- <img src="{{ asset('img/logo.png') }}" style="width: 500px;"> --}}
-            <h2 class="w-100 text-center">Ordem de Serviço</h2>
+            <img src="{{ asset('img/logo.png') }}" class="col-2" style="width: 100px">
+            <h2 class="text-center col-9 d-flex align-items-center ml-5 mt-3 display-5 font-weight-bold">Ordem de Serviço nº
+                {{ $serviceOrder->number_series }}
+            </h2>
         </div>
         <div class="card-header">
             <h3 class="card-title">Dados Cadastrais da Ordem de Serviço</h3>

@@ -2,7 +2,7 @@
 	Signature plugin for jQuery UI v1.2.1.
 	Requires excanvas.js in IE.
 	Written by Keith Wood (wood.keith{at}optusnet.com.au) April 2012.
-	Available under the MIT (http://keith-wood.name/licence.html) license. 
+	Available under the MIT (http://keith-wood.name/licence.html) license.
 	Please attribute the author if you use it. */
 
 /* globals G_vmlCanvasManager */
@@ -282,7 +282,7 @@ $(selector).signature({color: 'blue', guideline: true}) */
 				}).join('') +
 				'		</g>\n	</g>\n</svg>\n';
 		},
-		
+
 		/** Convert the captured lines to an image encoded in a <code>data:</code> URL.
 			@memberof Signature
 			@param {string} [type='image/png'] The MIME type of the image.

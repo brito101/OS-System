@@ -445,5 +445,6 @@
     <script src="{{ asset('js/address.js') }}"></script>
     <script src="{{ asset('vendor/jquery/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('js/jquery.signature.js') }}"></script>
+    <script src="{{ asset('js/jquery.ui.touch-punch.min.js') }}"></script>
     <script src="{{ asset('js/signature.js') }}"></script>
 @endsection

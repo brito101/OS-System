@@ -4,45 +4,45 @@ return [
     'name' => 'LaravelPWA',
     'manifest' => [
         'name' => env('APP_NAME', 'My PWA App'),
-        'short_name' => 'PWA',
-        'start_url' => '/',
+        'short_name' => env('APP_SHORT_NAME'),
+        'start_url' => '/login',
         'background_color' => '#ffffff',
-        'theme_color' => '#000000',
+        'theme_color' => '#f05a25',
         'display' => 'standalone',
-        'orientation'=> 'any',
-        'status_bar'=> 'black',
+        'orientation' => 'any',
+        'status_bar' => 'black',
         'icons' => [
             '72x72' => [
                 'path' => '/images/icons/icon-72x72.png',
-                'purpose' => 'any'
+                'purpose' => 'any maskable'
             ],
             '96x96' => [
                 'path' => '/images/icons/icon-96x96.png',
-                'purpose' => 'any'
+                'purpose' => 'any maskable'
             ],
             '128x128' => [
                 'path' => '/images/icons/icon-128x128.png',
-                'purpose' => 'any'
+                'purpose' => 'any maskable'
             ],
             '144x144' => [
                 'path' => '/images/icons/icon-144x144.png',
-                'purpose' => 'any'
+                'purpose' => 'any maskable'
             ],
             '152x152' => [
                 'path' => '/images/icons/icon-152x152.png',
-                'purpose' => 'any'
+                'purpose' => 'any maskable'
             ],
             '192x192' => [
                 'path' => '/images/icons/icon-192x192.png',
-                'purpose' => 'any'
+                'purpose' => 'any maskable'
             ],
             '384x384' => [
                 'path' => '/images/icons/icon-384x384.png',
-                'purpose' => 'any'
+                'purpose' => 'any maskable'
             ],
             '512x512' => [
                 'path' => '/images/icons/icon-512x512.png',
-                'purpose' => 'any'
+                'purpose' => 'any maskable'
             ],
         ],
         'splash' => [
@@ -64,7 +64,7 @@ return [
                 'url' => '/shortcutlink1',
                 'icons' => [
                     "src" => "/images/icons/icon-72x72.png",
-                    "purpose" => "any"
+                    'purpose' => 'any maskable'
                 ]
             ],
             [
@@ -73,6 +73,8 @@ return [
                 'url' => '/shortcutlink2'
             ]
         ],
-        'custom' => []
+        'custom' => [
+            'lang' => 'pt-BR'
+        ]
     ]
 ];

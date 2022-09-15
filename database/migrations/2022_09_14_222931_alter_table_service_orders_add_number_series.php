@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableClientsAddOriginApartments extends Migration
+class AlterTableServiceOrdersAddNumberSeries extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AlterTableClientsAddOriginApartments extends Migration
      */
     public function up()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->string('origin')->nullable();
-            $table->integer('apartments')->nullable()->default(0);
+        Schema::table('service_orders', function (Blueprint $table) {
+            $table->string('number_series')->nullable();
         });
     }
 
@@ -26,8 +25,8 @@ class AlterTableClientsAddOriginApartments extends Migration
      */
     public function down()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->dropColumn(['origin', 'apartments']);
+        Schema::table('service_orders', function (Blueprint $table) {
+            $table->dropColumn('number_series');
         });
     }
 }

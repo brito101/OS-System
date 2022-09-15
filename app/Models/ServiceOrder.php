@@ -31,7 +31,8 @@ class ServiceOrder extends Model
         'costumer_signature',
         'contributor_signature',
         'author',
-        'readiness_date'
+        'readiness_date',
+        'number_series'
     ];
 
     /** Accessor */

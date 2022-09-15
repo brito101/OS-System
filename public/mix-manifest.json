@@ -1,7 +1,10 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/img/favicon.png": "/img/favicon.png",
     "/img/favicon.svg": "/img/favicon.svg",
+    "/img/logo-circle.png": "/img/logo-circle.png",
+    "/img/logo.png": "/img/logo.png",
     "/js/company.js": "/js/company.js",
     "/js/address.js": "/js/address.js",
     "/js/phone.js": "/js/phone.js",
@@ -9,5 +12,6 @@
     "/js/date.js": "/js/date.js",
     "/vendor/jquery/jquery-ui.min.js": "/vendor/jquery/jquery-ui.min.js",
     "/js/jquery.signature.js": "/js/jquery.signature.js",
-    "/js/signature.js": "/js/signature.js"
+    "/js/signature.js": "/js/signature.js",
+    "/js/jquery.ui.touch-punch.min.js": "/js/jquery.ui.touch-punch.min.js"
 }

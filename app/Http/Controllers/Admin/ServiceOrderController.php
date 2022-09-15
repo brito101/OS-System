@@ -130,6 +130,10 @@ class ServiceOrderController extends Controller
         }
 
         $data['author'] = Auth::user()->id;
+
+        $serviceOrders = ServiceOrder::whereYear('created_at', date('Y'))->count();
+        $data['number_series'] = $serviceOrders + 1 . '/' . date('Y');
+
         $serviceOrder = ServiceOrder::create($data);
 
         if ($serviceOrder->save()) {

@@ -26,6 +26,7 @@ mix.js("resources/js/app.js", "public/js")
     .copy('node_modules/jquery-ui/dist/jquery-ui.min.js', 'public/vendor/jquery/jquery-ui.min.js')
     .scripts(["resources/js/jquery.signature.js"], "public/js/jquery.signature.js")
     .scripts(["resources/js/signature.js"], "public/js/signature.js")
+    .scripts(["resources/js/jquery.ui.touch-punch.min.js"], "public/js/jquery.ui.touch-punch.min.js")
 
     .options({
         processCssUrls: false,
