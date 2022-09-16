@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('subsidiaries', SubsidiaryController::class);
 
         /** Clients */
+        Route::get('/clients/timeline/{id}', [ClientController::class, 'timeline']);
         Route::get('/clients/destroy/{id}', [ClientController::class, 'destroy']);
         Route::resource('clients', ClientController::class);
         Route::get('clients-pdf/{id}', [ClientController::class, 'pdf'])->name('clients.pdf');

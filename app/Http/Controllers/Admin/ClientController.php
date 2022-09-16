@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ClientRequest;
 use App\Imports\ClientImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Client;
+use App\Models\ClientHistory;
 use App\Models\Collaborator;
 use App\Models\Manager;
 use App\Models\Subsidiary;
@@ -49,7 +50,7 @@ class ClientController extends Controller
             return Datatables::of($clients)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="clients/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="clients/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="clients/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste cliente?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+                    $btn = '<a class="btn btn-xs btn-dark mx-1 shadow" title="Timeline" href="clients/timeline/' . $row->id . '"><i class="fa fa-lg fa-fw fa-clock"></i></a>' . '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="clients/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="clients/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="clients/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste cliente?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -432,5 +433,46 @@ class ClientController extends Controller
 
         Excel::import(new ClientImport, $request->file('file')->store('temp'));
         return back()->with('success', 'Importação realizada!');
+    }
+
+    public function timeline($id)
+    {
+        if (!Auth::user()->hasPermissionTo('Acessar Clientes')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $client = Client::where(function ($query) {
+                    $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $collaborators)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            case 'Gerente':
+                $client = Client::where(function ($query) {
+                    $managers = Auth::user()->managers->pluck('subsidiary_id');
+                    $query->whereIn('subsidiary_id', $managers)
+                        ->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
+                break;
+            default:
+                $client = Client::find($id);
+                break;
+        }
+
+        if (!$client) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $histories = ClientHistory::where('client_id', $client->id)
+            ->orderBy('created_at', 'desc')
+            ->with('client')
+            ->with('subsidiary')
+            ->get();
+
+        return view('admin.clients.history', compact('client', 'histories'));
     }
 }
