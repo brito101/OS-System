@@ -257,9 +257,9 @@
                                 @endphp
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 form-group px-0">
-                                        <x-adminlte-text-editor name="observations" label="Observações"
-                                            label-class="text-black" igroup-size="md" placeholder="Observações..."
-                                            :config="$config" />
+                                        <x-adminlte-text-editor name="annotation" label="Anotação"
+                                            label-class="text-black" igroup-size="md"
+                                            placeholder="Escreva seu texto aqui..." :config="$config" />
                                     </div>
                                 </div>
 

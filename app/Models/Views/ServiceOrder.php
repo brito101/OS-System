@@ -16,4 +16,9 @@ class ServiceOrder extends Model
     {
         return date("d/m/Y", strtotime($value));
     }
+
+    public function getReadinessDateAttribute($value)
+    {
+        return $value ? date("d/m/Y", strtotime($value)) : '';
+    }
 }

@@ -61,7 +61,7 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 11,
                 'role_id' => 1
             ],
-            /* AProfile assignment by administrator type user */
+            /* Profile assignment by administrator type user */
             [
                 'permission_id' => 11,
                 'role_id' => 2
@@ -447,6 +447,266 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 45,
                 'role_id' => 2
+            ],
+            /** Finance 46 (programmer, administrator, managers, financial) */
+            [
+                'permission_id' => 46,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 46,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 46,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 46,
+                'role_id' => 5
+            ],
+            /** Incomes 47 to 51 (programmer, administrator, managers, financial) */
+            [
+                'permission_id' => 47,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 47,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 47,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 47,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 48,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 48,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 48,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 48,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 49,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 49,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 49,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 49,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 50,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 50,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 50,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 50,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 51,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 51,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 51,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 51,
+                'role_id' => 5
+            ],
+            /** Expenses 52 to 56 (programmer, administrator, managers, financial) */
+            [
+                'permission_id' => 52,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 52,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 52,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 52,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 53,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 53,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 53,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 53,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 54,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 54,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 54,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 54,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 55,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 55,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 55,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 55,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 56,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 56,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 56,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 56,
+                'role_id' => 5
+            ],
+            /** Refunds 57 to 61 (programmer, administrator, managers, financial) */
+            [
+                'permission_id' => 57,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 57,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 57,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 57,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 58,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 58,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 58,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 58,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 59,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 59,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 59,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 59,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 60,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 60,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 60,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 60,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 61,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 61,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 61,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 61,
+                'role_id' => 5
             ],
         ]);
     }

@@ -134,27 +134,45 @@
                     </div>
                 </div>
 
-                <div class="d-flex flex-wrap justify-content-between">
-                    <div class="col-12 form-group px-2">
-                        <label for="state">Observações</label>
-                        <div class="p-2 border rounded">
-                            {!! $serviceOrder->observations !!}
+                @if ($serviceOrder->observations)
+                    <div class="d-flex flex-wrap justify-content-between">
+                        <div class="col-12 form-group px-2">
+                            <label for="state">Observações</label>
+                            <div class="p-2 border rounded">
+                                {!! $serviceOrder->observations !!}
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
-                <div class="d-flex flex-wrap justify-content-between">
-                    <div class="col-6 form-group pr-2">
+                <div class="d-flex flex-wrap justify-content-start">
+                    <div class="col-3 form-group pr-2">
                         <label for="status">Status</label>
                         <input type="text" class="form-control bg-white" id="status" name="status"
                             value="{{ $serviceOrder->status }}" disabled>
                     </div>
 
                     @if ($serviceOrder->readiness_date)
-                        <div class="col-3 form-group pl-2">
+                        <div class="col-3 form-group px-2">
                             <label for="readiness_date">Data de Prontificação</label>
                             <input type="text" class="form-control bg-white" id="readiness_date"
                                 name="readiness_date" value="{{ $serviceOrder->readiness_date }}" disabled>
+                        </div>
+                    @endif
+
+                    @if ($serviceOrder->start_time)
+                        <div class="col-3 form-group px-2">
+                            <label for="start_time">Horário de Início</label>
+                            <input type="text" class="form-control bg-white" id="start_time" name="start_time"
+                                value="{{ $serviceOrder->start_time }}" disabled>
+                        </div>
+                    @endif
+
+                    @if ($serviceOrder->end_time)
+                        <div class="col-3 form-group pl-2">
+                            <label for="end_time">Horário de Conclusão</label>
+                            <input type="text" class="form-control bg-white" id="end_time" name="end_time"
+                                value="{{ $serviceOrder->end_time }}" disabled>
                         </div>
                     @endif
                 </div>

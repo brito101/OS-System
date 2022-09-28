@@ -84,7 +84,10 @@ class ServiceOrderController extends Controller
 
         $activities = Activity::orderBy('name')->get();
         $clients = Client::orderBy('name')->get();
-        $participants = User::role(['Gerente', 'Colaborador'])->orderBy('name')->get();
+        $participants = User::role(['Gerente', 'Colaborador'])
+            ->where('id', '!=', Auth::user()->id)
+            ->orderBy('name')
+            ->get();
         return view('admin.service_order.create', compact('activities', 'clients', 'participants'));
     }
 
@@ -101,6 +104,13 @@ class ServiceOrderController extends Controller
         }
 
         $data = $request->all();
+
+        if ($data['user_id'] == Auth::user()->id) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Não é possível criar uma OS com você como participante! Atribua-a a outro participante. Caso você seja o executor do serviço, ao menos seu gerente deverá ser o autor da OS para controle.');
+        }
 
         if ($request->observations) {
             $observations = $request->observations;
@@ -199,7 +209,10 @@ class ServiceOrderController extends Controller
 
         $activities = Activity::orderBy('name')->get();
         $clients = Client::orderBy('name')->get();
-        $participants = User::role(['Gerente', 'Colaborador'])->orderBy('name')->get();
+        $participants = User::role(['Gerente', 'Colaborador'])
+            ->where('id', '!=', Auth::user()->id)
+            ->orderBy('name')
+            ->get();
 
         return view('admin.service_order.edit', compact('serviceOrder', 'activities', 'clients', 'participants'));
     }
@@ -239,6 +252,13 @@ class ServiceOrderController extends Controller
             }
         } else {
             $data = $request->all();
+        }
+
+        if ($data['user_id'] == Auth::user()->id) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Não é possível criar uma OS com você como participante! Atribua-a a outro participante. Caso você seja o executor do serviço, ao menos seu gerente deverá ser o autor da OS para controle.');
         }
 
         if ($request->observations) {

@@ -374,8 +374,8 @@
 
                                 @endif
 
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2 mb-0">
+                                <div class="d-flex flex-wrap justify-content-start">
+                                    <div class="col-12 col-md-3 form-group px-0 pr-md-2 mb-0">
                                         <label for="status">Status</label>
                                         <x-adminlte-select2 name="status" required>
                                             <option
@@ -401,11 +401,25 @@
                                         </x-adminlte-select2>
                                     </div>
 
-                                    <div class="col-12 col-md-3 form-group px-0 pl-md-2">
+                                    <div class="col-12 col-md-3 form-group px-0 px-md-2">
                                         <label for="readiness_date">Data de Prontificação</label>
                                         <input type="text" class="form-control date" id="readiness_date"
                                             placeholder="dd/mm/yyyy ou vazio" name="readiness_date"
                                             value="{{ old('readiness_date') ?? $serviceOrder->readiness_date }}">
+                                    </div>
+
+                                    <div class="col-12 col-md-3 form-group px-0 px-md-2">
+                                        <label for="start_time">Horário de Início</label>
+                                        <input type="time" class="form-control" id="start_time"
+                                            placeholder="HH:mm ou vazio" name="start_time"
+                                            value="{{ old('start_time') ?? $serviceOrder->start_time }}">
+                                    </div>
+
+                                    <div class="col-12 col-md-3 form-group px-0 pl-md-2">
+                                        <label for="end_time">Horário de Conclusão</label>
+                                        <input type="time" class="form-control" id="end_time"
+                                            placeholder="HH:mm ou vazio" name="end_time"
+                                            value="{{ old('end_time') ?? $serviceOrder->end_time }}">
                                     </div>
                                 </div>
 

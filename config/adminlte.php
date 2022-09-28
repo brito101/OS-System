@@ -376,6 +376,50 @@ return [
             ],
         ],
         [
+            'text'        => 'Financeiro',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-money-bill',
+            'can'         => 'Acessar Financeiro',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Receitas',
+                    'url'  => 'admin/finance-incomes',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Rendas',
+                ],
+                [
+                    'text' => 'Cadastro de Receita',
+                    'url'  => 'admin/finance-incomes/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Rendas',
+                ],
+                [
+                    'text' => 'Listagem de Despesas',
+                    'url'  => 'admin/finance-expenses',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Despesas',
+                ],
+                [
+                    'text' => 'Cadastro de Despesa',
+                    'url'  => 'admin/finance-expenses/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Despesas',
+                ],
+                [
+                    'text' => 'Listagem de Reembolsos',
+                    'url'  => 'admin/finance-refunds',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Reembolsos',
+                ],
+                [
+                    'text' => 'Cadastro de Reembolso',
+                    'url'  => 'admin/finance-refunds/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Reembolsos',
+                ],
+            ],
+        ],
+        [
             'text'    => 'ACL',
             'icon'    => 'fas fa-fw fa-user-shield',
             'can'     => 'Acessar ACL',

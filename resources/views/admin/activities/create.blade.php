@@ -44,7 +44,7 @@
                                             placeholder="Nome Completo" name="name" value="{{ old('name') }}" required>
                                     </div>
 
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
+                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="duration">Duração (horas:minutos)</label>
                                         <input type="time" class="form-control" id="duration"
                                             placeholder="Duração em horas" name="duration" value="{{ old('duration') }}"

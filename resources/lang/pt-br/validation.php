@@ -248,6 +248,15 @@ return [
         'contributor_signature' => 'assinatura do colaborador',
         'readiness_date' => 'data de prontificação',
         'user_id' => 'participante',
+        'category' => 'categoria',
+        'due_date' => 'vencimento',
+        'repetition' => 'repetição',
+        'quota' => 'parcela',
+        'purchase_mode' => 'método de pagamento',
+        'annotation' => 'anotação',
+        'start_time' => 'horário de início',
+        'end_time' => 'horário de conclusão',
+        'file' => 'arquivo em anexo'
     ],
 
 ];

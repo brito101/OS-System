@@ -66,6 +66,8 @@ class ServiceOrderRequest extends FormRequest
             'costumer_signature' => 'nullable',
             'contributor_signature' => 'nullable',
             'readiness_date' => 'nullable|required_if:status,==,Concluído|date',
+            'start_time' => 'nullable|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i',
         ];
     }
 

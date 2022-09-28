@@ -32,7 +32,9 @@ class ServiceOrder extends Model
         'contributor_signature',
         'author',
         'readiness_date',
-        'number_series'
+        'number_series',
+        'start_time',
+        'end_time'
     ];
 
     /** Accessor */
@@ -60,6 +62,16 @@ class ServiceOrder extends Model
     public function getReadinessDateAttribute($value)
     {
         return $value ? date("d/m/Y", strtotime($value)) : null;
+    }
+
+    public function getStartTimeAttribute($value)
+    {
+        return $value ? date("H:i", strtotime($value)) : null;
+    }
+
+    public function getEndTimeAttribute($value)
+    {
+        return $value ? date("H:i", strtotime($value)) : null;
     }
 
     /** Relationships */

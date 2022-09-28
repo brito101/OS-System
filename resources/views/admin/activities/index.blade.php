@@ -33,7 +33,7 @@
                             <div class="d-flex flex-wrap justify-content-between col-12 align-content-center">
                                 <h3 class="card-title align-self-center">Atividades Cadastradas</h3>
                                 @can('Criar Atividades')
-                                    <a href="{{ route('admin.activities.create') }}" title="Novo Usuário"
+                                    <a href="{{ route('admin.activities.create') }}" title="Nova Atividade"
                                         class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Nova Atividade</a>
                                 @endcan
                             </div>

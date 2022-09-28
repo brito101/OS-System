@@ -22,6 +22,8 @@ mix.js("resources/js/app.js", "public/js")
     .scripts(["resources/js/document-person.js"], "public/js/document-person.js")
     .scripts(["resources/js/date.js"], "public/js/date.js")
     .scripts(["resources/js/date.js"], "public/js/date.js")
+    .scripts(["resources/js/money.js"], "public/js/money.js")
+    .scripts(["resources/js/invoices.js"], "public/js/invoices.js")
 
     .copy('node_modules/jquery-ui/dist/jquery-ui.min.js', 'public/vendor/jquery/jquery-ui.min.js')
     .scripts(["resources/js/jquery.signature.js"], "public/js/jquery.signature.js")

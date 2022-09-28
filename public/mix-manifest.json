@@ -10,6 +10,8 @@
     "/js/phone.js": "/js/phone.js",
     "/js/document-person.js": "/js/document-person.js",
     "/js/date.js": "/js/date.js",
+    "/js/money.js": "/js/money.js",
+    "/js/invoices.js": "/js/invoices.js",
     "/vendor/jquery/jquery-ui.min.js": "/vendor/jquery/jquery-ui.min.js",
     "/js/jquery.signature.js": "/js/jquery.signature.js",
     "/js/signature.js": "/js/signature.js",

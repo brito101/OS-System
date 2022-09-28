@@ -15,7 +15,9 @@ use App\Http\Controllers\Admin\ACL\{
     PermissionController,
     RoleController,
 };
-
+use App\Http\Controllers\Admin\Finance\ExpenseController;
+use App\Http\Controllers\Admin\Finance\IncomeController;
+use App\Http\Controllers\Admin\Finance\RefoundController;
 use Illuminate\Support\Facades\{
     Auth,
     Route
@@ -61,6 +63,28 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/clients/service-orders/{id}', [ServiceOrderController::class, 'destroy']);
         Route::resource('service-orders', ServiceOrderController::class);
         Route::get('service-orders-pdf/{id}', [ServiceOrderController::class, 'pdf'])->name('service-orders.pdf');
+
+        /** Finance */
+        /** Incomes */
+        Route::get('/finance-incomes/destroy/{id}', [IncomeController::class, 'destroy']);
+        Route::get('/finance-incomes/pay/{id}', [IncomeController::class, 'pay']);
+        Route::get('/finance-incomes/receive/{id}', [IncomeController::class, 'receive']);
+        Route::get('finance-incomes-pdf/{id}', [IncomeController::class, 'pdf'])->name('finance-incomes.pdf');
+        Route::resource('finance-incomes', IncomeController::class);
+
+        /** Expenses */
+        Route::get('/finance-expenses/destroy/{id}', [ExpenseController::class, 'destroy']);
+        Route::get('/finance-expenses/pay/{id}', [ExpenseController::class, 'pay']);
+        Route::get('/finance-expenses/receive/{id}', [ExpenseController::class, 'receive']);
+        Route::get('finance-expenses-pdf/{id}', [ExpenseController::class, 'pdf'])->name('finance-expenses.pdf');
+        Route::resource('finance-expenses', ExpenseController::class);
+
+        /** Refunds */
+        Route::get('/finance-refunds/destroy/{id}', [RefoundController::class, 'destroy']);
+        Route::get('/finance-refunds/pay/{id}', [RefoundController::class, 'pay']);
+        Route::get('/finance-refunds/receive/{id}', [RefoundController::class, 'receive']);
+        Route::get('finance-refunds-pdf/{id}', [RefoundController::class, 'pdf'])->name('finance-refunds.pdf');
+        Route::resource('finance-refunds', RefoundController::class);
 
         /**
          * ACL
