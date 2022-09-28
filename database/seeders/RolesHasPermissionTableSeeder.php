@@ -389,7 +389,11 @@ class RolesHasPermissionTableSeeder extends Seeder
             /** List Managers 40 (programmer, administrator ) */
             [
                 'permission_id' => 40,
-                'role_id' => 3
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 40,
+                'role_id' => 2
             ],
             /** Providers 41 to 45 (programmer, administrator, (manager, collaborators => (access and list))) */
             [
@@ -707,6 +711,15 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 61,
                 'role_id' => 5
+            ],
+            /** List Managers 62 (programmer, administrator ) */
+            [
+                'permission_id' => 62,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 62,
+                'role_id' => 2
             ],
         ]);
     }

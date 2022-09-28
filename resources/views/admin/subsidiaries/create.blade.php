@@ -177,6 +177,21 @@
                                         </x-adminlte-select-bs>
                                     </div>
                                 </div>
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 form-group px-0">
+                                        <x-adminlte-select-bs id="financiers" name="financiers[]" label="Financistas"
+                                            label-class="text-dark" igroup-size="md" :config="$config" multiple
+                                            class="border">
+                                            @foreach ($financiers as $financier)
+                                                <option value="{{ $financier->id }}">
+                                                    {{ $financier->name }}
+                                                    ({{ $financier->email }})
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select-bs>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="card-footer">

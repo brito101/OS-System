@@ -1,19 +1,18 @@
 @extends('adminlte::page')
-
-@section('title', '- Financeiro')
+@section('title', '- Financistas')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><i class="fas fa-fw fa-user-friends"></i> Gerentes</h1>
+                    <h1><i class="fas fa-fw fa-users"></i> <i class="fas fa-fw fa-money-bill"></i> Financistas</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.subsidiaries.index') }}">Filiais</a></li>
-                        <li class="breadcrumb-item active">Gerentes</li>
+                        <li class="breadcrumb-item active">Financistas</li>
                     </ol>
                 </div>
             </div>
@@ -29,7 +28,7 @@
                         <div class="card-header">
                             <i class="fas fa-fw fa-search"></i> Pesquisa
                         </div>
-                        <form method="POST" action="{{ route('admin.managers.search') }}">
+                        <form method="POST" action="{{ route('admin.financiers.search') }}">
                             @csrf
                             <div class="card-body pb-0">
                                 <div class="d-flex flex-wrap justify-content-start">
@@ -57,7 +56,7 @@
                     <div class="card card-solid">
                         <div class="card-header">
                             <div class="d-flex flex-wrap justify-content-between col-12 align-content-center">
-                                <h3 class="card-title align-self-center">Gerentes Cadastrados</h3>
+                                <h3 class="card-title align-self-center">Financistas Cadastrados</h3>
                             </div>
                         </div>
 
@@ -67,7 +66,7 @@
                                     <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                                         <div class="card bg-light d-flex flex-fill">
                                             <div class="card-header text-muted border-bottom-0">
-                                                Gerente #{{ $user->id }}
+                                                Financista #{{ $user->id }}
                                             </div>
                                             <div class="card-body pt-0">
                                                 <div class="row">
@@ -92,10 +91,10 @@
                                             </div>
                                             <div class="card-body pt-0">
                                                 <h3 class="lead">Vinculado às seguintes filiais:</h3>
-                                                @foreach ($user->managers as $manager)
+                                                @foreach ($user->financiers as $financier)
                                                     <p class="text-muted text-sm">
-                                                        {{ $manager->subsidiary->alias_name }} /
-                                                        {{ $manager->subsidiary->city }}-{{ $manager->subsidiary->state }}
+                                                        {{ $financier->subsidiary->alias_name }} /
+                                                        {{ $financier->subsidiary->city }}-{{ $financier->subsidiary->state }}
                                                     </p>
                                                 @endforeach
                                             </div>
@@ -103,7 +102,7 @@
                                     </div>
 
                                 @empty
-                                    <p>Não há gerentes cadastrados</p>
+                                    <p>Não há financistas cadastrados</p>
                                 @endforelse
                             </div>
                         </div>

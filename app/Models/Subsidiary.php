@@ -28,4 +28,9 @@ class Subsidiary extends Model
     {
         return $this->hasMany(Manager::class);
     }
+
+    public function financiers()
+    {
+        return $this->hasMany(Financier::class);
+    }
 }

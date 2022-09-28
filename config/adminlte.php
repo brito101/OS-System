@@ -293,6 +293,12 @@ return [
                     'icon' => 'fas fa-fw fa-chevron-right',
                     'can'  => 'Listar Colaboradores',
                 ],
+                [
+                    'text' => 'Financistas',
+                    'url'  => 'admin/subsidiaries/financiers',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Financistas',
+                ],
             ],
         ],
         [

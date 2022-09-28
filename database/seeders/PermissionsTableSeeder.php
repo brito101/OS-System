@@ -132,7 +132,7 @@ class PermissionsTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
-            /** Activities 23 to 29 */
+            /** Subsidiaries 23 to 29 */
             [
                 'name' => 'Acessar Filiais',
                 'guard_name' => 'web',
@@ -333,6 +333,12 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Excluir Reembolsos',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            /** List Managers 62  */
+            [
+                'name' => 'Listar Financiers',
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
