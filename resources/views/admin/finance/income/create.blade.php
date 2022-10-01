@@ -115,7 +115,7 @@
                                         </x-adminlte-select2>
                                     </div>
 
-                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
+                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2 mb-0">
                                         <x-adminlte-input-file name="file" label="Anexo"
                                             placeholder="Selecione um arquivo..." />
                                     </div>

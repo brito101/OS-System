@@ -34,7 +34,9 @@ class ServiceOrder extends Model
         'readiness_date',
         'number_series',
         'start_time',
-        'end_time'
+        'end_time',
+        'remarks',
+        'photo'
     ];
 
     /** Accessor */

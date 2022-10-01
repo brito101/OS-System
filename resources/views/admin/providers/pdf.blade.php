@@ -184,16 +184,27 @@
                         <input type="text" class="form-control bg-white" id="state" name="state"
                             value="{{ $provider->state }}" disabled>
                     </div>
+
+                    @if ($provider->coverage)
+                        <div class="col-12 col-md-6 form-group px-0 pl-md-2">
+                            <label for="coverage">Cobertura</label>
+                            <input type="text" class="form-control bg-white" id="coverage" name="coverage"
+                                value="{{ implode(', ', explode(',', $provider->coverage)) }}" disabled>
+                        </div>
+                    @endif
+
                 </div>
 
-                <div class="d-flex flex-wrap justify-content-between">
-                    <div class="col-12 form-group px-2">
-                        <label for="state">Observações</label>
-                        <div class="p-2 border rounded">
-                            {!! $provider->observations !!}
+                @if ($provider->observations)
+                    <div class="d-flex flex-wrap justify-content-between">
+                        <div class="col-12 form-group px-2">
+                            <label for="state">Observações</label>
+                            <div class="p-2 border rounded">
+                                {!! $provider->observations !!}
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
             </div>
 

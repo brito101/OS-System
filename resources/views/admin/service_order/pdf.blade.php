@@ -137,8 +137,8 @@
                 @if ($serviceOrder->observations)
                     <div class="d-flex flex-wrap justify-content-between">
                         <div class="col-12 form-group px-2">
-                            <label for="state">Observações</label>
-                            <div class="p-2 border rounded">
+                            <label for="observations">Observações</label>
+                            <div class="p-2 border rounded" id="observations">
                                 {!! $serviceOrder->observations !!}
                             </div>
                         </div>
@@ -176,6 +176,25 @@
                         </div>
                     @endif
                 </div>
+
+                @if ($serviceOrder->remarks)
+                    <div class="d-flex flex-wrap justify-content-between">
+                        <div class="col-12 form-group px-0">
+                            <label for="remarks">Observações de execução</label>
+                            <textarea name="remarks" class="form-control bg-white" id="remarks" disabled>{{ $serviceOrder->remarks }}</textarea>
+                        </div>
+                    </div>
+                @endif
+
+                @if ($serviceOrder->photo != null)
+                    <div class="d-flex flex-wrap justify-content-center">
+                        <div class="embed-responsive embed-responsive-16by9 col-6 form-group px-0">
+                            <img src="{{ url('storage/service-orders/' . $serviceOrder->photo) }}" alt="Imagem capturada"
+                                class="embed-responsive-item shadow-sm border border-1 border-primary rounded"
+                                style="max-width: 75%; left: 12.5%;"></canvas>
+                        </div>
+                    </div>
+                @endif
 
                 @if ($serviceOrder->costumer_signature)
                     <div class="col-12 form-group px-0">

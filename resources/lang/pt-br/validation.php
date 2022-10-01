@@ -256,7 +256,19 @@ return [
         'annotation' => 'anotação',
         'start_time' => 'horário de início',
         'end_time' => 'horário de conclusão',
-        'file' => 'arquivo em anexo'
+        'file' => 'arquivo em anexo',
+        'subsidiary_id' => 'filial',
+        'job' => 'obra',
+        'provider_id' => 'fornecedor',
+        'invoice' => 'nota fiscal',
+        'amount' => 'quantidade',
+        'requester' => 'solicitante',
+        'forecast' => 'previsão de entrega',
+        'authorized' => 'autorizado por',
+        'authorized_date' => 'data de autorização',
+        'freight' => 'frete',
+        'remarks' => 'observações de execução',
+        'coverage' => 'área de cobertura',
     ],
 
 ];

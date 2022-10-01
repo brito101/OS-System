@@ -16,6 +16,13 @@ class ProviderRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'coverage' => $this->coverage ? \implode(',', $this->coverage) : null
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -49,6 +56,7 @@ class ProviderRequest extends FormRequest
             'state' => 'nullable|min:2|max:2',
             'city' => 'nullable|min:2|max:100',
             'observations' => 'nullable|max:4000000000',
+            'coverage' => 'nullable|max:191',
         ];
     }
 }

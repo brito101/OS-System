@@ -252,8 +252,6 @@
                                         value="{{ $serviceOrder->activity_id }}">
                                     <input type="hidden" id="user_id" name="user_id"
                                         value="{{ $serviceOrder->user_id }}">
-                                    <input type="hidden" id="user_id" name="user_id"
-                                        value="{{ $serviceOrder->user_id }}">
                                     <input type="hidden" id="priority" name="priority"
                                         value="{{ $serviceOrder->priority }}">
 
@@ -363,14 +361,16 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex flex-wrap justify-content-between">
-                                        <div class="col-12 form-group px-0">
-                                            <label for="state">Observações</label>
-                                            <div class="p-2 border rounded bg-gray-light">
-                                                {!! $serviceOrder->observations !!}
+                                    @if ($serviceOrder->observations)
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="col-12 form-group px-0">
+                                                <label for="observations">Observações</label>
+                                                <div class="p-2 border rounded bg-gray-light" id="observations">
+                                                    {!! $serviceOrder->observations !!}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
 
                                 @endif
 
@@ -423,6 +423,45 @@
                                     </div>
                                 </div>
 
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 form-group px-0">
+                                        <label for="remarks">Observações de execução</label>
+                                        <textarea name="remarks" rows="2" class="form-control" id="remarks">{{ old('remarks') ?? $serviceOrder->remarks }}</textarea>
+                                    </div>
+                                </div>
+
+                                @if ($serviceOrder->photo != null)
+                                    <div class="d-flex flex-wrap justify-content-center">
+                                        <div
+                                            class="embed-responsive embed-responsive-16by9 col-12 col-md-6 form-group px-0">
+                                            <img src="{{ url('storage/service-orders/' . $serviceOrder->photo) }}"
+                                                alt="Imagem capturada"
+                                                class="embed-responsive-item shadow-sm border border-1 border-primary rounded"
+                                                style="max-width: 75%; left: 12.5%;"></canvas>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <label for="cover_base64">Capturar Foto</label>
+                                    <input type="hidden" id="cover_base64" name="cover_base64" />
+                                </div>
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div
+                                        class="embed-responsive embed-responsive-16by9 col-12 col-md-6 form-group px-0 pr-md-2">
+                                        <video id="player" autoplay class="embed-responsive-item"></video>
+                                    </div>
+
+                                    <div
+                                        class="embed-responsive embed-responsive-16by9 col-12 col-md-6 form-group px-0 pl-md-2">
+                                        <canvas id="canvas" class="embed-responsive-item"
+                                            style="max-width: 75%; left: 12.5%;"></canvas>
+                                    </div>
+                                    <button id="capture" class="btn btn-secondary"><i class="fa fa-camera mr-1"></i>
+                                        Capturar</button>
+                                </div>
+
                                 <div class="col-12 form-group px-0">
                                     <label>Assinatura do Cliente:</label>
                                     @if ($serviceOrder->costumer_signature)
@@ -461,4 +500,5 @@
     <script src="{{ asset('js/jquery.signature.js') }}"></script>
     <script src="{{ asset('js/jquery.ui.touch-punch.min.js') }}"></script>
     <script src="{{ asset('js/signature.js') }}"></script>
+    <script src="{{ asset('js/capture.js') }}"></script>
 @endsection

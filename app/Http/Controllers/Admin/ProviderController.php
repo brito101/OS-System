@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ProviderRequest;
 use App\Imports\ProviderImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Provider;
+use App\Models\Subsidiary;
 use App\Models\Views\Provider as ViewsProvider;
 use Illuminate\Http\Request;
 use DataTables;
@@ -26,7 +27,31 @@ class ProviderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $providers = ViewsProvider::all();
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+            case 'Financeiro':
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $states = array_unique($subsidiaries->pluck('state')->toArray());
+                sort($states);
+                $statesSearch = implode(',', $states);
+                $providers = ViewsProvider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->get();
+                break;
+            case 'Gerente':
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                $states = array_unique($subsidiaries->pluck('state')->toArray());
+                sort($states);
+                $statesSearch = implode(',', $states);
+                $providers = ViewsProvider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                $providers = ViewsProvider::all();
+                break;
+        }
 
         if ($request->ajax()) {
             if (Auth::user()->hasPermissionTo('Editar Fornecedores')) {
@@ -81,30 +106,32 @@ class ProviderController extends Controller
 
         $data = $request->all();
 
-        $observations = $request->observations;
-        $dom = new \DOMDocument();
-        $dom->encoding = 'utf-8';
-        $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
-        $imageFile = $dom->getElementsByTagName('img');
+        if ($request->observations) {
+            $observations = $request->observations;
+            $dom = new \DOMDocument();
+            $dom->encoding = 'utf-8';
+            $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+            $imageFile = $dom->getElementsByTagName('img');
 
-        foreach ($imageFile as $item => $image) {
-            $img = $image->getAttribute('src');
-            if (filter_var($img, FILTER_VALIDATE_URL) == false) {
-                list($type, $img) = explode(';', $img);
-                list(, $img) = explode(',', $img);
-                $imageData = base64_decode($img);
-                $image_name =  Str::slug($request->title) . '-' . time() . $item . '.png';
-                $path = storage_path() . '/app/public/observations/' . $image_name;
-                file_put_contents($path, $imageData);
-                $image->removeAttribute('src');
-                $image->removeAttribute('data-filename');
-                $image->setAttribute('alt', $request->title);
-                $image->setAttribute('src', url('storage/observations/' . $image_name));
+            foreach ($imageFile as $item => $image) {
+                $img = $image->getAttribute('src');
+                if (filter_var($img, FILTER_VALIDATE_URL) == false) {
+                    list($type, $img) = explode(';', $img);
+                    list(, $img) = explode(',', $img);
+                    $imageData = base64_decode($img);
+                    $image_name =  Str::slug($request->title) . '-' . time() . $item . '.png';
+                    $path = storage_path() . '/app/public/observations/' . $image_name;
+                    file_put_contents($path, $imageData);
+                    $image->removeAttribute('src');
+                    $image->removeAttribute('data-filename');
+                    $image->setAttribute('alt', $request->title);
+                    $image->setAttribute('src', url('storage/observations/' . $image_name));
+                }
             }
-        }
 
-        $observations = $dom->saveHTML();
-        $data['observations'] = $observations;
+            $observations = $dom->saveHTML();
+            $data['observations'] = $observations;
+        }
 
         $provider = Provider::create($data);
 
@@ -159,7 +186,9 @@ class ProviderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.providers.edit', compact('provider'));
+        $states = explode(',', $provider->coverage);
+
+        return view('admin.providers.edit', compact('provider', 'states'));
     }
 
     /**
@@ -171,6 +200,7 @@ class ProviderController extends Controller
      */
     public function update(ProviderRequest $request, $id)
     {
+
         if (!Auth::user()->hasPermissionTo('Editar Fornecedores')) {
             abort(403, 'Acesso não autorizado');
         }
@@ -183,30 +213,32 @@ class ProviderController extends Controller
 
         $data = $request->all();
 
-        $observations = $request->observations;
-        $dom = new \DOMDocument();
-        $dom->encoding = 'utf-8';
-        $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
-        $imageFile = $dom->getElementsByTagName('img');
+        if ($request->observations) {
+            $observations = $request->observations;
+            $dom = new \DOMDocument();
+            $dom->encoding = 'utf-8';
+            $dom->loadHTML(utf8_decode($observations), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+            $imageFile = $dom->getElementsByTagName('img');
 
-        foreach ($imageFile as $item => $image) {
-            $img = $image->getAttribute('src');
-            if (filter_var($img, FILTER_VALIDATE_URL) == false) {
-                list($type, $img) = explode(';', $img);
-                list(, $img) = explode(',', $img);
-                $imageData = base64_decode($img);
-                $image_name =  Str::slug($request->title) . '-' . time() . $item . '.png';
-                $path = storage_path() . '/app/public/observations/' . $image_name;
-                file_put_contents($path, $imageData);
-                $image->removeAttribute('src');
-                $image->removeAttribute('data-filename');
-                $image->setAttribute('alt', $request->title);
-                $image->setAttribute('src', url('storage/observations/' . $image_name));
+            foreach ($imageFile as $item => $image) {
+                $img = $image->getAttribute('src');
+                if (filter_var($img, FILTER_VALIDATE_URL) == false) {
+                    list($type, $img) = explode(';', $img);
+                    list(, $img) = explode(',', $img);
+                    $imageData = base64_decode($img);
+                    $image_name =  Str::slug($request->title) . '-' . time() . $item . '.png';
+                    $path = storage_path() . '/app/public/observations/' . $image_name;
+                    file_put_contents($path, $imageData);
+                    $image->removeAttribute('src');
+                    $image->removeAttribute('data-filename');
+                    $image->setAttribute('alt', $request->title);
+                    $image->setAttribute('src', url('storage/observations/' . $image_name));
+                }
             }
-        }
 
-        $observations = $dom->saveHTML();
-        $data['observations'] = $observations;
+            $observations = $dom->saveHTML();
+            $data['observations'] = $observations;
+        }
 
         if ($provider->update($data)) {
             return redirect()
@@ -221,7 +253,7 @@ class ProviderController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage.0
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

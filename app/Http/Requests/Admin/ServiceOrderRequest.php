@@ -5,6 +5,9 @@ namespace App\Http\Requests\Admin;
 use App\Models\Client;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ServiceOrderRequest extends FormRequest
 {
@@ -22,6 +25,14 @@ class ServiceOrderRequest extends FormRequest
     {
         $client = Client::find($this->client_id);
 
+        $base64 = null;
+        if ($this->cover_base64) {
+            $name = Str::slug(Str::random(15)) . time() . '.png';
+            $file = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $this->cover_base64));
+            $path = Storage::put('service-orders/' . $name, $file);
+            $base64 = $name;
+        }
+
         $this->merge([
             'execution_date' => Carbon::createFromFormat('d/m/Y', $this->validateDate($this->execution_date))->format('Y-m-d'),
             'deadline' => Carbon::createFromFormat('d/m/Y', $this->validateDate($this->deadline))->format('Y-m-d'),
@@ -34,6 +45,7 @@ class ServiceOrderRequest extends FormRequest
             'city' => $this->city ?? $client->city,
             'telephone' => $this->telephone ?? $client->telephone,
             'readiness_date' => $this->readiness_date ? Carbon::createFromFormat('d/m/Y', $this->validateDate($this->readiness_date))->format('Y-m-d') : null,
+            'photo' => $base64,
         ]);
     }
 
@@ -68,6 +80,8 @@ class ServiceOrderRequest extends FormRequest
             'readiness_date' => 'nullable|required_if:status,==,Concluído|date',
             'start_time' => 'nullable|date_format:H:i',
             'end_time' => 'nullable|date_format:H:i',
+            'remarks' => 'nullable|max:4000000000',
+            'photo' => 'nullable',
         ];
     }
 

@@ -12,6 +12,8 @@
     "/js/date.js": "/js/date.js",
     "/js/money.js": "/js/money.js",
     "/js/invoices.js": "/js/invoices.js",
+    "/js/material.js": "/js/material.js",
+    "/js/capture.js": "/js/capture.js",
     "/vendor/jquery/jquery-ui.min.js": "/vendor/jquery/jquery-ui.min.js",
     "/js/jquery.signature.js": "/js/jquery.signature.js",
     "/js/signature.js": "/js/signature.js",

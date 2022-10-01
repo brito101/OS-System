@@ -245,22 +245,16 @@ class ServiceOrderController extends Controller
         }
 
         if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
-            if ($serviceOrder->author = Auth::user()->id) {
+            if ($serviceOrder->author->id == Auth::user()->id) {
                 $data = $request->all();
             } else {
-                $data = $request->only(['status', 'costumer_signature', 'readiness_date']);
+                $data = $request->only(['status', 'costumer_signature', 'readiness_date', 'start_time', 'end_time']);
             }
         } else {
             $data = $request->all();
         }
 
-        if ($data['user_id'] == Auth::user()->id) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'Não é possível criar uma OS com você como participante! Atribua-a a outro participante. Caso você seja o executor do serviço, ao menos seu gerente deverá ser o autor da OS para controle.');
-        }
-
+        $data = $request->all();
         if ($request->observations) {
             $observations = $request->observations;
             $dom = new \DOMDocument();

@@ -1,5 +1,6 @@
 @extends('adminlte::page')
 @section('plugins.Summernote', true)
+@section('plugins.BootstrapSelect', true)
 
 @section('title', '- Edição de Fornecedor')
 
@@ -219,6 +220,78 @@
                                         <input type="text" class="form-control" id="state" placeholder="UF"
                                             name="state" value="{{ old('state') ?? $provider->state }}">
                                     </div>
+
+                                    @php
+                                        $config = [
+                                            'title' => 'Selecione múltiplos...',
+                                            'liveSearch' => true,
+                                            'liveSearchPlaceholder' => 'Pesquisar...',
+                                            'showTick' => true,
+                                            'actionsBox' => true,
+                                        ];
+                                    @endphp
+
+                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
+                                        <x-adminlte-select-bs id="coverage" name="coverage[]" label="Area de cobertura"
+                                            label-class="text-dark bg-white" igroup-size="md" :config="$config" multiple
+                                            class="border">
+                                            <option value="AC" {{ in_array('AC', $states) ? 'selected' : '' }}>AC
+                                            </option>
+                                            <option value="AL" {{ in_array('AL', $states) ? 'selected' : '' }}>AL
+                                            </option>
+                                            <option value="AP" {{ in_array('AP', $states) ? 'selected' : '' }}>AP
+                                            </option>
+                                            <option value="AM" {{ in_array('AM', $states) ? 'selected' : '' }}>AM
+                                            </option>
+                                            <option value="BA" {{ in_array('BA', $states) ? 'selected' : '' }}>BA
+                                            </option>
+                                            <option value="CE" {{ in_array('CE', $states) ? 'selected' : '' }}>CE
+                                            </option>
+                                            <option value="DF" {{ in_array('DF', $states) ? 'selected' : '' }}>DF
+                                            </option>
+                                            <option value="ES" {{ in_array('ES', $states) ? 'selected' : '' }}>ES
+                                            </option>
+                                            <option value="GO" {{ in_array('GO', $states) ? 'selected' : '' }}>GO
+                                            </option>
+                                            <option value="MA" {{ in_array('MA', $states) ? 'selected' : '' }}>MA
+                                            </option>
+                                            <option value="MT" {{ in_array('MT', $states) ? 'selected' : '' }}>MT
+                                            </option>
+                                            <option value="MS" {{ in_array('MS', $states) ? 'selected' : '' }}>MS
+                                            </option>
+                                            <option value="MG" {{ in_array('MG', $states) ? 'selected' : '' }}>MG
+                                            </option>
+                                            <option value="PA" {{ in_array('PA', $states) ? 'selected' : '' }}>PA
+                                            </option>
+                                            <option value="PB" {{ in_array('PB', $states) ? 'selected' : '' }}>PB
+                                            </option>
+                                            <option value="PR" {{ in_array('PR', $states) ? 'selected' : '' }}>PR
+                                            </option>
+                                            <option value="PE" {{ in_array('PE', $states) ? 'selected' : '' }}>PE
+                                            </option>
+                                            <option value="PI" {{ in_array('PI', $states) ? 'selected' : '' }}>PI
+                                            </option>
+                                            <option value="RJ" {{ in_array('RJ', $states) ? 'selected' : '' }}>RJ
+                                            </option>
+                                            <option value="RN" {{ in_array('RN', $states) ? 'selected' : '' }}>RN
+                                            </option>
+                                            <option value="RO" {{ in_array('RO', $states) ? 'selected' : '' }}>RO
+                                            </option>
+                                            <option value="RR" {{ in_array('RR', $states) ? 'selected' : '' }}>RR
+                                            </option>
+                                            <option value="RS" {{ in_array('RS', $states) ? 'selected' : '' }}>RS
+                                            </option>
+                                            <option value="SC" {{ in_array('SC', $states) ? 'selected' : '' }}>SC
+                                            </option>
+                                            <option value="SP" {{ in_array('SP', $states) ? 'selected' : '' }}>SP
+                                            </option>
+                                            <option value="SE" {{ in_array('SE', $states) ? 'selected' : '' }}>SE
+                                            </option>
+                                            <option value="TO" {{ in_array('TO', $states) ? 'selected' : '' }}>TO
+                                            </option>
+                                        </x-adminlte-select-bs>
+                                    </div>
+
                                 </div>
 
                                 @php

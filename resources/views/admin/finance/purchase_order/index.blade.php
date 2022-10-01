@@ -1,9 +1,8 @@
 @extends('adminlte::page')
 
-@section('title', '- Fornecedores')
+@section('title', '- Financeiro: Ordens de Compra')
 @section('plugins.Datatables', true)
 @section('plugins.DatatablesPlugins', true)
-@section('plugins.BsCustomFileInput', true)
 
 @section('content')
 
@@ -11,31 +10,17 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><i class="fas fa-fw fa-user-plus"></i> Fornecedores</h1>
+                    <h1><i class="fas fa-fw fa-cart-plus"></i> Ordens de Compra</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
-                        <li class="breadcrumb-item active">Fornecedores</li>
+                        <li class="breadcrumb-item active">Ordens de Compra</li>
                     </ol>
                 </div>
             </div>
         </div>
     </section>
-
-    @can('Criar Fornecedores')
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-end pb-4">
-                        <a class="btn btn-secondary" href="{{ Storage::url('worksheets/providers.xlsx') }}" download>Download
-                            Planilha</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    @endcan
-
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -43,41 +28,23 @@
 
                     @include('components.alert')
 
-                    @can('Criar Fornecedores')
-                        <div class="card card-solid">
-                            <div class="card-header">
-                                <i class="fas fa-fw fa-upload"></i> Importação de planilha para cadastro de fornecedores
-                            </div>
-                            <form action="{{ route('admin.providers.import') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <div class="card-body pb-0">
-                                    <x-adminlte-input-file name="file" label="Arquivo" placeholder="Selecione o arquivo..."
-                                        legend="Selecionar" />
-                                </div>
-                                <div class="card-footer">
-                                    <button class="btn btn-primary">Importar</button>
-                                </div>
-                            </form>
-                        </div>
-                    @endcan
-
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex flex-wrap justify-content-between col-12 align-content-center">
-                                <h3 class="card-title align-self-center">Fornecedores Cadastrados</h3>
-                                @can('Criar Fornecedores')
-                                    <a href="{{ route('admin.providers.create') }}" title="Novo Fornecedor"
-                                        class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Novo Fornecedor</a>
+                                <h3 class="card-title align-self-center">Ordens de Compra Cadastradas</h3>
+                                @can('Criar Ordens de Compra')
+                                    <a href="{{ route('admin.finance-purchase-orders.create') }}" title="Nova Ordem de Compra"
+                                        class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Nova Ordem de Compra</a>
                                 @endcan
                             </div>
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 5], 'Nome', 'E-mail', 'Telefone', 'Ramo', 'Cobertura', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Autor', 'Filial', 'NS', 'Data', 'Obra', 'Solicitante', 'Entrega', 'Valor', 'Status', ['label' => 'Status', 'no-export' => true, 'width' => 5], ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
                             $config = [
-                                'order' => [[1, 'asc']],
-                                'ajax' => url('/admin/providers'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'alias_name', 'name' => 'alias_name'], ['data' => 'email', 'name' => 'email'], ['data' => 'telephone', 'name' => 'telephone'], ['data' => 'activity', 'name' => 'activity'], ['data' => 'coverage', 'name' => 'coverage'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'order' => [[0, 'desc']],
+                                'ajax' => url('/admin/finance-purchase-orders'),
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'author', 'name' => 'author', 'visible' => false], ['data' => 'subsidiary', 'name' => 'subsidiary', 'visible' => false], ['data' => 'number_series', 'name' => 'number_series'], ['data' => 'date', 'name' => 'date'], ['data' => 'job', 'name' => 'job'], ['data' => 'requester', 'name' => 'requester'], ['data' => 'forecast', 'name' => 'forecast'], ['data' => 'value', 'name' => 'value'], ['data' => 'status', 'name' => 'status', 'visible' => false], ['data' => 'btnStatus', 'name' => 'btnStatus'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,
@@ -95,6 +62,14 @@
                             ];
                         @endphp
 
+                        <div class="card-body pb-0">
+                            <span class="text-muted text-sm px-2">Alterar visualização das colunas:</span>
+                            <div class="btn-group px-2" role="group" aria-label="Visualizar colunas">
+                                <button type="button" class="toggle-vis btn btn-info" data-column="1">Autor</button>
+                                <button type="button" class="toggle-vis btn btn-info" data-column="2">Filial</button>
+                            </div>
+                        </div>
+
                         <div class="card-body">
                             <x-adminlte-datatable id="table1" :heads="$heads" :heads="$heads" :config="$config"
                                 striped hoverable beautify />
@@ -104,4 +79,14 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('custom_js')
+    <script>
+        $('button.toggle-vis').on('click', function(e) {
+            e.preventDefault();
+            var column = $('#table1').DataTable().column($(this).attr('data-column'));
+            column.visible(!column.visible());
+        });
+    </script>
 @endsection

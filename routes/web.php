@@ -15,9 +15,12 @@ use App\Http\Controllers\Admin\ACL\{
     PermissionController,
     RoleController,
 };
-use App\Http\Controllers\Admin\Finance\ExpenseController;
-use App\Http\Controllers\Admin\Finance\IncomeController;
-use App\Http\Controllers\Admin\Finance\RefoundController;
+use App\Http\Controllers\Admin\Finance\{
+    ExpenseController,
+    IncomeController,
+    PurchaseOrderController,
+    RefoundController
+};
 use Illuminate\Support\Facades\{
     Auth,
     Route
@@ -62,7 +65,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('providers-import', [ProviderController::class, 'fileImport'])->name('providers.import');
 
         /** Service Orders */
-        Route::get('/clients/service-orders/{id}', [ServiceOrderController::class, 'destroy']);
+        Route::get('/service-orders/destroy/{id}', [ServiceOrderController::class, 'destroy']);
         Route::resource('service-orders', ServiceOrderController::class);
         Route::get('service-orders-pdf/{id}', [ServiceOrderController::class, 'pdf'])->name('service-orders.pdf');
 
@@ -87,6 +90,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/finance-refunds/receive/{id}', [RefoundController::class, 'receive']);
         Route::get('finance-refunds-pdf/{id}', [RefoundController::class, 'pdf'])->name('finance-refunds.pdf');
         Route::resource('finance-refunds', RefoundController::class);
+
+        /** Purchase Orders */
+        Route::get('/finance-purchase-orders/destroy/{id}', [PurchaseOrderController::class, 'destroy']);
+        Route::get('/finance-purchase-orders/unexecuted/{id}', [PurchaseOrderController::class, 'unexecuted']);
+        Route::get('/finance-purchase-orders/executed/{id}', [PurchaseOrderController::class, 'executed']);
+        Route::get('finance-purchase-orders-pdf/{id}', [PurchaseOrderController::class, 'pdf'])->name('finance-purchase-orders.pdf');
+        Route::resource('finance-purchase-orders', PurchaseOrderController::class);
 
         /**
          * ACL

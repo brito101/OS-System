@@ -423,6 +423,18 @@ return [
                     'icon' => 'fas fa-fw fa-chevron-right',
                     'can'  => 'Criar Reembolsos',
                 ],
+                [
+                    'text' => 'Listagem de O. de Compra',
+                    'url'  => 'admin/finance-purchase-orders',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Ordens de Compra',
+                ],
+                [
+                    'text' => 'Cadastro de O. de Compra',
+                    'url'  => 'admin/finance-purchase-orders/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Ordens de Compra',
+                ],
             ],
         ],
         [

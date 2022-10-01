@@ -13,6 +13,6 @@ class Provider extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'social_name', 'alias_name', 'document_company', 'document_company_secondary', 'activity', 'email', 'telephone', 'cell', 'contact', 'function', 'average_delivery_time', 'payment_conditions', 'discounts', 'products_offered', 'promotion_funds', 'technical_assistance', 'total_purchases_previous_year', 'zipcode', 'street', 'number', 'complement', 'neighborhood', 'state', 'city', 'observations'
+        'social_name', 'alias_name', 'document_company', 'document_company_secondary', 'activity', 'email', 'telephone', 'cell', 'contact', 'function', 'average_delivery_time', 'payment_conditions', 'discounts', 'products_offered', 'promotion_funds', 'technical_assistance', 'total_purchases_previous_year', 'zipcode', 'street', 'number', 'complement', 'neighborhood', 'state', 'city', 'observations', 'coverage'
     ];
 }
