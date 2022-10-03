@@ -227,7 +227,7 @@
                                     @endphp
 
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
-                                        <x-adminlte-select-bs id="coverage" name="coverage[]" label="Area de cobertura"
+                                        <x-adminlte-select-bs id="coverage" name="coverage[]" label="Área de cobertura"
                                             label-class="text-dark bg-white" igroup-size="md" :config="$config" multiple
                                             class="border">
                                             <option value="AC">AC</option>
