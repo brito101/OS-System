@@ -75,11 +75,11 @@ class PurchaseOrder extends Model
     /** Aux */
     public function getAuthorAttribute($value)
     {
-        return Str::words(User::find($this->user_id)->name, 5);
+        return User::find($this->user_id)->name;
     }
 
     public function getSubsidiaryAttribute($value)
     {
-        return Str::words(Subsidiary::find($this->subsidiary_id)->alias_name, 5);
+        return Subsidiary::find($this->subsidiary_id)->alias_name;
     }
 }

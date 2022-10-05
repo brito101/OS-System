@@ -20,7 +20,7 @@ class FinanceExpense extends Model
     /** Access */
     public function getDescriptionAttribute($value)
     {
-        return Str::limit($value, 15);
+        return $value;
     }
 
     public function getValueAttribute($value)
@@ -36,11 +36,11 @@ class FinanceExpense extends Model
     /** Aux */
     public function getAuthorAttribute($value)
     {
-        return Str::words(User::find($this->user_id)->name, 3);
+        return User::find($this->user_id)->name;
     }
 
     public function getSubsidiaryAttribute($value)
     {
-        return Str::words(Subsidiary::find($this->subsidiary_id)->alias_name, 3);
+        return Subsidiary::find($this->subsidiary_id)->alias_name;
     }
 }
