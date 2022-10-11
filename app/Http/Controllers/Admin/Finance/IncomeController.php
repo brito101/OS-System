@@ -118,6 +118,7 @@ class IncomeController extends Controller
         if (!$request->quota) {
             $data['quota'] = 1;
         } else {
+            $data['value'] = $data['entrance'];
             $data['description'] = $request->description . ' (1/' . $request->quota . ')';
         }
 
@@ -135,9 +136,10 @@ class IncomeController extends Controller
                 for ($i = 1; $i < $invoice->quota; $i++) {
                     $part = $i + 1;
                     $newInvoice = $invoice->replicate();
+                    $newInvoice->value = $request->value;
                     $newInvoice->invoice_id = $invoice->id;
                     $newInvoice->description = $request->description . ' (' . $part . '/' . $request->quota . ')';
-                    $newInvoice->due_date = date('Y-m-d', strtotime("+{$time} {$unit}", strtotime($invoice->due_date)));
+                    $newInvoice->due_date = date('Y-m-d', strtotime("+{$time} {$unit}", strtotime($request->due_date)));
                     $newInvoice->created_at = Carbon::now();
                     $newInvoice->save();
                     $time++;

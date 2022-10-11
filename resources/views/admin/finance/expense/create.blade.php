@@ -72,7 +72,7 @@
                                             placeholder="dd/mm/yyyy" name="due_date" value="{{ old('due_date') }}" required>
                                     </div>
 
-                                    <div class="col-12 col-md-3 form-group px-0 px-md-2 mb-0">
+                                    <div class="col-12 col-md-2 form-group px-0 px-md-2 mb-0">
                                         <label for="repetition">Repetição</label>
                                         <x-adminlte-select2 name="repetition">
                                             <option {{ old('repetition') == 'única' ? 'selected' : '' }} value="única">
@@ -87,11 +87,17 @@
                                         </x-adminlte-select2>
                                     </div>
 
-                                    <div class="col-12 col-md-3 form-group px-0 pl-md-2" id="quota_field">
+                                    <div class="col-12 col-md-2 form-group px-0 px-md-2" id="quota_field">
                                         <label for="quota">Parcelas</label>
                                         <input type="number" min="1" class="form-control" id="quota"
-                                            placeholder="Quantidade de Parcelas" name="quota"
-                                            value="{{ old('quota') }}">
+                                            placeholder="Qtd Parcelas" name="quota" value="{{ old('quota') }}">
+                                    </div>
+
+                                    <div class="col-12 col-md-2 form-group px-0 pl-md-2" id="entrance_field">
+                                        <label for="entrance">Entrada</label>
+                                        <input type="text" class="form-control money_format_2" id="entrance"
+                                            placeholder="Valor em reais" name="entrance" value="{{ old('entrance') }}"
+                                            required>
                                     </div>
                                 </div>
 

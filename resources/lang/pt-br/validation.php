@@ -269,6 +269,7 @@ return [
         'freight' => 'frete',
         'remarks' => 'observações de execução',
         'coverage' => 'área de cobertura',
+        'entrance' => 'entrada',
     ],
 
 ];
