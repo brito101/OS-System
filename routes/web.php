@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         /** Finance */
         /** Incomes */
+        Route::post('/finance-incomes/changeStatus', [IncomeController::class, 'changeStatus'])->name('finance-incomes.changeStatus');
         Route::get('/finance-incomes/destroy/{id}', [IncomeController::class, 'destroy']);
         Route::get('/finance-incomes/pay/{id}', [IncomeController::class, 'pay']);
         Route::get('/finance-incomes/receive/{id}', [IncomeController::class, 'receive']);
@@ -78,6 +79,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('finance-incomes', IncomeController::class);
 
         /** Expenses */
+        Route::post('/finance-expenses/changeStatus', [ExpenseController::class, 'changeStatus'])->name('finance-expenses.changeStatus');
         Route::get('/finance-expenses/destroy/{id}', [ExpenseController::class, 'destroy']);
         Route::get('/finance-expenses/pay/{id}', [ExpenseController::class, 'pay']);
         Route::get('/finance-expenses/receive/{id}', [ExpenseController::class, 'receive']);
@@ -85,6 +87,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('finance-expenses', ExpenseController::class);
 
         /** Refunds */
+        Route::post('/finance-refunds/changeStatus', [RefoundController::class, 'changeStatus'])->name('finance-refunds.changeStatus');
         Route::get('/finance-refunds/destroy/{id}', [RefoundController::class, 'destroy']);
         Route::get('/finance-refunds/pay/{id}', [RefoundController::class, 'pay']);
         Route::get('/finance-refunds/receive/{id}', [RefoundController::class, 'receive']);

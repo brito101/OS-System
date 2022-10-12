@@ -412,4 +412,49 @@ class RefoundController extends Controller
 
         return view('admin.finance.refound.pdf', compact('invoice'));
     }
+
+    public function changeStatus(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Editar Reembolsos')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->ids) {
+            return redirect()
+                ->back()
+                ->with('error', 'Selecione ao menos uma linha!');
+        }
+
+        $ids = explode(",", $request->ids);
+
+        $role = Auth::user()->roles->first()->name;
+        switch ($role) {
+            case 'Colaborador':
+            case 'Financeiro':
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                break;
+            case 'Gerente':
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
+        }
+
+        foreach ($ids as $id) {
+            $invoice = Invoice::where('id', $id)->where('type', 'reembolso')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+            if (!$invoice) {
+                abort(403, 'Acesso não autorizado');
+            }
+
+            $invoice->status = $invoice->status == 'pago' ? 'pendente' : 'pago';
+            $invoice->update();
+        }
+
+        return redirect()
+            ->route('admin.finance-refunds.index')
+            ->with('success', 'Reembolsos atualizados!');
+    }
 }

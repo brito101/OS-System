@@ -85,6 +85,7 @@
                                 'processing' => true,
                                 'serverSide' => true,
                                 'responsive' => true,
+                                'pageLength' => 50,
                                 'dom' => '<"d-flex flex-wrap col-12 justify-content-between"Bf>rtip',
                                 'buttons' => [
                                     ['extend' => 'pageLength', 'className' => 'btn-default'],
@@ -98,10 +99,27 @@
                         @endphp
 
                         <div class="card-body pb-0">
-                            <span class="text-muted text-sm px-2">Alterar visualização das colunas:</span>
-                            <div class="btn-group px-2" role="group" aria-label="Visualizar colunas">
-                                <button type="button" class="toggle-vis btn btn-info" data-column="1">Autor</button>
-                                <button type="button" class="toggle-vis btn btn-info" data-column="2">Filial</button>
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <div class="col-12 col-md-5">
+                                    <span class="text-muted text-sm px-2">Alterar visualização das colunas:</span>
+                                    <div class="btn-group px-2" role="group" aria-label="Visualizar colunas">
+                                        <button type="button" class="toggle-vis btn btn-info"
+                                            data-column="1">Autor</button>
+                                        <button type="button" class="toggle-vis btn btn-info"
+                                            data-column="2">Filial</button>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-7">
+                                    <span class="text-muted text-sm px-2">Alterar status dos lançamentos (clique nas linhas
+                                        para selecionar):</span>
+                                    <div class="btn-group px-2" role="group" aria-label="Visualizar colunas">
+                                        <form method="POST" action="{{ route('admin.finance-expenses.changeStatus') }}">
+                                            @csrf
+                                            <input type="hidden" name="ids" value="" id="ids">
+                                            <button type="submit" class="change-status btn btn-info">Alterar</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -122,6 +140,18 @@
             e.preventDefault();
             var column = $('#table1').DataTable().column($(this).attr('data-column'));
             column.visible(!column.visible());
+        });
+
+        $('#table1 tbody').on('click', 'tr', function() {
+            $(this).toggleClass('selected bg-dark');
+            let rows = $('#table1')[0].rows;
+            let ids = [];
+            $.each(rows, function(i, el) {
+                if ($(el).hasClass('selected')) {
+                    ids.push(el.children[0].textContent);
+                }
+            });
+            $("#ids").val(ids)
         });
     </script>
 @endsection

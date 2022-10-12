@@ -50,6 +50,7 @@
                                 'processing' => true,
                                 'serverSide' => true,
                                 'responsive' => true,
+                                'pageLength' => 50,
                                 'dom' => '<"d-flex flex-wrap col-12 justify-content-between"Bf>rtip',
                                 'buttons' => [
                                     ['extend' => 'pageLength', 'className' => 'btn-default'],
