@@ -208,6 +208,24 @@
                                     </div>
                                 </div>
 
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2 mb-0">
+                                        <label for="provider_id">Fornecedor</label>
+                                        <x-adminlte-select2 name="provider_id">
+                                            <option
+                                                {{ old('provider_id') == null ? 'selected' : ($invoice->provider_id == null ? 'selected' : '') }}
+                                                value="">
+                                                Nenhum</option>
+                                            @foreach ($providers as $provider)
+                                                <option
+                                                    {{ old('provider_id') == $provider->id ? 'selected' : ($invoice->provider_id == $provider->id ? 'selected' : '') }}
+                                                    value="{{ $provider->id }}">{{ $provider->alias_name }}
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select2>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="card-footer">

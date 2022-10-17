@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\InvoiceRequest;
 use App\Models\Invoice;
 use App\Models\Manager;
+use App\Models\Provider;
 use App\Models\Subsidiary;
 use App\Models\Views\FinanceExpense;
 use Carbon\Carbon;
@@ -89,16 +90,26 @@ class ExpenseController extends Controller
             case 'Financeiro':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $states = array_unique($subsidiaries->pluck('state')->toArray());
+                sort($states);
+                $statesSearch = implode(',', $states);
+                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->get();
                 break;
             case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                $states = array_unique($subsidiaries->pluck('state')->toArray());
+                sort($states);
+                $statesSearch = implode(',', $states);
+                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->get();
                 break;
             default:
                 $subsidiaries = Subsidiary::all();
+                $providers = Provider::all();
                 break;
         }
-        return view('admin.finance.expense.create', compact('subsidiaries'));
+
+        return view('admin.finance.expense.create', compact('subsidiaries', 'providers'));
     }
 
     public function store(InvoiceRequest $request)
@@ -125,6 +136,13 @@ class ExpenseController extends Controller
         if ($request->hasFile('file') && $request->file('file')->isValid()) {
             $path = $request->file('file')->store('finance/expense');
             $data['file'] = $path;
+        }
+
+        if ($data['provider_id']) {
+            $provider = Provider::where('id', $request->provider_id)->first();
+            if (!$provider) {
+                abort(403, 'Acesso não autorizado');
+            }
         }
 
         $invoice = Invoice::create($data);
@@ -202,13 +220,22 @@ class ExpenseController extends Controller
             case 'Financeiro':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $states = array_unique($subsidiaries->pluck('state')->toArray());
+                sort($states);
+                $statesSearch = implode(',', $states);
+                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->get();
                 break;
             case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                $states = array_unique($subsidiaries->pluck('state')->toArray());
+                sort($states);
+                $statesSearch = implode(',', $states);
+                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->get();
                 break;
             default:
                 $subsidiaries = Subsidiary::all();
+                $providers = Provider::all();
                 break;
         }
 
@@ -218,7 +245,7 @@ class ExpenseController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.finance.expense.edit', compact('subsidiaries', 'invoice'));
+        return view('admin.finance.expense.edit', compact('subsidiaries', 'invoice', 'providers'));
     }
 
     public function update(InvoiceRequest $request, $id)
@@ -263,6 +290,13 @@ class ExpenseController extends Controller
         if ($request->hasFile('file') && $request->file('file')->isValid()) {
             $path = $request->file('file')->store('finance/expense');
             $data['file'] = $path;
+        }
+
+        if ($data['provider_id']) {
+            $provider = Provider::where('id', $request->provider_id)->first();
+            if (!$provider) {
+                abort(403, 'Acesso não autorizado');
+            }
         }
 
         if ($invoice->update($data)) {

@@ -107,6 +107,16 @@
                     </div>
                 </div>
 
+                @if ($invoice->provider)
+                    <div class="d-flex flex-wrap justify-content-between">
+                        <div class="col-6 form-group pr-2">
+                            <label for="provider">Fornecedor</label>
+                            <input type="text" class="form-control bg-white" id="provider" name="provider"
+                                value="{{ $invoice->provider->alias_name }}" disabled>
+                        </div>
+                    </div>
+                @endif
+
             </div>
         </form>
 

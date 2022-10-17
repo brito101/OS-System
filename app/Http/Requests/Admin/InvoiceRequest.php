@@ -45,7 +45,8 @@ class InvoiceRequest extends FormRequest
             'status' => 'nullable|in:pago,pendente',
             'purchase_mode' => 'nullable|in:boleto,cartão de crédito,dinheiro,PIX,transferência',
             'annotation' => 'nullable|max:4000000000',
-            'file' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,zip|max:20480'
+            'file' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,zip|max:20480',
+            'provider_id' => 'nullable|exists:providers,id'
         ];
     }
 

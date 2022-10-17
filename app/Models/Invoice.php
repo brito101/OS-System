@@ -12,7 +12,7 @@ class Invoice extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['user_id', 'subsidiary_id', 'description', 'category', 'invoice_id', 'type', 'value', 'due_date', 'repetition', 'quota', 'status', 'purchase_mode', 'annotation', 'file'];
+    protected $fillable = ['user_id', 'subsidiary_id', 'description', 'category', 'invoice_id', 'type', 'value', 'due_date', 'repetition', 'quota', 'status', 'purchase_mode', 'annotation', 'file', 'provider_id'];
 
     /** Accessors */
     public function getDueDateAttribute($value)
@@ -39,5 +39,10 @@ class Invoice extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function provider()
+    {
+        return $this->belongsTo(Provider::class);
     }
 }
