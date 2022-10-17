@@ -45,7 +45,7 @@ class ClientRequest extends FormRequest
             'origin' => 'nullable|in:Google,oHub,SindicoNet,Cota Síndicos,Feira,Indicação,Outros',
             'apartments' => 'nullable|integer|min:0|max:9999',
             'contact' => 'nullable|max:65000',
-            'subsidiary_id' => 'nullable|exists:subsidiaries,id'
+            'subsidiary_id' => 'required|exists:subsidiaries,id'
         ];
     }
 }

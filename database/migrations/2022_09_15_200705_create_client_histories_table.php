@@ -21,7 +21,7 @@ class CreateClientHistoriesTable extends Migration
                 ->onDelete('cascade');
             $table->string('action');
             $table->string('trade_status');
-            $table->foreignId('user_id')
+            $table->foreignId('user_id')->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
