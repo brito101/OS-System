@@ -478,6 +478,22 @@
                                     <textarea id="costumer_signature" name="costumer_signature" style="display: none"></textarea>
                                 </div>
 
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
+                                        <label for="costumer_name">Nome de quem assinou</label>
+                                        <input type="text" class="form-control " id="costumer_name"
+                                            name="costumer_name" placeholder="Nome completo para identificação"
+                                            value="{{ $serviceOrder->costumer_name }}">
+                                    </div>
+
+                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
+                                        <label for="costumer_document">Documento de quem assinou</label>
+                                        <input type="text" class="form-control " id="costumer_document"
+                                            name="costumer_document" placeholder="nº do documento (CPF ou RG)"
+                                            value="{{ $serviceOrder->costumer_document }}">
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="card-footer">

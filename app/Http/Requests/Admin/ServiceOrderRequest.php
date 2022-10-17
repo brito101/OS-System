@@ -82,6 +82,8 @@ class ServiceOrderRequest extends FormRequest
             'end_time' => 'nullable|date_format:H:i',
             'remarks' => 'nullable|max:4000000000',
             'photo' => 'nullable',
+            'costumer_name' => 'nullable|max:191',
+            'costumer_document' => 'nullable|max:191',
         ];
     }
 

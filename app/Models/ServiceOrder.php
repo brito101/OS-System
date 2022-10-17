@@ -36,7 +36,9 @@ class ServiceOrder extends Model
         'start_time',
         'end_time',
         'remarks',
-        'photo'
+        'photo',
+        'costumer_name',
+        'costumer_document',
     ];
 
     /** Accessor */

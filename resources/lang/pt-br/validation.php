@@ -270,6 +270,8 @@ return [
         'remarks' => 'observações de execução',
         'coverage' => 'área de cobertura',
         'entrance' => 'entrada',
+        'costumer_name' => 'nome de quem assina',
+        'costumer_document' => 'documento de quem assina',
     ],
 
 ];

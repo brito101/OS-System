@@ -226,6 +226,25 @@
                                     </div>
                                 @endif
 
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    @if ($serviceOrder->costumer_name)
+                                        <div class="col-12 col-md-6 form-group px-0 pr-md-2">
+                                            <label for="costumer_name">Nome de quem assinou</label>
+                                            <input type="text" class="form-control bg-white" id="costumer_name"
+                                                name="costumer_name" value="{{ $serviceOrder->costumer_name }}" disabled>
+                                        </div>
+                                    @endif
+
+                                    @if ($serviceOrder->costumer_document)
+                                        <div class="col-12 col-md-6 form-group px-0 pl-md-2">
+                                            <label for="costumer_document">Documento de quem assinou</label>
+                                            <input type="text" class="form-control bg-white" id="costumer_document"
+                                                name="costumer_document" value="{{ $serviceOrder->costumer_document }}"
+                                                disabled>
+                                        </div>
+                                    @endif
+                                </div>
+
                             </div>
 
                             <div class="card-footer">
