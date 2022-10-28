@@ -161,7 +161,7 @@
                                         class="fas fa-fw fa-sync"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Reembolsos Pagos</span>
-                                    <span class="info-box-number">{{ $service_orders }}</span>
+                                    <span class="info-box-number">{{ $paid_refunds }}</span>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
                                         class="fas fa-fw fa-sync"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Reembolsos Pendentes</span>
-                                    <span class="info-box-number">{{ $service_orders }}</span>
+                                    <span class="info-box-number">{{ $unpaid_refunds }}</span>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +183,7 @@
                                         class="fas fa-fw fa-cart-plus"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">O. de Compra Executadas</span>
-                                    <span class="info-box-number">{{ $service_orders }}</span>
+                                    <span class="info-box-number">{{ $exec_purchases }}</span>
                                 </div>
                             </div>
                         </div>
@@ -194,7 +194,7 @@
                                         class="fas fa-fw fa-cart-plus"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">O. de Compra Pendentes</span>
-                                    <span class="info-box-number">{{ $service_orders }}</span>
+                                    <span class="info-box-number">{{ $unexec_purchases }}</span>
                                 </div>
                             </div>
                         </div>

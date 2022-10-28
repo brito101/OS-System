@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Collaborator;
 use App\Models\Financier;
 use App\Models\Manager;
+use App\Models\PurchaseOrder;
 use App\Models\User;
 use App\Models\Views\Client;
 use App\Models\Views\FinanceExpense;
 use App\Models\Views\FinanceIncome;
+use App\Models\Views\FinanceRefund;
 use App\Models\Views\Provider;
 use App\Models\Views\ServiceOrder;
 use App\Models\Views\Subsidiary;
@@ -35,6 +37,10 @@ class AdminController extends Controller
         $unpaid_incomes = 0;
         $paid_expenses = 0;
         $unpaid_expenses = 0;
+        $paid_refunds = 0;
+        $unpaid_refunds = 0;
+        $exec_purchases = 0;
+        $unexec_purchases = 0;
 
         switch ($role) {
             case 'Colaborador':
@@ -54,6 +60,10 @@ class AdminController extends Controller
                 $unpaid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
                 $paid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
                 $unpaid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
+                $paid_refunds = FinanceRefund::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
+                $unpaid_refunds = FinanceRefund::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
+                $exec_purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->where('status', 'executada')->count();
+                $unexec_purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->where('status', 'não executada')->count();
                 break;
             case 'Financeiro':
                 $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
@@ -61,6 +71,11 @@ class AdminController extends Controller
                 $unpaid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
                 $paid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
                 $unpaid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
+                $paid_refunds = FinanceRefund::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
+                $unpaid_refunds = FinanceRefund::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
+                $exec_purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->where('status', 'executada')->count();
+                $unexec_purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->where('status', 'não executada')->count();
+                break;
             default:
                 $clients = Client::count();
                 $financiers = ViewsUser::where('type', 'Financeiro')->count();
@@ -70,6 +85,10 @@ class AdminController extends Controller
                 $unpaid_incomes = FinanceIncome::where('status', 'pendente')->count();
                 $paid_expenses = FinanceExpense::where('status', 'pago')->count();
                 $unpaid_expenses = FinanceExpense::where('status', 'pendente')->count();
+                $paid_refunds = FinanceRefund::where('status', 'pago')->count();
+                $unpaid_refunds = FinanceRefund::where('status', 'pendente')->count();
+                $exec_purchases = PurchaseOrder::where('status', 'executada')->count();
+                $unexec_purchases = PurchaseOrder::where('status', 'não executada')->count();
                 break;
         }
 
@@ -96,6 +115,10 @@ class AdminController extends Controller
             'unpaid_incomes',
             'paid_expenses',
             'unpaid_expenses',
+            'paid_refunds',
+            'unpaid_refunds',
+            'exec_purchases',
+            'unexec_purchases',
             'onlineUsers',
             'percent',
             'access',
