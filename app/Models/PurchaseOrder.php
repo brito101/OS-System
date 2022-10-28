@@ -17,7 +17,8 @@ class PurchaseOrder extends Model
 
     protected $appends = [
         'author',
-        'subsidiary'
+        'subsidiary',
+        'amount'
     ];
 
     /** Accessor */
@@ -44,6 +45,11 @@ class PurchaseOrder extends Model
     public function getCreatedAtAttribute($value)
     {
         return date("d/m/Y H:i", strtotime($value));
+    }
+
+    public function getAmountAttribute($value)
+    {
+        return (float) str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value)));
     }
 
     /** relationships */

@@ -37,11 +37,117 @@
 {{-- Add plugin initialization and configuration code --}}
 
 @push('js')
-    <script>
-        $(() => {
-            $('#{{ $id }}').DataTable(@json($config));
-        })
-    </script>
+    @if (isset($withFooter) && $withFooter == 'invoice')
+        <script>
+            $(() => {
+                let {{ $id }} = $('#{{ $id }}').DataTable(
+                        {!! substr(json_encode($config), 0, -1) !!},
+                        "footerCallback": function(tfoot, data, start, end, display) {
+                            var api = this.api();
+                            let balance = 0;
+                            let payed = 0;
+                            let unpayed = 0;
+                            data.forEach(el => {
+                                if (el['status'] == 'pago') {
+                                    payed += el['amount'];
+                                } else if (el['status'] == 'pendente') {
+                                    unpayed += el['amount'];
+                                }
+                            });
+
+                            balance = payed - unpayed;
+
+                            payed = payed.toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            });
+
+                            unpayed = unpayed.toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            });
+
+                            balance = balance.toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            });
+
+                            $(api.column(0).footer()).html('');
+                            $(api.column(1).footer()).html('');
+                            $(api.column(2).footer()).html('');
+                            $(api.column(3).footer()).html('');
+                            $(api.column(4).footer()).html(`Pago: ${payed}`);
+                            $(api.column(5).footer()).html(`Pendente: ${unpayed}`);
+                            $(api.column(6).footer()).html(`Balanço: ${balance}`);
+
+                            $(tfoot).html(
+                                `<th colspan="10" class="text-left">
+                            Pago: ${payed} | Pendente: ${unpayed} | Balanço: ${balance}</th>`
+                            );
+                        }
+                    },
+            );
+            })
+        </script>
+    @elseif (isset($withFooter) && $withFooter == 'purchase')
+        <script>
+            $(() => {
+                let {{ $id }} = $('#{{ $id }}').DataTable(
+                        {!! substr(json_encode($config), 0, -1) !!},
+                        "footerCallback": function(tfoot, data, start, end, display) {
+                            var api = this.api();
+                            let balance = 0;
+                            let exec = 0;
+                            let unexec = 0;
+                            data.forEach(el => {
+                                if (el['status'] == 'executada') {
+                                    exec += el['amount'];
+                                } else if (el['status'] == 'não executada') {
+                                    unexec += el['amount'];
+                                }
+                            });
+
+                            balance = exec - unexec;
+
+                            exec = exec.toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            });
+
+                            unexec = unexec.toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            });
+
+                            balance = balance.toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            });
+
+                            $(api.column(0).footer()).html('');
+                            $(api.column(1).footer()).html('');
+                            $(api.column(2).footer()).html('');
+                            $(api.column(3).footer()).html('');
+                            $(api.column(4).footer()).html(`Pago: ${exec}`);
+                            $(api.column(5).footer()).html(`Pendente: ${unexec}`);
+                            $(api.column(6).footer()).html(`Balanço: ${balance}`);
+
+                            $(tfoot).html(
+                                `<th colspan="10" class="text-left">
+                        Exec: ${exec} | Não Exec: ${unexec} | Balanço: ${balance}</th>`
+                            );
+                        }
+                    },
+            );
+            })
+        </script>
+    @else
+        <script>
+            $(() => {
+                $('#{{ $id }}').DataTable(@json($config));
+            })
+        </script>
+    @endif
 @endpush
 
 {{-- Add CSS styling --}}

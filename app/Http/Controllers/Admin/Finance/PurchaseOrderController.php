@@ -44,6 +44,14 @@ class PurchaseOrderController extends Controller
                 break;
         }
 
+        $execValue = PurchaseOrder::where('status', 'executada')->whereIn('id', $purchases->pluck('id'))->sum('value');
+        $exec = 'R$ ' . \number_format($execValue, 2, ',', '.');
+
+        $unexecValue = PurchaseOrder::where('status', 'não executada')->whereIn('id', $purchases->pluck('id'))->sum('value');
+        $unexec = 'R$ ' . \number_format($unexecValue, 2, ',', '.');
+
+        $balance = 'R$ ' . \number_format($execValue - $unexecValue, 2, ',', '.');
+
         if ($request->ajax()) {
             return Datatables::of($purchases)
                 ->addIndexColumn()
@@ -69,7 +77,7 @@ class PurchaseOrderController extends Controller
                 ->make(true);
         }
 
-        return view('admin.finance.purchase_order.index');
+        return view('admin.finance.purchase_order.index', compact('exec', 'unexec', 'balance'));
     }
 
     /**

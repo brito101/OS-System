@@ -23,9 +23,10 @@
         <div class="container-fluid">
             <div class="row">
                 @if (Auth::user()->hasRole('Programador|Administrador'))
-                    <div class="col-12 col-sm-6 col-md-4">
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box mb-3">
-                            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-user-shield"></i></span>
+                            <span class="info-box-icon bg-gradient-danger elevation-1"><i
+                                    class="fas fa-user-shield"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Administradores</span>
                                 <span class="info-box-number">{{ $administrators }}</span>
@@ -35,9 +36,9 @@
                 @endif
 
                 @if (Auth::user()->hasRole('Programador|Administrador|Gerente'))
-                    <div class="col-12 col-sm-6 col-md-4">
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box mb-3">
-                            <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-building"></i></span>
+                            <span class="info-box-icon bg-gradient-gray elevation-1"><i class="fas fa-building"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Filiais</span>
                                 <span class="info-box-number">{{ $subsidiariesList }}</span>
@@ -45,30 +46,42 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-md-4">
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box mb-3">
-                            <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-user-friends"></i></span>
+                            <span class="info-box-icon bg-gradient-primary elevation-1"><i
+                                    class="fas fa-user-friends"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Gerentes</span>
                                 <span class="info-box-number">{{ $managers }}</span>
                             </div>
                         </div>
                     </div>
-                @endif
 
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-cyan elevation-1"><i class="fas fa-users-cog"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Colaboradores</span>
-                            <span class="info-box-number">{{ $collaborators }}</span>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-gradient-cyan elevation-1"><i class="fas fa-users-cog"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Colaboradores</span>
+                                <span class="info-box-number">{{ $collaborators }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-12 col-sm-6 col-md-4">
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-gradient-green elevation-1"><i
+                                    class="fas fa-fw fa-money-bill"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Financistas</span>
+                                <span class="info-box-number">{{ $financiers }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="col-12 col-sm-6 col-md-3">
                     <div class="info-box mb-3">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-user-plus"></i></span>
+                        <span class="info-box-icon bg-gradient-teal elevation-1"><i class="fas fa-user-plus"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Clientes</span>
                             <span class="info-box-number">{{ $clients }}</span>
@@ -76,15 +89,117 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-sm-6 col-md-4">
+                <div class="col-12 col-sm-6 col-md-3">
                     <div class="info-box mb-3">
-                        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-truck"></i></span>
+                        <span class="info-box-icon bg-gradient-warning elevation-1"><i class="fas fa-truck"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Fornecedores</span>
                             <span class="info-box-number">{{ $providers }}</span>
                         </div>
                     </div>
                 </div>
+
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-gradient-light elevation-1"><i class="fas fa-fw fa-list"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Ordens de Serviço</span>
+                            <span class="info-box-number">{{ $service_orders }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Auth::user()->hasRole('Programador|Administrador|Gerente|Financeiro'))
+                    <div class="col-12 d-flex flex-wrap px-0">
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-gradient-lime elevation-1"><i
+                                        class="fas fa-fw fa-plus"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Receitas pagas</span>
+                                    <span class="info-box-number">{{ $paid_incomes }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-gradient-danger elevation-1"><i
+                                        class="fas fa-fw fa-plus"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Receitas pendentes</span>
+                                    <span class="info-box-number">{{ $unpaid_incomes }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-gradient-lime elevation-1"><i
+                                        class="fas fa-fw fa-minus"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Despesas Pagas</span>
+                                    <span class="info-box-number">{{ $paid_expenses }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-gradient-danger elevation-1"><i
+                                        class="fas fa-fw fa-minus"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Despesas Pendentes</span>
+                                    <span class="info-box-number">{{ $unpaid_expenses }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-gradient-lime elevation-1"><i
+                                        class="fas fa-fw fa-sync"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Reembolsos Pagos</span>
+                                    <span class="info-box-number">{{ $service_orders }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-gradient-danger elevation-1"><i
+                                        class="fas fa-fw fa-sync"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Reembolsos Pendentes</span>
+                                    <span class="info-box-number">{{ $service_orders }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-gradient-lime elevation-1"><i
+                                        class="fas fa-fw fa-cart-plus"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">O. de Compra Executadas</span>
+                                    <span class="info-box-number">{{ $service_orders }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-gradient-lime elevation-1"><i
+                                        class="fas fa-fw fa-cart-plus"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">O. de Compra Pendentes</span>
+                                    <span class="info-box-number">{{ $service_orders }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
             </div>
 

@@ -14,7 +14,8 @@ class FinanceIncome extends Model
 
     protected $appends = [
         'author',
-        'subsidiary'
+        'subsidiary',
+        'amount',
     ];
 
     /** Access */
@@ -26,6 +27,11 @@ class FinanceIncome extends Model
     public function getValueAttribute($value)
     {
         return 'R$ ' . \number_format($value, 2, ',', '.');
+    }
+
+    public function getAmountAttribute($value)
+    {
+        return (float) str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value)));
     }
 
     public function getDueDateAttribute($value)

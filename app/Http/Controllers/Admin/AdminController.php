@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Collaborator;
+use App\Models\Financier;
 use App\Models\Manager;
 use App\Models\User;
 use App\Models\Views\Client;
+use App\Models\Views\FinanceExpense;
+use App\Models\Views\FinanceIncome;
 use App\Models\Views\Provider;
+use App\Models\Views\ServiceOrder;
 use App\Models\Views\Subsidiary;
 use App\Models\Views\User as ViewsUser;
 use App\Models\Views\Visit;
@@ -20,21 +24,52 @@ class AdminController extends Controller
     {
         $administrators = ViewsUser::where('type', 'Administrador')->count();
         $managers = ViewsUser::where('type', 'Gerente')->count();
-        $collaborators = ViewsUser::where('type', 'Colaborador')->count();
 
         $role = Auth::user()->roles->first()->name;
+
+        $clients = 0;
+        $collaborator = 0;
+        $financiers = 0;
+        $service_orders = 0;
+        $paid_incomes = 0;
+        $unpaid_incomes = 0;
+        $paid_expenses = 0;
+        $unpaid_expenses = 0;
 
         switch ($role) {
             case 'Colaborador':
                 $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $clients = Client::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->count();
+                $financiers = Financier::whereIn('subsidiary_id', $subsidiaries)->count();
+                $collaborators = Collaborator::whereIn('subsidiary_id', $subsidiaries)->count();
+                $service_orders = ServiceOrder::where('author_id', Auth::user()->id)->orWhere('user_id', Auth::user()->id)->count();
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $clients = Client::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->count();
+                $financiers = Financier::whereIn('subsidiary_id', $subsidiaries)->count();
+                $collaborators = Collaborator::whereIn('subsidiary_id', $subsidiaries)->count();
+                $service_orders = ServiceOrder::where('author_id', Auth::user()->id)->orWhere('user_id', Auth::user()->id)->count();
+                $paid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
+                $unpaid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
+                $paid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
+                $unpaid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
                 break;
+            case 'Financeiro':
+                $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $paid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
+                $unpaid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
+                $paid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
+                $unpaid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
             default:
                 $clients = Client::count();
+                $financiers = ViewsUser::where('type', 'Financeiro')->count();
+                $collaborators = ViewsUser::where('type', 'Colaborador')->count();
+                $service_orders = ServiceOrder::count();
+                $paid_incomes = FinanceIncome::where('status', 'pago')->count();
+                $unpaid_incomes = FinanceIncome::where('status', 'pendente')->count();
+                $paid_expenses = FinanceExpense::where('status', 'pago')->count();
+                $unpaid_expenses = FinanceExpense::where('status', 'pendente')->count();
                 break;
         }
 
@@ -53,8 +88,14 @@ class AdminController extends Controller
             'subsidiariesList',
             'managers',
             'collaborators',
+            'financiers',
             'clients',
             'providers',
+            'service_orders',
+            'paid_incomes',
+            'unpaid_incomes',
+            'paid_expenses',
+            'unpaid_expenses',
             'onlineUsers',
             'percent',
             'access',
