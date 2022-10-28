@@ -10,4 +10,10 @@ class Client extends Model
     use HasFactory;
 
     protected $table = 'clients_view';
+
+    /** Accessors */
+    public function getCreatedAtAttribute($value)
+    {
+        return date('d/m/Y', strtotime($value));
+    }
 }

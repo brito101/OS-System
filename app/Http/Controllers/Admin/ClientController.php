@@ -151,6 +151,8 @@ class ClientController extends Controller
             $data['observations'] = $observations;
         }
 
+        $data['seller'] = Auth::user()->id;
+
         $client = Client::create($data);
 
         if ($client->save()) {
