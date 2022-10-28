@@ -280,7 +280,7 @@ class RefoundController extends Controller
                 break;
         }
 
-        $invoice = Invoice::where('id', $id)->where('type', 'rembolso')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $invoice = Invoice::where('id', $id)->where('type', 'reembolso')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
 
         if (!$invoice) {
             abort(403, 'Acesso não autorizado');
