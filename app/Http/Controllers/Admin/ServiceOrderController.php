@@ -241,6 +241,8 @@ class ServiceOrderController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
                 $serviceOrder = ServiceOrder::where('id', $id)
                     ->where(function ($query) {
                         $query->where('user_id', Auth::user()->id)
@@ -248,15 +250,17 @@ class ServiceOrderController extends Controller
                     })->first();
                 break;
             case 'Gerente':
-                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 $serviceOrder = ServiceOrder::where('id', $id)
                     ->where(function ($query) {
                         $query->where('user_id', Auth::user()->id)
                             ->orWhere('author', Auth::user()->id);
-                    })->orWhereIn('subsidiary_id', $subsidiaries)->first();
+                    })->orWhereIn('subsidiary_id', $managers)->first();
                 break;
             default:
                 $serviceOrder = ServiceOrder::find($id);
+                $subsidiaries = Subsidiary::all();
                 break;
         }
 
@@ -265,20 +269,6 @@ class ServiceOrderController extends Controller
         }
 
         $role = Auth::user()->roles->first()->name;
-
-        switch ($role) {
-            case 'Colaborador':
-                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
-                break;
-            case 'Gerente':
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
-                break;
-            default:
-                $subsidiaries = Subsidiary::all();
-                break;
-        }
 
         $activities = Activity::orderBy('name')->get();
         $clients = Client::orderBy('name')->get();
