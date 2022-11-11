@@ -186,7 +186,7 @@
                                             <x-adminlte-select2 name="subsidiary_id">
                                                 @foreach ($subsidiaries as $subsidiary)
                                                     <option
-                                                        {{ old('subsidiary_id') == $subsidiary->id ? 'selected' : ($client->subsidiary_id == $subsidiary->id ? 'selected' : '') }}
+                                                        {{ old('subsidiary_id') == $subsidiary->id ? 'selected' : ($serviceOrder->subsidiary_id == $subsidiary->id ? 'selected' : '') }}
                                                         value="{{ $subsidiary->id }}">{{ $subsidiary->alias_name }}
                                                     </option>
                                                 @endforeach

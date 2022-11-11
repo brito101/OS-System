@@ -211,7 +211,7 @@ class ServiceOrderController extends Controller
                     ->where(function ($query) {
                         $query->where('user_id', Auth::user()->id)
                             ->orWhere('author', Auth::user()->id);
-                    })->orWhereIn('subsidiary_id', $subsidiaries)->first();
+                    })->whereIn('subsidiary_id', $subsidiaries)->first();
                 break;
             default:
                 $serviceOrder = ServiceOrder::find($id);
@@ -256,7 +256,7 @@ class ServiceOrderController extends Controller
                     ->where(function ($query) {
                         $query->where('user_id', Auth::user()->id)
                             ->orWhere('author', Auth::user()->id);
-                    })->orWhereIn('subsidiary_id', $managers)->first();
+                    })->whereIn('subsidiary_id', $managers)->first();
                 break;
             default:
                 $serviceOrder = ServiceOrder::find($id);
@@ -309,7 +309,7 @@ class ServiceOrderController extends Controller
                     ->where(function ($query) {
                         $query->where('user_id', Auth::user()->id)
                             ->orWhere('author', Auth::user()->id);
-                    })->orWhereIn('subsidiary_id', $subsidiaries)->first();
+                    })->whereIn('subsidiary_id', $subsidiaries)->first();
                 break;
             default:
                 $serviceOrder = ServiceOrder::find($id);
