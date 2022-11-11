@@ -55,7 +55,10 @@ class AdminController extends Controller
                 $clients = Client::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->count();
                 $financiers = Financier::whereIn('subsidiary_id', $subsidiaries)->count();
                 $collaborators = Collaborator::whereIn('subsidiary_id', $subsidiaries)->count();
-                $service_orders = ServiceOrder::where('author_id', Auth::user()->id)->orWhere('user_id', Auth::user()->id)->count();
+                $serviceOrders = ServiceOrder::where('user_id', Auth::user()->id)
+                    ->orWhere('author_id', Auth::user()->id)
+                    ->orWhereIn('subsidiary_id', $subsidiaries)
+                    ->get();
                 $paid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
                 $unpaid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
                 $paid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();

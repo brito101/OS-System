@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\{
     ActivityController,
     AdminController,
     ClientController,
+    InventoryController,
+    ProductController,
     ProviderController,
     ServiceOrderController,
     SubsidiaryController,
@@ -100,6 +102,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/finance-purchase-orders/executed/{id}', [PurchaseOrderController::class, 'executed']);
         Route::get('finance-purchase-orders-pdf/{id}', [PurchaseOrderController::class, 'pdf'])->name('finance-purchase-orders.pdf');
         Route::resource('finance-purchase-orders', PurchaseOrderController::class);
+
+        /** Inventory */
+        /** Products */
+        Route::get('/products/destroy/{id}', [ProductController::class, 'destroy']);
+        Route::resource('products', ProductController::class);
+        Route::post('products-import', [ProductController::class, 'fileImport'])->name('products.import');
+        /** Stocks  */
+        Route::get('/stocks/destroy/{id}', [InventoryController::class, 'destroy']);
+        Route::resource('stocks', InventoryController::class);
 
         /**
          * ACL

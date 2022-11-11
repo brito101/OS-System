@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ServiceOrderRequest;
 use App\Models\Activity;
 use App\Models\Client;
+use App\Models\Collaborator;
+use App\Models\Manager;
 use App\Models\ServiceOrder;
+use App\Models\Subsidiary;
 use App\Models\User;
 use App\Models\Views\ServiceOrder as ViewsServiceOrder;
 use Illuminate\Http\Request;
@@ -27,11 +30,23 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
-            $serviceOrders = ViewsServiceOrder::where('user_id', Auth::user()->id)
-                ->orWhere('author_id', Auth::user()->id)->get();
-        } else {
-            $serviceOrders = ViewsServiceOrder::all();
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $serviceOrders = ViewsServiceOrder::where('user_id', Auth::user()->id)
+                    ->orWhere('author_id', Auth::user()->id)->get();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $serviceOrders = ViewsServiceOrder::where('user_id', Auth::user()->id)
+                    ->orWhere('author_id', Auth::user()->id)
+                    ->orWhereIn('subsidiary_id', $subsidiaries)
+                    ->get();
+                break;
+            default:
+                $serviceOrders = ViewsServiceOrder::all();
+                break;
         }
 
         if ($request->ajax()) {
@@ -82,13 +97,29 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                break;
+            case 'Gerente':
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
+        }
+
         $activities = Activity::orderBy('name')->get();
         $clients = Client::orderBy('name')->get();
         $participants = User::role(['Gerente', 'Colaborador'])
             ->where('id', '!=', Auth::user()->id)
             ->orderBy('name')
             ->get();
-        return view('admin.service_order.create', compact('activities', 'clients', 'participants'));
+        return view('admin.service_order.create', compact('activities', 'clients', 'participants', 'subsidiaries'));
     }
 
     /**
@@ -164,14 +195,27 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
-            $serviceOrder = ServiceOrder::where('id', $id)
-                ->where(function ($query) {
-                    $query->where('user_id', Auth::user()->id)
-                        ->orWhere('author', Auth::user()->id);
-                })->first();
-        } else {
-            $serviceOrder = ServiceOrder::find($id);
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $serviceOrder = ServiceOrder::where('id', $id)
+                    ->where(function ($query) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id);
+                    })->first();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $serviceOrder = ServiceOrder::where('id', $id)
+                    ->where(function ($query) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id);
+                    })->orWhereIn('subsidiary_id', $subsidiaries)->first();
+                break;
+            default:
+                $serviceOrder = ServiceOrder::find($id);
+                break;
         }
 
         if (!$serviceOrder) {
@@ -193,18 +237,47 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
-            $serviceOrder = ServiceOrder::where('id', $id)
-                ->where(function ($query) {
-                    $query->where('user_id', Auth::user()->id)
-                        ->orWhere('author', Auth::user()->id);
-                })->first();
-        } else {
-            $serviceOrder = ServiceOrder::find($id);
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $serviceOrder = ServiceOrder::where('id', $id)
+                    ->where(function ($query) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id);
+                    })->first();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $serviceOrder = ServiceOrder::where('id', $id)
+                    ->where(function ($query) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id);
+                    })->orWhereIn('subsidiary_id', $subsidiaries)->first();
+                break;
+            default:
+                $serviceOrder = ServiceOrder::find($id);
+                break;
         }
 
         if (!$serviceOrder) {
             abort(403, 'Acesso não autorizado');
+        }
+
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                break;
+            case 'Gerente':
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
         }
 
         $activities = Activity::orderBy('name')->get();
@@ -214,7 +287,7 @@ class ServiceOrderController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('admin.service_order.edit', compact('serviceOrder', 'activities', 'clients', 'participants'));
+        return view('admin.service_order.edit', compact('serviceOrder', 'activities', 'clients', 'participants', 'subsidiaries'));
     }
 
     /**
@@ -230,14 +303,27 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
-            $serviceOrder = ServiceOrder::where('id', $id)
-                ->where(function ($query) {
-                    $query->where('user_id', Auth::user()->id)
-                        ->orWhere('author', Auth::user()->id);
-                })->first();
-        } else {
-            $serviceOrder = ServiceOrder::find($id);
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+                $serviceOrder = ServiceOrder::where('id', $id)
+                    ->where(function ($query) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id);
+                    })->first();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $serviceOrder = ServiceOrder::where('id', $id)
+                    ->where(function ($query) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id);
+                    })->orWhereIn('subsidiary_id', $subsidiaries)->first();
+                break;
+            default:
+                $serviceOrder = ServiceOrder::find($id);
+                break;
         }
 
         if (!$serviceOrder) {

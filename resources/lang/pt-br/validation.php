@@ -272,6 +272,9 @@ return [
         'entrance' => 'entrada',
         'costumer_name' => 'nome de quem assina',
         'costumer_document' => 'documento de quem assina',
+        'unity' => 'unidade',
+        'min_stock' => 'estoque mínimo',
+        'max_stock' => 'estoque máximo',
     ],
 
 ];

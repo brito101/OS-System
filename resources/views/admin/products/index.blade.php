@@ -1,8 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', '- Ordens de Serviço')
+@section('title', '- Produtos')
 @section('plugins.Datatables', true)
 @section('plugins.DatatablesPlugins', true)
+@section('plugins.BsCustomFileInput', true)
 
 @section('content')
 
@@ -10,17 +11,31 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><i class="fas fa-fw fa-list"></i> Ordens de Serviço</h1>
+                    <h1><i class="fas fa-fw fa-box"></i> Produtos</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
-                        <li class="breadcrumb-item active">Ordens de Serviço</li>
+                        <li class="breadcrumb-item active">Produtos</li>
                     </ol>
                 </div>
             </div>
         </div>
     </section>
+
+    @can('Criar Produtos')
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-end pb-4">
+                        <a class="btn btn-secondary" href="{{ Storage::url('worksheets/products.xlsx') }}" download>Download
+                            Planilha</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endcan
+
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -28,23 +43,41 @@
 
                     @include('components.alert')
 
+                    @can('Criar Clientes')
+                        <div class="card card-solid">
+                            <div class="card-header">
+                                <i class="fas fa-fw fa-upload"></i> Importação de planilha para cadastro de produtos
+                            </div>
+                            <form action="{{ route('admin.products.import') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="card-body pb-0">
+                                    <x-adminlte-input-file name="file" label="Arquivo" placeholder="Selecione o arquivo..."
+                                        legend="Selecionar" />
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn btn-primary">Importar</button>
+                                </div>
+                            </form>
+                        </div>
+                    @endcan
+
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex flex-wrap justify-content-between col-12 align-content-center">
-                                <h3 class="card-title align-self-center">Ordens de Serviço Cadastradas</h3>
-                                @can('Criar Ordens de Serviço')
-                                    <a href="{{ route('admin.service-orders.create') }}" title="Nova Ordem de Serviço"
-                                        class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Nova Ordem de Serviço</a>
+                                <h3 class="card-title align-self-center">Produtos Cadastrados</h3>
+                                @can('Criar Produtos')
+                                    <a href="{{ route('admin.products.create') }}" title="Novo Produto"
+                                        class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Novo Produto</a>
                                 @endcan
                             </div>
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 5], 'NS', 'Atividade', 'Filial', 'Autor', 'Cliente', 'Participante', 'Prioridade', 'Prazo', 'Status', 'Prontificação', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Produto', 'Descrição', 'Unidade de Consumo', 'Estoque Mínimo', 'Estoque Máximo', ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
                             $config = [
-                                'order' => [[0, 'desc']],
-                                'ajax' => url('/admin/service-orders'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'number_series', 'name' => 'number_series'], ['data' => 'activity', 'name' => 'activity'], ['data' => 'subsidiary', 'name' => 'subsidiary'], ['data' => 'author', 'name' => 'author'], ['data' => 'client', 'name' => 'client'], ['data' => 'collaborator', 'name' => 'collaborator'], ['data' => 'priority', 'name' => 'priority'], ['data' => 'deadline', 'name' => 'deadline'], ['data' => 'status', 'name' => 'status'], ['data' => 'readiness_date', 'name' => 'readiness_date'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'order' => [[1, 'asc']],
+                                'ajax' => url('/admin/products'),
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'description', 'name' => 'description'], ['data' => 'unity', 'name' => 'unity'], ['data' => 'min_stock', 'name' => 'min_stock'], ['data' => 'max_stock', 'name' => 'max_stock'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,
@@ -59,7 +92,7 @@
                                     ['extend' => 'print', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-print text-info"></i>', 'titleAttr' => 'Imprimir', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
                                     ['extend' => 'csv', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-csv text-primary"></i>', 'titleAttr' => 'Exportar para CSV', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
                                     ['extend' => 'excel', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-excel text-success"></i>', 'titleAttr' => 'Exportar para Excel', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
-                                    ['extend' => 'pdf', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-pdf text-danger"></i>', 'titleAttr' => 'Exportar para PDF', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
+                                    ['extend' => 'pdf', 'className' => 'btn-default', 'text' => '<i class="fas  fa-fw fa-lg fa-file-pdf text-danger"></i>', 'titleAttr' => 'Exportar para PDF', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
                                 ],
                             ];
                         @endphp

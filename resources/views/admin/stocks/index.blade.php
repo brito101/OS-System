@@ -1,8 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', '- Ordens de Serviço')
+@section('title', '- Movimentações')
 @section('plugins.Datatables', true)
 @section('plugins.DatatablesPlugins', true)
+@section('plugins.BsCustomFileInput', true)
 
 @section('content')
 
@@ -10,17 +11,18 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><i class="fas fa-fw fa-list"></i> Ordens de Serviço</h1>
+                    <h1><i class="fas fa-fw fa-box-open"></i> Movimentações</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
-                        <li class="breadcrumb-item active">Ordens de Serviço</li>
+                        <li class="breadcrumb-item active">Movimentações</li>
                     </ol>
                 </div>
             </div>
         </div>
     </section>
+
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -31,20 +33,20 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex flex-wrap justify-content-between col-12 align-content-center">
-                                <h3 class="card-title align-self-center">Ordens de Serviço Cadastradas</h3>
-                                @can('Criar Ordens de Serviço')
-                                    <a href="{{ route('admin.service-orders.create') }}" title="Nova Ordem de Serviço"
-                                        class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Nova Ordem de Serviço</a>
+                                <h3 class="card-title align-self-center">Movimentações Cadastradas</h3>
+                                @can('Criar Movimentações')
+                                    <a href="{{ route('admin.stocks.create') }}" title="Nova Movimentação"
+                                        class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Nova Movimentação</a>
                                 @endcan
                             </div>
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 5], 'NS', 'Atividade', 'Filial', 'Autor', 'Cliente', 'Participante', 'Prioridade', 'Prazo', 'Status', 'Prontificação', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Data', 'Produto', 'Valor Unitário', 'Validade', 'Entrada', 'Saída', 'Saldo Diário', ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
                             $config = [
-                                'order' => [[0, 'desc']],
-                                'ajax' => url('/admin/service-orders'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'number_series', 'name' => 'number_series'], ['data' => 'activity', 'name' => 'activity'], ['data' => 'subsidiary', 'name' => 'subsidiary'], ['data' => 'author', 'name' => 'author'], ['data' => 'client', 'name' => 'client'], ['data' => 'collaborator', 'name' => 'collaborator'], ['data' => 'priority', 'name' => 'priority'], ['data' => 'deadline', 'name' => 'deadline'], ['data' => 'status', 'name' => 'status'], ['data' => 'readiness_date', 'name' => 'readiness_date'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'order' => [[1, 'asc']],
+                                'ajax' => url('/admin/stocks'),
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'description', 'name' => 'description'], ['data' => 'unity', 'name' => 'unity'], ['data' => 'min_stock', 'name' => 'min_stock'], ['data' => 'max_stock', 'name' => 'max_stock'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,
@@ -59,7 +61,7 @@
                                     ['extend' => 'print', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-print text-info"></i>', 'titleAttr' => 'Imprimir', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
                                     ['extend' => 'csv', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-csv text-primary"></i>', 'titleAttr' => 'Exportar para CSV', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
                                     ['extend' => 'excel', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-excel text-success"></i>', 'titleAttr' => 'Exportar para Excel', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
-                                    ['extend' => 'pdf', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-pdf text-danger"></i>', 'titleAttr' => 'Exportar para PDF', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
+                                    ['extend' => 'pdf', 'className' => 'btn-default', 'text' => '<i class="fas  fa-fw fa-lg fa-file-pdf text-danger"></i>', 'titleAttr' => 'Exportar para PDF', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
                                 ],
                             ];
                         @endphp

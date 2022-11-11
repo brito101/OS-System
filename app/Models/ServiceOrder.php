@@ -39,6 +39,7 @@ class ServiceOrder extends Model
         'photo',
         'costumer_name',
         'costumer_document',
+        'subsidiary_id',
     ];
 
     /** Accessor */
@@ -92,5 +93,10 @@ class ServiceOrder extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function subsidiary()
+    {
+        return $this->belongsTo(Subsidiary::class);
     }
 }

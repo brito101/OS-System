@@ -76,7 +76,7 @@
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 form-group px-0 mb-0">
+                                    <div class="col-12 form-group px-0">
                                         <label for="user_id">Participante</label>
                                         <x-adminlte-select2 name="user_id" required>
                                             <option disabled selected value="">Selecione</option>
@@ -84,6 +84,19 @@
                                                 <option {{ old('user_id') == $participant->id ? 'selected' : '' }}
                                                     value="{{ $participant->id }}">{{ $participant->name }}
                                                     ({{ $participant->roles->first()->name }})
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select2>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="col-12 form-group px-0">
+                                        <label for="subsidiary_id">Filial</label>
+                                        <x-adminlte-select2 name="subsidiary_id">
+                                            @foreach ($subsidiaries as $subsidiary)
+                                                <option {{ old('subsidiary_id') == $subsidiary->id ? 'selected' : '' }}
+                                                    value="{{ $subsidiary->id }}">{{ $subsidiary->alias_name }}
                                                 </option>
                                             @endforeach
                                         </x-adminlte-select2>

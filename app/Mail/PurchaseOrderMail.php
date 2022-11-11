@@ -29,6 +29,7 @@ class PurchaseOrderMail extends Mailable
     public function build()
     {
         return $this->to(env('MAIL_TO_ADDRESS_FINANCE'), 'Financeiro')
+            ->cc(env('MAIL_TO_ADDRESS_FINANCE_CC'))
             ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
             ->subject('Nova Ordem de Compra ' . env('APP_NAME'))
             ->markdown('emails.purchase_order', [

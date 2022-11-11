@@ -109,6 +109,14 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 15,
                 'role_id' => 4
             ],
+            [
+                'permission_id' => 15,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 15,
+                'role_id' => 6
+            ],
             /** */
             [
                 'permission_id' => 16,
@@ -801,6 +809,152 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 67,
                 'role_id' => 5
+            ],
+            /** Priducts 68 to 72 (programmer, administrator, managers, stockist) */
+            [
+                'permission_id' => 68,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 68,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 68,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 68,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 69,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 69,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 69,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 69,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 70,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 70,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 70,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 70,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 71,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 71,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 71,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 71,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 72,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 72,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 72,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 72,
+                'role_id' => 6
+            ],
+            /** Stocks 73 to 76 (programmer, administrator, managers, stockist) */
+            [
+                'permission_id' => 73,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 73,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 73,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 73,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 74,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 74,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 74,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 74,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 75,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 75,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 75,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 75,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 76,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 76,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 76,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 76,
+                'role_id' => 6
             ],
         ]);
     }

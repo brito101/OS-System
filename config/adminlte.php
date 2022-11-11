@@ -438,6 +438,38 @@ return [
             ],
         ],
         [
+            'text'        => 'Estoque',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-box',
+            'can'         => 'Acessar Estoque',
+            'submenu' => [
+                [
+                    'text' => 'Movimentações',
+                    'url'  => 'admin/stocks',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Movimentações',
+                ],
+                [
+                    'text' => 'Cadastrar Movimentação',
+                    'url'  => 'admin/stocks/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Movimentações',
+                ],
+                [
+                    'text' => 'Listagem de Produtos',
+                    'url'  => 'admin/products',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Produtos',
+                ],
+                [
+                    'text' => 'Cadastro de Produto',
+                    'url'  => 'admin/products/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Produtos',
+                ],
+            ]
+        ],
+        [
             'text'    => 'ACL',
             'icon'    => 'fas fa-fw fa-user-shield',
             'can'     => 'Acessar ACL',

@@ -115,6 +115,15 @@
                 </div>
 
                 <div class="d-flex flex-wrap justify-content-between">
+                    <div class="col-12 form-group px-0">
+                        <label for="subsidiary_id">Filial</label>
+                        <input type="text" class="form-control bg-white" id="subsidiary_id" name="subsidiary_id"
+                            value="{{ $serviceOrder->subsidiary->alias_name ?? null }}" disabled>
+
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-between">
                     <div class="col-6 form-group pr-2">
                         <label for="priority">Prioridade</label>
                         <input type="text" class="form-control bg-white" id="priority" name="priority"

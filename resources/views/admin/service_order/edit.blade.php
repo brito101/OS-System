@@ -181,6 +181,20 @@
                                     </div>
 
                                     <div class="d-flex flex-wrap justify-content-between">
+                                        <div class="col-12 form-group px-0">
+                                            <label for="subsidiary_id">Filial</label>
+                                            <x-adminlte-select2 name="subsidiary_id">
+                                                @foreach ($subsidiaries as $subsidiary)
+                                                    <option
+                                                        {{ old('subsidiary_id') == $subsidiary->id ? 'selected' : ($client->subsidiary_id == $subsidiary->id ? 'selected' : '') }}
+                                                        value="{{ $subsidiary->id }}">{{ $subsidiary->alias_name }}
+                                                    </option>
+                                                @endforeach
+                                            </x-adminlte-select2>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-wrap justify-content-between">
                                         <div class="col-12 col-md-6 form-group px-0 pr-md-2 mb-0">
                                             <label for="priority">Prioridade</label>
                                             <x-adminlte-select2 name="priority" required>
