@@ -42,11 +42,11 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 5], 'Data', 'Produto', 'Valor Unitário', 'Validade', 'Entrada', 'Saída', 'Saldo Diário', ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Data', 'Produto', 'Filial', 'Valor Unitário', 'Validade', ['label' => 'Entrada', 'width' => 40], ['label' => 'Saída', 'width' => 40], ['label' => 'Saldo Diário', 'width' => 40], ['label' => 'Ações', 'no-export' => true, 'width' => 10]];
                             $config = [
-                                'order' => [[1, 'asc']],
+                                'order' => [[0, 'desc']],
                                 'ajax' => url('/admin/stocks'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'description', 'name' => 'description'], ['data' => 'unity', 'name' => 'unity'], ['data' => 'min_stock', 'name' => 'min_stock'], ['data' => 'max_stock', 'name' => 'max_stock'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'day', 'name' => 'day'], ['data' => 'product', 'name' => 'product'], ['data' => 'subsidiary', 'name' => 'subsidiary'], ['data' => 'value', 'name' => 'value'], ['data' => 'validity', 'name' => 'validity'], ['data' => 'input_value', 'name' => 'input_value'], ['data' => 'output_value', 'name' => 'output_value'], ['data' => 'balance', 'name' => 'balance'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,

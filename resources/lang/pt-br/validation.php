@@ -275,6 +275,9 @@ return [
         'unity' => 'unidade',
         'min_stock' => 'estoque mínimo',
         'max_stock' => 'estoque máximo',
+        'validity' => 'validae',
+        'input' => 'entrada',
+        'output' => 'saída',
     ],
 
 ];

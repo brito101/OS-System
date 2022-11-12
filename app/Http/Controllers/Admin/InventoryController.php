@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\InventoryRequest;
 use App\Models\Inventory;
+use App\Models\Manager;
+use App\Models\Product;
+use App\Models\Subsidiary;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +25,17 @@ class InventoryController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $stocks = Inventory::get();
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $stocks = Inventory::whereIn('subsidiary_id', $subsidiaries)->get();
+                break;
+            default:
+                $stocks = Inventory::get();
+                break;
+        }
 
         if ($request->ajax()) {
             return Datatables::of($stocks)
@@ -44,7 +58,25 @@ class InventoryController extends Controller
      */
     public function create()
     {
-        //
+        if (!Auth::user()->hasPermissionTo('Criar Movimentações')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Gerente':
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::select('id', 'alias_name')->get();
+                break;
+        }
+
+        $products = Product::select('id', 'name')->get();
+
+        return view('admin.stocks.create', \compact('products', 'subsidiaries'));
     }
 
     /**
@@ -53,20 +85,28 @@ class InventoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(InventoryRequest $request)
     {
-        //
-    }
+        if (!Auth::user()->hasPermissionTo('Criar Movimentações')) {
+            abort(403, 'Acesso não autorizado');
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $data = $request->all();
+
+        $data['user_id'] = Auth::user()->id;
+
+        $stock = Inventory::create($data);
+
+        if ($stock->save()) {
+            return redirect()
+                ->route('admin.stocks.index')
+                ->with('success', 'Cadastro realizado!');
+        } else {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Erro ao cadastrar!');
+        }
     }
 
     /**
@@ -77,7 +117,32 @@ class InventoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        if (!Auth::user()->hasPermissionTo('Editar Movimentações')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Gerente':
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $stock = Inventory::whereIn('subsidiary_id', $managers)->where('id', $id)->first();
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $stock = Inventory::find($id);
+                $subsidiaries = Subsidiary::select('id', 'alias_name')->get();
+                break;
+        }
+
+
+        if (!$stock) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $products = Product::select('id', 'name')->get();
+
+        return view('admin.stocks.edit', compact('stock', 'subsidiaries', 'products'));
     }
 
     /**
@@ -87,9 +152,41 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(InventoryRequest $request, $id)
     {
-        //
+        if (!Auth::user()->hasPermissionTo('Editar Movimentações')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $data = $request->all();
+        $data['user_id'] = Auth::user()->id;
+
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $stock = Inventory::whereIn('subsidiary_id', $subsidiaries)->where('id', $id)->first();
+                break;
+            default:
+                $stock = Inventory::find($id);
+                break;
+        }
+
+        if (!$stock) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if ($stock->update($data)) {
+            return redirect()
+                ->route('admin.stocks.index')
+                ->with('success', 'Atualização realizada!');
+        } else {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Erro ao atualizar!');
+        }
     }
 
     /**
@@ -100,6 +197,34 @@ class InventoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (!Auth::user()->hasPermissionTo('Excluir Movimentações')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $stock = Inventory::whereIn('subsidiary_id', $subsidiaries)->where('id', $id)->first();
+                break;
+            default:
+                $stock = Inventory::find($id);
+                break;
+        }
+
+        if (!$stock) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if ($stock->delete()) {
+            return redirect()
+                ->route('admin.stocks.index')
+                ->with('success', 'Exclusão realizada!');
+        } else {
+            return redirect()
+                ->back()
+                ->with('error', 'Erro ao excluir!');
+        }
     }
 }

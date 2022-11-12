@@ -12,12 +12,14 @@ class Inventory extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['product_id', 'day', 'value', 'validity', 'input', 'output', 'user_id'];
+    protected $fillable = ['product_id', 'day', 'value', 'validity', 'input', 'output', 'user_id', 'observations', 'subsidiary_id'];
 
     protected $appends = [
         'product',
+        'subsidiary',
         'input_value',
         'output_value',
+        'balance',
     ];
 
     /** Accessors */
@@ -44,6 +46,16 @@ class Inventory extends Model
         }
     }
 
+    public function getSubsidiaryAttribute($value)
+    {
+        $subsidiary = Subsidiary::find($this->subsidiary_id);
+        if ($subsidiary) {
+            return $subsidiary->alias_name;
+        } else {
+            return '-';
+        }
+    }
+
     public function getProductAttribute($value)
     {
         $product = Product::find($this->product_id);
@@ -56,6 +68,23 @@ class Inventory extends Model
 
     public function getInputValueAttribute($value)
     {
-        return;
+        $product = Product::find($this->product_id);
+        $value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))) * $this->input;
+        return $this->input . " ($product->unity) :: " . 'R$ ' . \number_format($value, 2, ',', '.');
+    }
+
+    public function getOutputValueAttribute($value)
+    {
+        $product = Product::find($this->product_id);
+        $value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))) * $this->output;
+        return $this->output . " ($product->unity) :: " . 'R$ ' . \number_format($value, 2, ',', '.');
+    }
+
+    public function getBalanceAttribute($value)
+    {
+        $product = Product::find($this->product_id);
+        $total = $this->input - $this->output;
+        $value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))) * $total;
+        return $total . " ($product->unity) :: " . 'R$ ' . \number_format($value, 2, ',', '.');
     }
 }

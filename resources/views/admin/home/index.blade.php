@@ -190,7 +190,7 @@
 
                         <div class="col-12 col-sm-6 col-md-3">
                             <div class="info-box mb-3">
-                                <span class="info-box-icon bg-gradient-lime elevation-1"><i
+                                <span class="info-box-icon bg-gradient-danger elevation-1"><i
                                         class="fas fa-fw fa-cart-plus"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">O. de Compra Pendentes</span>
