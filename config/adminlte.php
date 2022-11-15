@@ -444,6 +444,12 @@ return [
             'can'         => 'Acessar Estoque',
             'submenu' => [
                 [
+                    'text' => 'Estoque Consolidado',
+                    'url'  => 'admin/stocks/consolidated',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Movimentações',
+                ],
+                [
                     'text' => 'Movimentações',
                     'url'  => 'admin/stocks',
                     'icon' => 'fas fa-fw fa-chevron-right',

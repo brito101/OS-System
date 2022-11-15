@@ -109,6 +109,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('products', ProductController::class);
         Route::post('products-import', [ProductController::class, 'fileImport'])->name('products.import');
         /** Stocks  */
+        Route::match(['get', 'post'], 'stocks/consolidated', [InventoryController::class, 'consolidated'])->name('stocks.consolidated');
+        Route::get('stocks-pdf/{id}', [InventoryController::class, 'pdf'])->name('stocks.pdf');
         Route::get('/stocks/destroy/{id}', [InventoryController::class, 'destroy']);
         Route::resource('stocks', InventoryController::class);
 

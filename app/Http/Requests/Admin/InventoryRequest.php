@@ -30,14 +30,24 @@ class InventoryRequest extends FormRequest
             $base64 = $name;
         }
 
-        $this->merge([
-            'value'  => str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))),
-            'day' => $this->day ? Carbon::createFromFormat('d/m/Y', $this->day)->format('Y-m-d') : date('Y-m-d'),
-            'validity' => $this->validity && $this->validity != 'Interminado' ? Carbon::createFromFormat('d/m/Y', $this->validity)->format('Y-m-d') : null,
-            'input' => (int) $this->input,
-            'output' => (int)$this->output,
-            'photo' => $base64,
-        ]);
+        if ($base64) {
+            $this->merge([
+                'value'  => str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))),
+                'day' => $this->day ? Carbon::createFromFormat('d/m/Y', $this->day)->format('Y-m-d') : date('Y-m-d'),
+                'validity' => $this->validity && $this->validity != 'Interminado' ? Carbon::createFromFormat('d/m/Y', $this->validity)->format('Y-m-d') : null,
+                'input' => (int)$this->input,
+                'output' => (int)$this->output,
+                'photo' => $base64,
+            ]);
+        } else {
+            $this->merge([
+                'value'  => str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))),
+                'day' => $this->day ? Carbon::createFromFormat('d/m/Y', $this->day)->format('Y-m-d') : date('Y-m-d'),
+                'validity' => $this->validity && $this->validity != 'Interminado' ? Carbon::createFromFormat('d/m/Y', $this->validity)->format('Y-m-d') : null,
+                'input' => (int)$this->input,
+                'output' => (int)$this->output
+            ]);
+        }
     }
 
     /**

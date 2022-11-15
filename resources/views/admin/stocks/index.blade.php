@@ -42,7 +42,7 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 5], 'Data', 'Produto', 'Filial', 'Valor Unitário', 'Validade', ['label' => 'Entrada', 'width' => 40], ['label' => 'Saída', 'width' => 40], ['label' => 'Saldo Diário', 'width' => 40], ['label' => 'Ações', 'no-export' => true, 'width' => 10]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Data', 'Produto', 'Filial', 'Valor Unitário', 'Validade', ['label' => 'Entrada', 'width' => 40], ['label' => 'Saída', 'width' => 40], ['label' => 'Saldo Diário', 'width' => 40], ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
                             $config = [
                                 'order' => [[0, 'desc']],
                                 'ajax' => url('/admin/stocks'),

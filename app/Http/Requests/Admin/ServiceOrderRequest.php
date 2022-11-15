@@ -33,20 +33,36 @@ class ServiceOrderRequest extends FormRequest
             $base64 = $name;
         }
 
-        $this->merge([
-            'execution_date' => Carbon::createFromFormat('d/m/Y', $this->validateDate($this->execution_date))->format('Y-m-d'),
-            'deadline' => Carbon::createFromFormat('d/m/Y', $this->validateDate($this->deadline))->format('Y-m-d'),
-            'zipcode' => $this->zipcode ?? $client->zipcode,
-            'street' => $this->street ?? $client->street,
-            'number' => $this->number ?? $client->number,
-            'complement' => $this->complement ?? $client->complement,
-            'neighborhood' => $this->neighborhood ?? $client->neighborhood,
-            'state' => $this->state ?? $client->state,
-            'city' => $this->city ?? $client->city,
-            'telephone' => $this->telephone ?? $client->telephone,
-            'readiness_date' => $this->readiness_date ? Carbon::createFromFormat('d/m/Y', $this->validateDate($this->readiness_date))->format('Y-m-d') : null,
-            'photo' => $base64,
-        ]);
+        if ($base64) {
+            $this->merge([
+                'execution_date' => Carbon::createFromFormat('d/m/Y', $this->validateDate($this->execution_date))->format('Y-m-d'),
+                'deadline' => Carbon::createFromFormat('d/m/Y', $this->validateDate($this->deadline))->format('Y-m-d'),
+                'zipcode' => $this->zipcode ?? $client->zipcode,
+                'street' => $this->street ?? $client->street,
+                'number' => $this->number ?? $client->number,
+                'complement' => $this->complement ?? $client->complement,
+                'neighborhood' => $this->neighborhood ?? $client->neighborhood,
+                'state' => $this->state ?? $client->state,
+                'city' => $this->city ?? $client->city,
+                'telephone' => $this->telephone ?? $client->telephone,
+                'readiness_date' => $this->readiness_date ? Carbon::createFromFormat('d/m/Y', $this->validateDate($this->readiness_date))->format('Y-m-d') : null,
+                'photo' => $base64,
+            ]);
+        } else {
+            $this->merge([
+                'execution_date' => Carbon::createFromFormat('d/m/Y', $this->validateDate($this->execution_date))->format('Y-m-d'),
+                'deadline' => Carbon::createFromFormat('d/m/Y', $this->validateDate($this->deadline))->format('Y-m-d'),
+                'zipcode' => $this->zipcode ?? $client->zipcode,
+                'street' => $this->street ?? $client->street,
+                'number' => $this->number ?? $client->number,
+                'complement' => $this->complement ?? $client->complement,
+                'neighborhood' => $this->neighborhood ?? $client->neighborhood,
+                'state' => $this->state ?? $client->state,
+                'city' => $this->city ?? $client->city,
+                'telephone' => $this->telephone ?? $client->telephone,
+                'readiness_date' => $this->readiness_date ? Carbon::createFromFormat('d/m/Y', $this->validateDate($this->readiness_date))->format('Y-m-d') : null,
+            ]);
+        }
     }
 
     /**

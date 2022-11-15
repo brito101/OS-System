@@ -25,14 +25,21 @@ class Inventory extends Model
         'balance',
     ];
 
+    /** Relationships */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function provider()
+    {
+        return $this->belongsTo(Provider::class);
+    }
+
     /** Accessors */
     public function getDayAttribute($value)
     {
-        if ($value) {
-            return date("d/m/Y", strtotime($value));
-        } else {
-            return 'Indeterminado';
-        }
+        return date("d/m/Y", strtotime($value));
     }
 
     public function getValueAttribute($value)
@@ -89,5 +96,10 @@ class Inventory extends Model
         $total = $this->input - $this->output;
         $value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))) * $total;
         return $total . " ($product->unity) / " . 'R$ ' . \number_format($value, 2, ',', '.');
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return date("d/m/Y H:i:s", strtotime($value));
     }
 }

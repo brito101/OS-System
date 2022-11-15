@@ -12,6 +12,7 @@ use App\Models\Subsidiary;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InventoryController extends Controller
 {
@@ -42,7 +43,7 @@ class InventoryController extends Controller
             return Datatables::of($stocks)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="stocks/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="stocks/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão desta movimentação?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+                    $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="stocks/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="stocks/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="stocks/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão desta movimentação?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -110,6 +111,22 @@ class InventoryController extends Controller
                 ->with('error', 'Erro ao cadastrar!');
         }
     }
+
+    public function show($id)
+    {
+        if (!Auth::user()->hasPermissionTo('Listar Movimentações')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $stock = Inventory::find($id);
+
+        if (!$stock) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        return view('admin.stocks.show', compact('stock'));
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -229,5 +246,53 @@ class InventoryController extends Controller
                 ->back()
                 ->with('error', 'Erro ao excluir!');
         }
+    }
+
+    public function pdf($id)
+    {
+        if (!Auth::user()->hasPermissionTo('Listar Movimentações')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $stock = Inventory::find($id);
+
+        if (!$stock) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        return view('admin.stocks.pdf', compact('stock'));
+    }
+
+    public function consolidated(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Listar Movimentações')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $year = date('Y');
+        if (isset($request->year)) {
+            $year = $request->year;
+        }
+
+        $products = Product::all('id', 'name');
+        $stocks = [];
+        foreach ($products as $product) {
+            $items = [];
+            for ($i = 1; $i <= 12; $i++) {
+                $inventories = Inventory::select(DB::raw('sum(input - output) as total'))
+                    ->where('product_id', $product->id)
+                    ->whereMonth('day', $i)
+                    ->whereYear('day', $year)
+                    ->first();
+
+                $items[$i] = $inventories->total ?? 0;
+            }
+            $stocks[] = [
+                'product' => $product->name,
+                'months' => $items
+            ];
+        }
+
+        return view('admin.stocks.consolidated', compact('stocks', 'year'));
     }
 }
