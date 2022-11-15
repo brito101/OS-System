@@ -14,8 +14,14 @@ class AlterTableInventoriesAddSubsidiaryAndObservations extends Migration
     public function up()
     {
         Schema::table('inventories', function (Blueprint $table) {
+            $table->string('job')->nullable();
             $table->text('observations')->nullable();
+            $table->text('liberator')->nullable();
+            $table->text('stripper')->nullable();
+            $table->text('lecturer')->nullable();
             $table->foreignId('subsidiary_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('provider_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('photo')->nullable();
         });
     }
 
@@ -27,8 +33,9 @@ class AlterTableInventoriesAddSubsidiaryAndObservations extends Migration
     public function down()
     {
         Schema::table('inventories', function (Blueprint $table) {
-            $table->dropColumn('observations');
+            $table->dropColumn(['observations', 'job', 'liberator', 'stripper', 'lecturer', 'photo']);
             $table->dropConstrainedForeignId('subsidiary_id');
+            $table->dropConstrainedForeignId('provider_id');
         });
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\InventoryRequest;
 use App\Models\Inventory;
 use App\Models\Manager;
 use App\Models\Product;
+use App\Models\Provider;
 use App\Models\Subsidiary;
 use Illuminate\Http\Request;
 use DataTables;
@@ -74,9 +75,10 @@ class InventoryController extends Controller
                 break;
         }
 
-        $products = Product::select('id', 'name')->get();
+        $products = Product::all('id', 'name');
+        $providers = Provider::all('id', 'alias_name');
 
-        return view('admin.stocks.create', \compact('products', 'subsidiaries'));
+        return view('admin.stocks.create', \compact('products', 'subsidiaries', 'providers'));
     }
 
     /**
@@ -140,9 +142,10 @@ class InventoryController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $products = Product::select('id', 'name')->get();
+        $products = Product::all('id', 'name');
+        $providers = Provider::all('id', 'alias_name');
 
-        return view('admin.stocks.edit', compact('stock', 'subsidiaries', 'products'));
+        return view('admin.stocks.edit', compact('stock', 'subsidiaries', 'products', 'providers'));
     }
 
     /**

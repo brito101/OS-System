@@ -272,12 +272,16 @@ return [
         'entrance' => 'entrada',
         'costumer_name' => 'nome de quem assina',
         'costumer_document' => 'documento de quem assina',
+        'product_id' => 'produto',
         'unity' => 'unidade',
         'min_stock' => 'estoque mínimo',
         'max_stock' => 'estoque máximo',
         'validity' => 'validae',
         'input' => 'entrada',
         'output' => 'saída',
+        'liberator' => 'quem liberou',
+        'stripper' => 'quem retirou',
+        'lecturer' => 'conferente',
     ],
 
 ];

@@ -12,7 +12,10 @@ class Inventory extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['product_id', 'day', 'value', 'validity', 'input', 'output', 'user_id', 'observations', 'subsidiary_id'];
+    protected $fillable = [
+        'product_id', 'day', 'value', 'validity', 'input', 'output', 'user_id',
+        'job', 'liberator', 'stripper', 'lecturer', 'observations', 'provider_id', 'subsidiary_id', 'photo'
+    ];
 
     protected $appends = [
         'product',
@@ -70,14 +73,14 @@ class Inventory extends Model
     {
         $product = Product::find($this->product_id);
         $value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))) * $this->input;
-        return $this->input . " ($product->unity) :: " . 'R$ ' . \number_format($value, 2, ',', '.');
+        return $this->input . " ($product->unity) / " . 'R$ ' . \number_format($value, 2, ',', '.');
     }
 
     public function getOutputValueAttribute($value)
     {
         $product = Product::find($this->product_id);
         $value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))) * $this->output;
-        return $this->output . " ($product->unity) :: " . 'R$ ' . \number_format($value, 2, ',', '.');
+        return $this->output . " ($product->unity) / " . 'R$ ' . \number_format($value, 2, ',', '.');
     }
 
     public function getBalanceAttribute($value)
@@ -85,6 +88,6 @@ class Inventory extends Model
         $product = Product::find($this->product_id);
         $total = $this->input - $this->output;
         $value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))) * $total;
-        return $total . " ($product->unity) :: " . 'R$ ' . \number_format($value, 2, ',', '.');
+        return $total . " ($product->unity) / " . 'R$ ' . \number_format($value, 2, ',', '.');
     }
 }
