@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Collaborator;
 use App\Models\Financier;
+use App\Models\Inventory;
+use App\Models\Invoice;
 use App\Models\Manager;
+use App\Models\Product;
 use App\Models\PurchaseOrder;
+use App\Models\Subsidiary as ModelsSubsidiary;
 use App\Models\User;
 use App\Models\Views\Client;
 use App\Models\Views\FinanceExpense;
@@ -19,84 +23,425 @@ use App\Models\Views\User as ViewsUser;
 use App\Models\Views\Visit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        $administrators = ViewsUser::where('type', 'Administrador')->count();
-        $managers = ViewsUser::where('type', 'Gerente')->count();
-
         $role = Auth::user()->roles->first()->name;
 
-        $clients = 0;
-        $collaborator = 0;
-        $financiers = 0;
-        $service_orders = 0;
-        $paid_incomes = 0;
-        $unpaid_incomes = 0;
-        $paid_expenses = 0;
-        $unpaid_expenses = 0;
-        $paid_refunds = 0;
-        $unpaid_refunds = 0;
-        $exec_purchases = 0;
-        $unexec_purchases = 0;
-
         switch ($role) {
-            case 'Colaborador':
-                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $clients = Client::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->count();
-                $financiers = Financier::whereIn('subsidiary_id', $subsidiaries)->count();
-                $collaborators = Collaborator::whereIn('subsidiary_id', $subsidiaries)->count();
-                $service_orders = ServiceOrder::where('author_id', Auth::user()->id)->orWhere('user_id', Auth::user()->id)->count();
-                break;
             case 'Gerente':
-                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $clients = Client::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->count();
-                $financiers = Financier::whereIn('subsidiary_id', $subsidiaries)->count();
-                $collaborators = Collaborator::whereIn('subsidiary_id', $subsidiaries)->count();
-                $serviceOrders = ServiceOrder::where('user_id', Auth::user()->id)
-                    ->orWhere('author_id', Auth::user()->id)
-                    ->orWhereIn('subsidiary_id', $subsidiaries)
-                    ->get();
-                $paid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
-                $unpaid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
-                $paid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
-                $unpaid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
-                $paid_refunds = FinanceRefund::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
-                $unpaid_refunds = FinanceRefund::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
-                $exec_purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->where('status', 'executada')->count();
-                $unexec_purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->where('status', 'não executada')->count();
+                /** Company */
+                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $subsidiariesList = ModelsSubsidiary::whereIn('id', $managers)->get();
+                $states = array_unique($subsidiariesList->pluck('state')->toArray());
+                sort($states);
+                $statesSearch = implode(',', $states);
+                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
+                $clients = Client::select('alias_name', 'trade_status')->whereIn('subsidiary_id', $managers)->orWhere('subsidiary_id', null)->get();
+                /** Users */
+                $users = ViewsUser::all('type');
+                $programmers = 0;
+                $administrators = 0;
+                $managers = Manager::whereIn('subsidiary_id',  $subsidiariesList->pluck('id'))->count();
+                $financiers = Financier::whereIn('subsidiary_id', $subsidiariesList->pluck('id'))->count();
+                $collaborators = Collaborator::whereIn('subsidiary_id', $subsidiariesList->pluck('id'))->count();
+                $stockists = $users->where('type', 'Estoquista')->count();
+                /** Clients */
+                $clientsSubsidiary = $clients->groupBy('alias_name')->toArray();
+                $clientsSubsidiaryChart = [];
+                foreach ($clientsSubsidiary as $key => $value) {
+                    if ($key == '') {
+                        $key = 'Sem filial';
+                    }
+                    $clientsSubsidiaryChart['label'][] = $key;
+                    $clientsSubsidiaryChart['data'][] = count($value);
+                }
+                $clientsStatus = $clients->groupBy('trade_status')->toArray();
+                $clientsStatusChart = [];
+                foreach ($clientsStatus as $key => $value) {
+                    $clientsStatusChart['label'][] = $key;
+                    $clientsStatusChart['data'][] = count($value);
+                }
+                /** Service Orders */
+                $serviceOrders = ServiceOrder::select('status', 'priority', 'subsidiary')
+                    ->whereIn('subsidiary_id', $subsidiariesList->pluck('id'))
+                    ->orWhere('user_id', Auth::user()->id)
+                    ->orWhere('author_id', Auth::user()->id)->get();
+                $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
+                $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
+                $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
+                $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
+                $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
+                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')->groupBy('priority')->toArray();
+                $serviceOrdersPriorityChart = [];
+                foreach ($serviceOrdersPriority as $key => $value) {
+                    $serviceOrdersPriorityChart['label'][] = $key;
+                    $serviceOrdersPriorityChart['data'][] = count($value);
+                }
+                /** Finance */
+                $invoices = Invoice::where('subsidiary_id', $subsidiariesList->pluck('id'))
+                    ->whereYear('due_date', date('Y'))
+                    ->orderBy('due_date', 'desc')->get();
+                $financeIncomesChart = [];
+                $financeExpensesChart = [];
+                $financeRefundsChart = [];
+                for ($i = 1; $i <= 12; $i++) {
+                    $incomesValue = 0;
+                    $expensesValue = 0;
+                    $refundsValue = 0;
+                    foreach ($invoices as $val) {
+                        $invoiceMonth = explode('/', $val->due_date);
+                        $month = (int)$invoiceMonth[1];
+                        $value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $val->value)));
+                        if ($month == $i) {
+                            if ($val->type == 'receita' && $val->status == 'pago') {
+                                $incomesValue += $value;
+                            }
+                            if ($val->type == 'despesa' && $val->status == 'pendente') {
+                                $expensesValue += $value;
+                            }
+                            if ($val->type == 'reembolso' && $val->status == 'pendente') {
+                                $refundsValue += $value;
+                            }
+                        }
+                    }
+                    $financeIncomesChart[] = $incomesValue;
+                    $financeExpensesChart[] = $expensesValue;
+                    $financeRefundsChart[] = $refundsValue;
+                }
+                $paid_incomes = $invoices->where('status', 'pago')->where('type', 'receita')->count();
+                $unpaid_incomes = $invoices->where('status', 'pendente')->where('type', 'receita')->count();
+                $paid_expenses = $invoices->where('status', 'pago')->where('type', 'despesa')->count();
+                $unpaid_expenses = $invoices->where('status', 'pendente')->where('type', 'despesa')->count();
+                $paid_refunds = $invoices->where('status', 'pago')->where('type', 'reembolso')->count();
+                $unpaid_refunds = $invoices->where('status', 'pendente')->where('type', 'reembolso')->count();
+                $purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiariesList->pluck('id'))->whereYear('date', date('Y'))
+                    ->orderBy('forecast', 'desc')->get();
+                $exec_purchases = $purchases->where('status', 'executada')->count();
+                $unexec_purchases = $purchases->where('status', 'não executada')->count();
+                //Inventory
+                $products = Product::select('id', 'name')->orderBy('name')->get();
+                $stocks = [];
+                foreach ($products as $product) {
+                    $items = [];
+                    for ($i = 1; $i <= 12; $i++) {
+                        $inventories = Inventory::select(DB::raw('sum(input - output) as total'))
+                            ->where('product_id', $product->id)
+                            ->whereMonth('day', $i)
+                            ->whereYear('day', date('Y'))
+                            ->first();
+
+                        $items[$i] = $inventories->total ?? 0;
+                    }
+                    $stocks[] = [
+                        'product' => $product->name,
+                        'months' => $items
+                    ];
+                }
                 break;
             case 'Financeiro':
-                $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $paid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
-                $unpaid_incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
-                $paid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
-                $unpaid_expenses = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
-                $paid_refunds = FinanceRefund::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pago')->count();
-                $unpaid_refunds = FinanceRefund::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->count();
-                $exec_purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->where('status', 'executada')->count();
-                $unexec_purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->where('status', 'não executada')->count();
+                /** Company */
+                $financiers = Auth::user()->financiers->pluck('subsidiary_id');
+                $subsidiariesList = ModelsSubsidiary::whereIn('id', $financiers)->get();
+                $states = array_unique($subsidiariesList->pluck('state')->toArray());
+                sort($states);
+                $statesSearch = implode(',', $states);
+                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
+                $clients = Client::select('alias_name', 'trade_status')->whereIn('subsidiary_id', $financiers)->orWhere('subsidiary_id', null)->get();
+                /** Users */
+                $programmers = 0;
+                $administrators = 0;
+                $managers = 0;
+                $financiers = 0;
+                $collaborators = 0;
+                $stockists = 0;
+                /** Clients */
+                $clientsStatusChart = [];
+                $clientsSubsidiaryChart = [];
+                /** Service Orders */
+                $serviceOrders = null;
+                $serviceOrdersNotStarted = 0;
+                $serviceOrdersLate = 0;
+                $serviceOrdersStarted = 0;
+                $serviceOrdersConcluded = 0;
+                $serviceOrdersCanceled = 0;
+                $serviceOrdersSubsidiary = 0;
+                $serviceOrdersPriorityChart = [];
+                /** Finance */
+                $invoices = Invoice::where('subsidiary_id', $subsidiariesList->pluck('id'))
+                    ->whereYear('due_date', date('Y'))
+                    ->orderBy('due_date', 'desc')->get();
+                $financeIncomesChart = [];
+                $financeExpensesChart = [];
+                $financeRefundsChart = [];
+                for ($i = 1; $i <= 12; $i++) {
+                    $incomesValue = 0;
+                    $expensesValue = 0;
+                    $refundsValue = 0;
+                    foreach ($invoices as $val) {
+                        $invoiceMonth = explode('/', $val->due_date);
+                        $month = (int)$invoiceMonth[1];
+                        $value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $val->value)));
+                        if ($month == $i) {
+                            if ($val->type == 'receita' && $val->status == 'pago') {
+                                $incomesValue += $value;
+                            }
+                            if ($val->type == 'despesa' && $val->status == 'pendente') {
+                                $expensesValue += $value;
+                            }
+                            if ($val->type == 'reembolso' && $val->status == 'pendente') {
+                                $refundsValue += $value;
+                            }
+                        }
+                    }
+                    $financeIncomesChart[] = $incomesValue;
+                    $financeExpensesChart[] = $expensesValue;
+                    $financeRefundsChart[] = $refundsValue;
+                }
+                $paid_incomes = $invoices->where('status', 'pago')->where('type', 'receita')->count();
+                $unpaid_incomes = $invoices->where('status', 'pendente')->where('type', 'receita')->count();
+                $paid_expenses = $invoices->where('status', 'pago')->where('type', 'despesa')->count();
+                $unpaid_expenses = $invoices->where('status', 'pendente')->where('type', 'despesa')->count();
+                $paid_refunds = $invoices->where('status', 'pago')->where('type', 'reembolso')->count();
+                $unpaid_refunds = $invoices->where('status', 'pendente')->where('type', 'reembolso')->count();
+                $purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiariesList->pluck('id'))->whereYear('date', date('Y'))
+                    ->orderBy('forecast', 'desc')->get();
+                $exec_purchases = $purchases->where('status', 'executada')->count();
+                $unexec_purchases = $purchases->where('status', 'não executada')->count();
+                //Inventory
+                $stocks = [];
+                break;
+            case 'Colaborador':
+                /** Company */
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiariesList = ModelsSubsidiary::whereIn('id', $collaborators)->get();
+                $states = array_unique($subsidiariesList->pluck('state')->toArray());
+                sort($states);
+                $statesSearch = implode(',', $states);
+                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
+                $clients = Client::select('alias_name', 'trade_status')->whereIn('subsidiary_id', $collaborators)->orWhere('subsidiary_id', null)->get();
+                /** Users */
+                $programmers = 0;
+                $administrators = 0;
+                $managers = 0;
+                $financiers = 0;
+                $collaborators = 0;
+                $stockists = 0;
+                /** Clients */
+                $clientsSubsidiary = $clients->groupBy('alias_name')->toArray();
+                $clientsSubsidiaryChart = [];
+                foreach ($clientsSubsidiary as $key => $value) {
+                    if ($key == '') {
+                        $key = 'Sem filial';
+                    }
+                    $clientsSubsidiaryChart['label'][] = $key;
+                    $clientsSubsidiaryChart['data'][] = count($value);
+                }
+                $clientsStatus = $clients->groupBy('trade_status')->toArray();
+                $clientsStatusChart = [];
+                foreach ($clientsStatus as $key => $value) {
+                    $clientsStatusChart['label'][] = $key;
+                    $clientsStatusChart['data'][] = count($value);
+                }
+                /** Service Orders */
+                $serviceOrders = ServiceOrder::select('status', 'priority', 'subsidiary')
+                    ->where(function ($query) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id);
+                    })->get();
+                $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
+                $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
+                $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
+                $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
+                $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
+                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')->groupBy('priority')->toArray();
+                $serviceOrdersPriorityChart = [];
+                foreach ($serviceOrdersPriority as $key => $value) {
+                    $serviceOrdersPriorityChart['label'][] = $key;
+                    $serviceOrdersPriorityChart['data'][] = count($value);
+                }
+                /** Finance */
+                $invoices = null;
+                $financeIncomesChart = [];
+                $financeExpensesChart = [];
+                $financeRefundsChart = [];
+                $paid_incomes = 0;
+                $unpaid_incomes = 0;
+                $paid_expenses = 0;
+                $unpaid_expenses = 0;
+                $paid_refunds = 0;
+                $unpaid_refunds = 0;
+                $purchases = 0;
+                $exec_purchases = 0;
+                $unexec_purchases = 0;
+                //Inventory
+                $stocks = [];
+                break;
+            case 'Estoquista':
+                /** Company */
+                $subsidiariesList = null;
+                $providers = 0;
+                $clients = null;
+                /** Users */
+                $programmers = 0;
+                $administrators = 0;
+                $managers = 0;
+                $financiers = 0;
+                $collaborators = 0;
+                $stockists = 0;
+                /** Clients */
+                $clientsSubsidiaryChart = [];
+                $clientsStatusChart = [];
+                /** Service Orders */
+                $serviceOrders = null;
+                $serviceOrdersNotStarted = 0;
+                $serviceOrdersLate = 0;
+                $serviceOrdersStarted = 0;
+                $serviceOrdersConcluded = 0;
+                $serviceOrdersCanceled = 0;
+                $serviceOrdersSubsidiary = 0;
+                $serviceOrdersPriorityChart = [];
+                /** Finance */
+                $invoices = null;
+                $financeIncomesChart = [];
+                $financeExpensesChart = [];
+                $financeRefundsChart = [];
+                $paid_incomes = 0;
+                $unpaid_incomes = 0;
+                $paid_expenses = 0;
+                $unpaid_expenses = 0;
+                $paid_refunds = 0;
+                $unpaid_refunds = 0;
+                $purchases = null;
+                $exec_purchases = 0;
+                $unexec_purchases = 0;
+                //Inventory
+                $products = Product::select('id', 'name')->orderBy('name')->get();
+                $stocks = [];
+                foreach ($products as $product) {
+                    $items = [];
+                    for ($i = 1; $i <= 12; $i++) {
+                        $inventories = Inventory::select(DB::raw('sum(input - output) as total'))
+                            ->where('product_id', $product->id)
+                            ->whereMonth('day', $i)
+                            ->whereYear('day', date('Y'))
+                            ->first();
+
+                        $items[$i] = $inventories->total ?? 0;
+                    }
+                    $stocks[] = [
+                        'product' => $product->name,
+                        'months' => $items
+                    ];
+                }
                 break;
             default:
-                $clients = Client::count();
-                $financiers = ViewsUser::where('type', 'Financeiro')->count();
-                $collaborators = ViewsUser::where('type', 'Colaborador')->count();
-                $service_orders = ServiceOrder::count();
-                $paid_incomes = FinanceIncome::where('status', 'pago')->count();
-                $unpaid_incomes = FinanceIncome::where('status', 'pendente')->count();
-                $paid_expenses = FinanceExpense::where('status', 'pago')->count();
-                $unpaid_expenses = FinanceExpense::where('status', 'pendente')->count();
-                $paid_refunds = FinanceRefund::where('status', 'pago')->count();
-                $unpaid_refunds = FinanceRefund::where('status', 'pendente')->count();
-                $exec_purchases = PurchaseOrder::where('status', 'executada')->count();
-                $unexec_purchases = PurchaseOrder::where('status', 'não executada')->count();
+                /** Company */
+                $subsidiariesList = Subsidiary::all('alias_name');
+                $providers = Provider::count();
+                $clients = Client::all('alias_name', 'trade_status');
+                /** Users */
+                $users = ViewsUser::all('type');
+                $programmers = $users->where('type', 'Programador')->count();
+                $administrators = $users->where('type', 'Administrador')->count();
+                $managers = $users->where('type', 'Gerente')->count();
+                $financiers = $users->where('type', 'Financeiro')->count();
+                $collaborators = $users->where('type', 'Colaborador')->count();
+                $stockists = $users->where('type', 'Estoquista')->count();
+                /** Clients */
+                $clientsSubsidiary = $clients->groupBy('alias_name')->toArray();
+                $clientsSubsidiaryChart = [];
+                foreach ($clientsSubsidiary as $key => $value) {
+                    if ($key == '') {
+                        $key = 'Sem filial';
+                    }
+                    $clientsSubsidiaryChart['label'][] = $key;
+                    $clientsSubsidiaryChart['data'][] = count($value);
+                }
+                $clientsStatus = $clients->groupBy('trade_status')->toArray();
+                $clientsStatusChart = [];
+                foreach ($clientsStatus as $key => $value) {
+                    $clientsStatusChart['label'][] = $key;
+                    $clientsStatusChart['data'][] = count($value);
+                }
+                /** Service Orders */
+                $serviceOrders = ServiceOrder::all('status', 'priority', 'subsidiary');
+                $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
+                $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
+                $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
+                $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
+                $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
+                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')->groupBy('priority')->toArray();
+                $serviceOrdersPriorityChart = [];
+                foreach ($serviceOrdersPriority as $key => $value) {
+                    $serviceOrdersPriorityChart['label'][] = $key;
+                    $serviceOrdersPriorityChart['data'][] = count($value);
+                }
+                /** Finance */
+                $invoices = Invoice::whereYear('due_date', date('Y'))->orderBy('due_date', 'desc')->get();
+                $financeIncomesChart = [];
+                $financeExpensesChart = [];
+                $financeRefundsChart = [];
+                for ($i = 1; $i <= 12; $i++) {
+                    $incomesValue = 0;
+                    $expensesValue = 0;
+                    $refundsValue = 0;
+                    foreach ($invoices as $val) {
+                        $invoiceMonth = explode('/', $val->due_date);
+                        $month = (int)$invoiceMonth[1];
+                        $value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $val->value)));
+                        if ($month == $i) {
+                            if ($val->type == 'receita' && $val->status == 'pago') {
+                                $incomesValue += $value;
+                            }
+                            if ($val->type == 'despesa' && $val->status == 'pendente') {
+                                $expensesValue += $value;
+                            }
+                            if ($val->type == 'reembolso' && $val->status == 'pendente') {
+                                $refundsValue += $value;
+                            }
+                        }
+                    }
+                    $financeIncomesChart[] = $incomesValue;
+                    $financeExpensesChart[] = $expensesValue;
+                    $financeRefundsChart[] = $refundsValue;
+                }
+                $paid_incomes = $invoices->where('status', 'pago')->where('type', 'receita')->count();
+                $unpaid_incomes = $invoices->where('status', 'pendente')->where('type', 'receita')->count();
+                $paid_expenses = $invoices->where('status', 'pago')->where('type', 'despesa')->count();
+                $unpaid_expenses = $invoices->where('status', 'pendente')->where('type', 'despesa')->count();
+                $paid_refunds = $invoices->where('status', 'pago')->where('type', 'reembolso')->count();
+                $unpaid_refunds = $invoices->where('status', 'pendente')->where('type', 'reembolso')->count();
+                $purchases = PurchaseOrder::whereYear('date', date('Y'))->orderBy('forecast', 'desc')->get();
+                $exec_purchases = $purchases->where('status', 'executada')->count();
+                $unexec_purchases = $purchases->where('status', 'não executada')->count();
+                //Inventory
+                $products = Product::select('id', 'name')->orderBy('name')->get();
+                $stocks = [];
+                foreach ($products as $product) {
+                    $items = [];
+                    for ($i = 1; $i <= 12; $i++) {
+                        $inventories = Inventory::select(DB::raw('sum(input - output) as total'))
+                            ->where('product_id', $product->id)
+                            ->whereMonth('day', $i)
+                            ->whereYear('day', date('Y'))
+                            ->first();
+
+                        $items[$i] = $inventories->total ?? 0;
+                    }
+                    $stocks[] = [
+                        'product' => $product->name,
+                        'months' => $items
+                    ];
+                }
                 break;
         }
-
-        $providers = Provider::count();
-        $subsidiariesList = Subsidiary::count();
 
         /** Statistics */
         $statistics = $this->accessStatistics();
@@ -106,22 +451,44 @@ class AdminController extends Controller
         $chart = $statistics['chart'];
 
         return view('admin.home.index', compact(
+            'programmers',
             'administrators',
-            'subsidiariesList',
             'managers',
             'collaborators',
             'financiers',
+            'stockists',
+
+            'subsidiariesList',
             'clients',
             'providers',
-            'service_orders',
+            'clientsSubsidiaryChart',
+            'clientsStatusChart',
+
+            'serviceOrders',
+            'serviceOrdersNotStarted',
+            'serviceOrdersLate',
+            'serviceOrdersStarted',
+            'serviceOrdersConcluded',
+            'serviceOrdersCanceled',
+            'serviceOrdersPriorityChart',
+
+            'financeIncomesChart',
+            'financeExpensesChart',
+            'financeRefundsChart',
+
+            'invoices',
             'paid_incomes',
             'unpaid_incomes',
             'paid_expenses',
             'unpaid_expenses',
             'paid_refunds',
             'unpaid_refunds',
+            'purchases',
             'exec_purchases',
             'unexec_purchases',
+
+            'stocks',
+
             'onlineUsers',
             'percent',
             'access',

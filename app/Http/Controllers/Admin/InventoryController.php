@@ -274,7 +274,7 @@ class InventoryController extends Controller
             $year = $request->year;
         }
 
-        $products = Product::all('id', 'name');
+        $products = Product::select('id', 'name')->orderBy('name')->get();
         $stocks = [];
         foreach ($products as $product) {
             $items = [];

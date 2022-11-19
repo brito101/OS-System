@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Finance;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\InvoiceRequest;
+use App\Models\Financier;
 use App\Models\Invoice;
 use App\Models\Manager;
 use App\Models\Subsidiary;
@@ -27,13 +28,13 @@ class IncomeController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         switch ($role) {
-            case 'Colaborador':
             case 'Financeiro':
-                $incomes = FinanceIncome::where('user_id', Auth::user()->id)->get();
+                $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->get();
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->get();
                 break;
             default:
                 $incomes = FinanceIncome::all();
@@ -85,13 +86,12 @@ class IncomeController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         switch ($role) {
-            case 'Colaborador':
             case 'Financeiro':
-                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
                 break;
             case 'Gerente':
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 break;
             default:
@@ -166,13 +166,12 @@ class IncomeController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         switch ($role) {
-            case 'Colaborador':
             case 'Financeiro':
-                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
                 break;
             case 'Gerente':
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 break;
             default:
@@ -198,13 +197,12 @@ class IncomeController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         switch ($role) {
-            case 'Colaborador':
             case 'Financeiro':
-                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
                 break;
             case 'Gerente':
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 break;
             default:
@@ -230,13 +228,12 @@ class IncomeController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         switch ($role) {
-            case 'Colaborador':
             case 'Financeiro':
-                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
                 break;
             case 'Gerente':
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 break;
             default:
@@ -287,13 +284,12 @@ class IncomeController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         switch ($role) {
-            case 'Colaborador':
             case 'Financeiro':
-                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
                 break;
             case 'Gerente':
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 break;
             default:
@@ -327,13 +323,12 @@ class IncomeController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         switch ($role) {
-            case 'Colaborador':
             case 'Financeiro':
-                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
                 break;
             case 'Gerente':
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 break;
             default:
@@ -369,13 +364,12 @@ class IncomeController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         switch ($role) {
-            case 'Colaborador':
             case 'Financeiro':
-                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
                 break;
             case 'Gerente':
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $managers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 break;
             default:
@@ -411,13 +405,12 @@ class IncomeController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         switch ($role) {
-            case 'Colaborador':
             case 'Financeiro':
-                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
                 break;
             case 'Gerente':
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 break;
             default:
@@ -450,13 +443,12 @@ class IncomeController extends Controller
 
         $role = Auth::user()->roles->first()->name;
         switch ($role) {
-            case 'Colaborador':
             case 'Financeiro':
-                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
-                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
                 break;
             case 'Gerente':
-                $managers = Auth::user()->managers->pluck('subsidiary_id');
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 break;
             default:

@@ -207,11 +207,12 @@ class ServiceOrderController extends Controller
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $serviceOrder = ServiceOrder::where('id', $id)
-                    ->where(function ($query) {
+                $serviceOrder = ServiceOrder::whereIn('subsidiary_id', $subsidiaries)
+                    ->orWhere(function ($query) {
                         $query->where('user_id', Auth::user()->id)
                             ->orWhere('author', Auth::user()->id);
-                    })->whereIn('subsidiary_id', $subsidiaries)->first();
+                    })
+                    ->where('id', $id)->first();
                 break;
             default:
                 $serviceOrder = ServiceOrder::find($id);
@@ -252,11 +253,12 @@ class ServiceOrderController extends Controller
             case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
-                $serviceOrder = ServiceOrder::where('id', $id)
-                    ->where(function ($query) {
+                $serviceOrder = ServiceOrder::whereIn('subsidiary_id', $subsidiaries)
+                    ->orWhere(function ($query) {
                         $query->where('user_id', Auth::user()->id)
                             ->orWhere('author', Auth::user()->id);
-                    })->whereIn('subsidiary_id', $managers)->first();
+                    })
+                    ->where('id', $id)->first();
                 break;
             default:
                 $serviceOrder = ServiceOrder::find($id);
@@ -305,11 +307,12 @@ class ServiceOrderController extends Controller
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $serviceOrder = ServiceOrder::where('id', $id)
-                    ->where(function ($query) {
+                $serviceOrder = ServiceOrder::whereIn('subsidiary_id', $subsidiaries)
+                    ->orWhere(function ($query) {
                         $query->where('user_id', Auth::user()->id)
                             ->orWhere('author', Auth::user()->id);
-                    })->whereIn('subsidiary_id', $subsidiaries)->first();
+                    })
+                    ->where('id', $id)->first();
                 break;
             default:
                 $serviceOrder = ServiceOrder::find($id);
