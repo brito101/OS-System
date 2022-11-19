@@ -171,7 +171,7 @@
                             </div>
                         </div>
 
-                        <div class="card-body p-0">
+                        <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                             <div class="table-responsive">
                                 <table class="table m-0">
                                     <thead>
@@ -227,7 +227,7 @@
                             </div>
                         </div>
 
-                        <div class="card-body p-0">
+                        <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                             <div class="table-responsive">
                                 <table class="table m-0">
                                     <thead>
@@ -284,7 +284,7 @@
                             </div>
                         </div>
 
-                        <div class="card-body p-0">
+                        <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                             <div class="table-responsive">
                                 <table class="table m-0">
                                     <thead>
@@ -340,7 +340,7 @@
                             </div>
                         </div>
 
-                        <div class="card-body p-0">
+                        <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                             <div class="table-responsive">
                                 <table class="table m-0">
                                     <thead>

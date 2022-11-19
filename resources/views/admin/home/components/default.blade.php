@@ -373,7 +373,7 @@
                             </div>
                         </div>
 
-                        <div class="card-body p-0">
+                        <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                             <div class="table-responsive">
                                 <table class="table m-0">
                                     <thead>
@@ -429,7 +429,7 @@
                             </div>
                         </div>
 
-                        <div class="card-body p-0">
+                        <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                             <div class="table-responsive">
                                 <table class="table m-0">
                                     <thead>
@@ -486,7 +486,7 @@
                             </div>
                         </div>
 
-                        <div class="card-body p-0">
+                        <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                             <div class="table-responsive">
                                 <table class="table m-0">
                                     <thead>
@@ -542,7 +542,7 @@
                             </div>
                         </div>
 
-                        <div class="card-body p-0">
+                        <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                             <div class="table-responsive">
                                 <table class="table m-0">
                                     <thead>
@@ -599,7 +599,7 @@
         <div class="card-header">
             Estoque Consolidado {{ date('Y') }}
         </div>
-        <div class="card-body">
+        <div class="card-body" style="max-height: 300px; overflow-y: auto;">
             <div class="table-responsive-lg">
                 <table class="table table-bordered table-hover table-striped">
                     <thead class="table-light">
