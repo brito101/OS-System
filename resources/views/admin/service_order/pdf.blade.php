@@ -41,7 +41,8 @@
                     <div class="col-12 form-group px-0">
                         <label for="client_id">Cliente</label>
                         <input type="text" class="form-control bg-white" id="client_id" name="client_id"
-                            value="{{ $serviceOrder->client->name }}" disabled>
+                            value="{{ $serviceOrder->client->name }} ({{ $serviceOrder->client->document_person }})"
+                            disabled>
                     </div>
                 </div>
 

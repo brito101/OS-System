@@ -26,7 +26,8 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><i class="fas fa-fw fa-list"></i> Editar Ordem de Serviço</h1>
+                    <h1><i class="fas fa-fw fa-list"></i> Editar Ordem de Serviço nº
+                        {{ $serviceOrder->number_series }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -268,6 +269,8 @@
                                         value="{{ $serviceOrder->user_id }}">
                                     <input type="hidden" id="priority" name="priority"
                                         value="{{ $serviceOrder->priority }}">
+                                    <input type="hidden" id="subsidiary_id" name="subsidiary_id"
+                                        value="{{ $serviceOrder->subsidiary_id }}">
 
                                     <div class="d-flex flex-wrap justify-content-between">
                                         <div class="col-12 form-group px-0">
