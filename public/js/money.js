@@ -1,1 +1,1 @@
-$(".money_format_2").inputmask("currency",{autoUnmask:!0,radixPoint:",",groupSeparator:".",allowMinus:!1,prefix:"R$ ",digits:2,digitsOptional:!1,rightAlign:!1,unmaskAsNumber:!0});
+$(".money_format_2").inputmask("currency",{autoUnmask:!0,radixPoint:",",groupSeparator:".",allowMinus:!1,prefix:"R$ ",digits:2,digitsOptional:!1,rightAlign:!1,unmaskAsNumber:!0}),$(".percentage").inputmask({alias:"percentage",radixPoint:",",groupSeparator:".",postfix:" %",integerDigits:9,digits:2,allowMinus:!1,digitsOptional:!0,placeholder:"0"});

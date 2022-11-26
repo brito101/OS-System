@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Collaborator;
+use App\Models\Commission;
 use App\Models\Financier;
 use App\Models\Inventory;
 use App\Models\Invoice;
 use App\Models\Manager;
 use App\Models\Product;
 use App\Models\PurchaseOrder;
+use App\Models\Seller;
 use App\Models\Subsidiary as ModelsSubsidiary;
 use App\Models\User;
 use App\Models\Views\Client;
@@ -123,6 +125,9 @@ class AdminController extends Controller
                     ->orderBy('forecast', 'desc')->get();
                 $exec_purchases = $purchases->where('status', 'executada')->count();
                 $unexec_purchases = $purchases->where('status', 'não executada')->count();
+                //Commissions
+                $sellers = Seller::orderBy('name')->get();
+                $commissions = Commission::where('status', 'pendente')->whereIn('subsidiary_id', $subsidiariesList->pluck('id'))->orderBy('due_date', 'desc')->get();
                 //Inventory
                 $products = Product::select('id', 'name')->orderBy('name')->get();
                 $stocks = [];
@@ -212,6 +217,9 @@ class AdminController extends Controller
                     ->orderBy('forecast', 'desc')->get();
                 $exec_purchases = $purchases->where('status', 'executada')->count();
                 $unexec_purchases = $purchases->where('status', 'não executada')->count();
+                //Commissions
+                $sellers = Seller::orderBy('name')->get();
+                $commissions = Commission::where('status', 'pendente')->whereIn('subsidiary_id', $subsidiariesList->pluck('id'))->orderBy('due_date', 'desc')->get();
                 //Inventory
                 $stocks = [];
                 break;
@@ -279,6 +287,9 @@ class AdminController extends Controller
                 $purchases = 0;
                 $exec_purchases = 0;
                 $unexec_purchases = 0;
+                //Commissions
+                $sellers = [];
+                $commissions = [];
                 //Inventory
                 $stocks = [];
                 break;
@@ -421,6 +432,9 @@ class AdminController extends Controller
                 $purchases = PurchaseOrder::whereYear('date', date('Y'))->orderBy('forecast', 'desc')->get();
                 $exec_purchases = $purchases->where('status', 'executada')->count();
                 $unexec_purchases = $purchases->where('status', 'não executada')->count();
+                //Commissions
+                $sellers = Seller::orderBy('name')->get();
+                $commissions = Commission::where('status', 'pendente')->orderBy('due_date', 'desc')->get();
                 //Inventory
                 $products = Product::select('id', 'name')->orderBy('name')->get();
                 $stocks = [];
@@ -486,6 +500,9 @@ class AdminController extends Controller
             'purchases',
             'exec_purchases',
             'unexec_purchases',
+
+            'sellers',
+            'commissions',
 
             'stocks',
 

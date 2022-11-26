@@ -282,6 +282,11 @@ return [
         'liberator' => 'quem liberou',
         'stripper' => 'quem retirou',
         'lecturer' => 'conferente',
+        'seller_id' => 'vendedor',
+        'product' => 'produto',
+        'job_value' => 'valor da obra',
+        'percentage' => 'percentual de comissão',
+        'total_value' => 'valor total',
     ],
 
 ];

@@ -9,3 +9,17 @@ $(".money_format_2").inputmask("currency", {
     rightAlign: false,
     unmaskAsNumber: true,
 });
+
+$(".percentage").inputmask({
+    alias:"percentage",
+    radixPoint: ",",
+    groupSeparator: ".",
+    postfix: " %",
+    integerDigits:9,
+    digits:2,
+    allowMinus:false,
+    digitsOptional: true,
+    placeholder: "0"
+});
+
+

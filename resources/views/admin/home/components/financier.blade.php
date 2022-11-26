@@ -391,3 +391,75 @@
         </div>
     </div>
 </div>
+
+{{-- Commissions --}}
+<div class="row">
+    <div class="card col-12">
+        <div class="card-header">
+            Comissões
+        </div>
+        <div class="card-body px-0 pb-0 d-flex flex-wrap justify-content-center">
+            <div class="col-12 d-flex flex-wrap justify-content-between px-0">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header border-transparent">
+                            <h3 class="card-title">Comissões Pendentes</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
+                            <div class="table-responsive">
+                                <table class="table m-0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Vendedor</th>
+                                            <th>Produto</th>
+                                            <th>Obra</th>
+                                            <th>Vencimento</th>
+                                            <th>Valor Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($commissions as $commission)
+                                            <tr>
+                                                <td><a
+                                                        href="{{ route('admin.commissions.show', ['commission' => $commission->id]) }}">{{ $commission->id }}</a>
+                                                </td>
+                                                <td>{{ $commission->seller }}</td>
+                                                <td>{{ $commission->product }}</td>
+                                                <td>{{ $commission->job }}</td>
+                                                <td>{{ $commission->due_date }}</td>
+                                                <td>{{ $commission->total_value }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6">Sem comissões pendentes</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer clearfix">
+                            <a href="{{ route('admin.commissions.create') }}"
+                                class="btn btn-sm btn-info float-left">Nova Comissão</a>
+                            <a href="{{ route('admin.commissions.index') }}"
+                                class="btn btn-sm btn-secondary
+                                float-right">Listagem</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

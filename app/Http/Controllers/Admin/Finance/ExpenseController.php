@@ -386,7 +386,7 @@ class ExpenseController extends Controller
         } else {
             return redirect()
                 ->back()
-                ->with('error', 'Erro ao excluir!');
+                ->with('error', 'Erro ao atualizar!');
         }
     }
 
@@ -427,7 +427,7 @@ class ExpenseController extends Controller
         } else {
             return redirect()
                 ->back()
-                ->with('error', 'Erro ao excluir!');
+                ->with('error', 'Erro ao atualizar!');
         }
     }
 

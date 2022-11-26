@@ -956,6 +956,151 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 76,
                 'role_id' => 6
             ],
+            /** Commissions 77 to 85 (programmer, administrator, managers, financiers) */
+            [
+                'permission_id' => 77,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 77,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 77,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 77,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 78,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 78,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 78,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 78,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 79,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 79,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 79,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 79,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 80,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 80,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 80,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 80,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 81,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 81,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 81,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 81,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 82,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 82,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 82,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 82,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 83,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 83,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 83,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 83,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 84,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 84,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 84,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 84,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 85,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 85,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 85,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 85,
+                'role_id' => 5
+            ],
         ]);
     }
 }

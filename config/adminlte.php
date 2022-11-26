@@ -438,6 +438,38 @@ return [
             ],
         ],
         [
+            'text'        => 'Comissões',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-coins',
+            'can'         => 'Acessar Comissões',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Comissões',
+                    'url'  => 'admin/commissions',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Comissões',
+                ],
+                [
+                    'text' => 'Cadastro de Comissão',
+                    'url'  => 'admin/commissions/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Comissões',
+                ],
+                [
+                    'text' => 'Listagem de Vendedores',
+                    'url'  => 'admin/sellers',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Vendedores',
+                ],
+                [
+                    'text' => 'Cadastro de Vendedor',
+                    'url'  => 'admin/sellers/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Vendedores',
+                ],
+            ]
+        ],
+        [
             'text'        => 'Estoque',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-box',

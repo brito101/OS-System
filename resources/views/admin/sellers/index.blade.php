@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', '- Movimentações')
+@section('title', '- Vendedores')
 @section('plugins.Datatables', true)
 @section('plugins.DatatablesPlugins', true)
 
@@ -10,12 +10,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><i class="fas fa-fw fa-box-open"></i> Movimentações</h1>
+                    <h1><i class="fas fa-fw fa-id-badge"></i> Vendedores</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
-                        <li class="breadcrumb-item active">Movimentações</li>
+                        <li class="breadcrumb-item active">Vendedores</li>
                     </ol>
                 </div>
             </div>
@@ -32,20 +32,20 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex flex-wrap justify-content-between col-12 align-content-center">
-                                <h3 class="card-title align-self-center">Movimentações Cadastradas</h3>
-                                @can('Criar Movimentações')
-                                    <a href="{{ route('admin.stocks.create') }}" title="Nova Movimentação"
-                                        class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Nova Movimentação</a>
+                                <h3 class="card-title align-self-center">Vendedores Cadastrados</h3>
+                                @can('Criar Vendedores')
+                                    <a href="{{ route('admin.sellers.create') }}" title="Novo Vendedor"
+                                        class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Novo Vendedor</a>
                                 @endcan
                             </div>
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 5], 'Data', 'Produto', 'Filial', 'Valor Unitário', 'Validade', ['label' => 'Entrada', 'width' => 40], ['label' => 'Saída', 'width' => 40], ['label' => 'Saldo Diário', 'width' => 40], ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Nome', 'CPF', 'E-mail', 'Celular', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
                             $config = [
-                                'order' => [[0, 'desc']],
-                                'ajax' => url('/admin/stocks'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'day', 'name' => 'day'], ['data' => 'product', 'name' => 'product'], ['data' => 'subsidiary', 'name' => 'subsidiary'], ['data' => 'value', 'name' => 'value'], ['data' => 'validity', 'name' => 'validity'], ['data' => 'input_value', 'name' => 'input_value'], ['data' => 'output_value', 'name' => 'output_value'], ['data' => 'balance', 'name' => 'balance'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'order' => [[1, 'desc']],
+                                'ajax' => url('/admin/sellers'),
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'document_person', 'name' => 'document_person'], ['data' => 'email', 'name' => 'email'], ['data' => 'cell', 'name' => 'cell'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,

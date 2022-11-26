@@ -86,8 +86,8 @@ class UserController extends Controller
 
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
             $name = Str::slug(mb_substr($data['name'], 0, 100)) . time();
-            $extenstion = $request->photo->extension();
-            $nameFile = "{$name}.{$extenstion}";
+            $extension = $request->photo->extension();
+            $nameFile = "{$name}.{$extension}";
 
             $data['photo'] = $nameFile;
 
@@ -204,8 +204,8 @@ class UserController extends Controller
                 unlink($imagePath);
             }
 
-            $extenstion = $request->photo->extension();
-            $nameFile = "{$name}.{$extenstion}";
+            $extension = $request->photo->extension();
+            $nameFile = "{$name}.{$extension}";
 
             $data['photo'] = $nameFile;
 

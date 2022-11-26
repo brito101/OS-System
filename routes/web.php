@@ -5,9 +5,11 @@ use App\Http\Controllers\Admin\{
     ActivityController,
     AdminController,
     ClientController,
+    CommissionController,
     InventoryController,
     ProductController,
     ProviderController,
+    SellerController,
     ServiceOrderController,
     SubsidiaryController,
     UserController,
@@ -102,6 +104,20 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/finance-purchase-orders/executed/{id}', [PurchaseOrderController::class, 'executed']);
         Route::get('finance-purchase-orders-pdf/{id}', [PurchaseOrderController::class, 'pdf'])->name('finance-purchase-orders.pdf');
         Route::resource('finance-purchase-orders', PurchaseOrderController::class);
+
+        /** Sellers */
+        Route::get('/sellers/destroy/{id}', [SellerController::class, 'destroy']);
+        Route::get('/sellers/commissions/{id}', [SellerController::class, 'commissions'])->name('sellers.commissions');
+        Route::resource('sellers', SellerController::class);
+
+        /** Comissions */
+        Route::get('/commissions/receipt/{id}', [CommissionController::class, 'receipt'])->name('commissions.receipt');
+        Route::post('/commissions/changeStatus', [CommissionController::class, 'changeStatus'])->name('commissions.changeStatus');
+        Route::get('commissions-pdf/{id}', [CommissionController::class, 'pdf'])->name('commissions.pdf');
+        Route::get('/commissions/pay/{id}', [CommissionController::class, 'pay']);
+        Route::get('/commissions/receive/{id}', [CommissionController::class, 'receive']);
+        Route::get('/commissions/destroy/{id}', [CommissionController::class, 'destroy']);
+        Route::resource('commissions', CommissionController::class);
 
         /** Inventory */
         /** Products */

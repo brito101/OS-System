@@ -141,6 +141,62 @@
             );
             })
         </script>
+    @elseif (isset($withFooter) && $withFooter == 'comissions')
+        <script>
+            $(() => {
+                let {{ $id }} = $('#{{ $id }}').DataTable(
+                        {!! substr(json_encode($config), 0, -1) !!},
+                        "footerCallback": function(tfoot, data, start, end, display) {
+                            var api = this.api();
+                            let balance = 0;
+                            let payed = 0;
+                            let unpayed = 0;
+                            data.forEach(el => {
+                                if (el['status'] == 'pago') {
+                                    payed += el['amount'];
+                                } else if (el['status'] == 'pendente') {
+                                    unpayed += el['amount'];
+                                }
+                            });
+
+                            balance = payed - unpayed;
+
+                            payed = payed.toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            });
+
+                            unpayed = unpayed.toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            });
+
+                            balance = balance.toLocaleString('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            });
+
+                            $(api.column(0).footer()).html('');
+                            $(api.column(1).footer()).html('');
+                            $(api.column(2).footer()).html('');
+                            $(api.column(3).footer()).html('');
+                            $(api.column(4).footer()).html('');
+                            $(api.column(5).footer()).html(`Pago: ${payed}`);
+                            $(api.column(6).footer()).html(`Pendente: ${unpayed}`);
+                            $(api.column(7).footer()).html(`Balanço: ${balance}`);
+                            $(api.column(8).footer()).html('');
+                            $(api.column(9).footer()).html('');
+                            $(api.column(10).footer()).html('');
+
+                            $(tfoot).html(
+                                `<th colspan="10" class="text-left">
+                        Pago: ${payed} | Pendente: ${unpayed} | Balanço: ${balance}</th>`
+                            );
+                        }
+                    },
+            );
+            })
+        </script>
     @else
         <script>
             $(() => {
