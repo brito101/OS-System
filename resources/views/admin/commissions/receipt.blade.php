@@ -2,7 +2,7 @@
 @section('adminlte_css')
     <style>
         @page {
-            margin: 0 2cm;
+            margin: 2cm 2cm 0cm 2cm;
             font-size: 14px !important;
         }
     </style>
