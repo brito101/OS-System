@@ -24,13 +24,13 @@
                             </h2>
                         </div>
                         <div class="card-body">
-                            <p>Eu, {{ $commission->author }},
-                                {{ $commission->document_person ? 'CPF nº ' . $commission->document_person . ', ' : '' }}
+                            <p>Eu, {{ $seller->name }},
+                                {{ $seller->document_person ? 'CPF nº ' . $seller->document_person . ', ' : '' }}
                                 recebi a
                                 quantia de <b>{{ $commission->total_value }}</b> referente a comissão de
                                 {{ $commission->percentage }} sobre a venda do produto
                                 {{ $commission->product }} na obra {{ $commission->job }}, com valor total de
-                                {{ $commission->job_value }}
+                                {{ $commission->job_value }}.
                             </p>
                             <p class="text-right mt-2">Em ___________________, _____ de _________________ de _________.
                             </p>
@@ -55,13 +55,13 @@
                             </h2>
                         </div>
                         <div class="card-body">
-                            <p>Eu, {{ $commission->author }},
-                                {{ $commission->document_person ? 'CPF nº ' . $commission->document_person . ', ' : '' }}
+                            <p>Eu, {{ $seller->name }},
+                                {{ $seller->document_person ? 'CPF nº ' . $seller->document_person . ', ' : '' }}
                                 recebi a
                                 quantia de <b>{{ $commission->total_value }}</b> referente a comissão de
                                 {{ $commission->percentage }} sobre a venda do produto
                                 {{ $commission->product }} na obra {{ $commission->job }}, com valor total de
-                                {{ $commission->job_value }}
+                                {{ $commission->job_value }}.
                             </p>
                             <p class="text-right mt-2">Em ___________________, _____ de _________________ de _________.
                             </p>
@@ -86,13 +86,13 @@
                             </h2>
                         </div>
                         <div class="card-body">
-                            <p>Eu, {{ $commission->author }},
-                                {{ $commission->document_person ? 'CPF nº ' . $commission->document_person . ', ' : '' }}
+                            <p>Eu, {{ $seller->name }},
+                                {{ $seller->document_person ? 'CPF nº ' . $seller->document_person . ', ' : '' }}
                                 recebi a
                                 quantia de <b>{{ $commission->total_value }}</b> referente a comissão de
                                 {{ $commission->percentage }} sobre a venda do produto
                                 {{ $commission->product }} na obra {{ $commission->job }}, com valor total de
-                                {{ $commission->job_value }}
+                                {{ $commission->job_value }}.
                             </p>
                             <p class="text-right mt-2">Em ___________________, _____ de _________________ de _________.
                             </p>

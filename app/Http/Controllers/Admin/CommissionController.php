@@ -461,6 +461,8 @@ class CommissionController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.commissions.receipt', compact('commission'));
+        $seller = Seller::find($commission->seller_id);
+
+        return view('admin.commissions.receipt', compact('commission', 'seller'));
     }
 }
