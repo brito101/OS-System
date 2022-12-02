@@ -415,7 +415,7 @@ class PermissionsTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
-            /** Commissions 77 to 85 */
+            /** Commissions 77 to 86 */
             [
                 'name' => 'Acessar Comissões',
                 'guard_name' => 'web',
@@ -458,6 +458,11 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Excluir Vendedores',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Acessar Vendedores',
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],

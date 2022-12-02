@@ -40,10 +40,22 @@
                             <div class="card-body">
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-8 form-group px-0 pr-md-2">
+                                    <div class="col-12 col-md-4 form-group px-0 pr-md-2">
                                         <label for="name">Nome</label>
                                         <input type="text" class="form-control" id="name"
                                             placeholder="Nome Completo" name="name" value="{{ old('name') }}" required>
+                                    </div>
+                                    <div class="col-12 col-md-4 form-group px-0 px-md-2 mb-0">
+                                        <label for="seller_id">Vendedor</label>
+                                        <x-adminlte-select2 name="seller_id">
+                                            <option value="" {{ old('seller_id') == null ? 'selected' : '' }}>
+                                                Não informado</option>
+                                            @foreach ($sellers as $seller)
+                                                <option {{ old('seller_id') == $seller->id ? 'selected' : '' }}
+                                                    value="{{ $seller->id }}">{{ $seller->name }}
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select2>
                                     </div>
                                     <div class="col-12 col-md-4 form-group px-0 pl-md-2">
                                         <label for="document_person">CPF/CNPJ</label>

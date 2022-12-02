@@ -302,6 +302,26 @@ return [
             ],
         ],
         [
+            'text'        => 'Vendedores',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-id-badge',
+            'can'         => 'Acessar Vendedores',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Vendedores',
+                    'url'  => 'admin/sellers',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Vendedores',
+                ],
+                [
+                    'text' => 'Cadastro de Vendedor',
+                    'url'  => 'admin/sellers/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Vendedores',
+                ],
+            ]
+        ],
+        [
             'text'        => 'Clientes',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-user-plus',
@@ -454,18 +474,6 @@ return [
                     'url'  => 'admin/commissions/create',
                     'icon' => 'fas fa-fw fa-chevron-right',
                     'can'  => 'Criar Comissões',
-                ],
-                [
-                    'text' => 'Listagem de Vendedores',
-                    'url'  => 'admin/sellers',
-                    'icon' => 'fas fa-fw fa-chevron-right',
-                    'can'  => 'Listar Vendedores',
-                ],
-                [
-                    'text' => 'Cadastro de Vendedor',
-                    'url'  => 'admin/sellers/create',
-                    'icon' => 'fas fa-fw fa-chevron-right',
-                    'can'  => 'Criar Vendedores',
                 ],
             ]
         ],

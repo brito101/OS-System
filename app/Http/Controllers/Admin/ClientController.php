@@ -10,6 +10,7 @@ use App\Models\Client;
 use App\Models\ClientHistory;
 use App\Models\Collaborator;
 use App\Models\Manager;
+use App\Models\Seller;
 use App\Models\Subsidiary;
 use App\Models\Views\Client as ViewsClient;
 use Illuminate\Http\Request;
@@ -99,7 +100,9 @@ class ClientController extends Controller
                 break;
         }
 
-        return view('admin.clients.create', compact('subsidiaries'));
+        $sellers = Seller::all();
+
+        return view('admin.clients.create', compact('subsidiaries', 'sellers'));
     }
 
     /**
@@ -163,7 +166,7 @@ class ClientController extends Controller
             $data['observations'] = $observations;
         }
 
-        $data['seller'] = Auth::user()->id;
+        $data['user_id'] = Auth::user()->id;
 
         $client = Client::create($data);
 
@@ -257,7 +260,9 @@ class ClientController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.clients.edit', compact('client', 'subsidiaries'));
+        $sellers = Seller::all();
+
+        return view('admin.clients.edit', compact('client', 'subsidiaries', 'sellers'));
     }
 
     /**

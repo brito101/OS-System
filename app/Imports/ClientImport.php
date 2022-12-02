@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Client;
+use App\Models\Seller;
 use App\Models\Subsidiary;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -40,7 +41,8 @@ class ClientImport implements ToModel, WithHeadingRow, WithValidation
             'apartments' => $row['apartamentos'] ?? 0,
             'contact' => $row['contato'],
             'subsidiary_id' => Subsidiary::where('alias_name', $row['filial'])->first()->id ?? null,
-            'seller' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'seller_id' => Seller::where('name', $row['vendedor'])->first()->id ?? null,
         ]);
     }
 

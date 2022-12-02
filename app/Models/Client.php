@@ -15,7 +15,7 @@ class Client extends Model
     protected $fillable = [
         'name', 'document_person', 'document_registry',
         'email', 'telephone', 'cell', 'zipcode', 'street', 'number', 'complement',
-        'neighborhood', 'state', 'city', 'company', 'observations', 'service', 'trade_status', 'type', 'origin', 'apartments', 'contact', 'subsidiary_id', 'seller'
+        'neighborhood', 'state', 'city', 'company', 'observations', 'service', 'trade_status', 'type', 'origin', 'apartments', 'contact', 'subsidiary_id', 'seller_id'
     ];
 
     /** Relationships */
@@ -26,6 +26,6 @@ class Client extends Model
 
     public function seller()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Seller::class);
     }
 }

@@ -37,11 +37,19 @@
                             <div class="card-body">
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-8 form-group px-0 pr-md-2">
+                                    <div class="col-12 col-md-4 form-group px-0 pr-md-2">
                                         <label for="name">Nome</label>
                                         <input type="text" class="form-control bg-white" id="name" name="name"
                                             value="{{ $client->name }}" disabled>
                                     </div>
+
+                                    <div class="col-12 col-md-4 form-group px-0 px-md-2">
+                                        <label for="seller_id">Vendedor</label>
+                                        <input type="text" class="form-control bg-white" id="seller_id" name="seller_id"
+                                            value="{{ $client->seller ? $client->seller->name : 'Não Informado' }}"
+                                            disabled>
+                                    </div>
+
                                     <div class="col-12 col-md-4 form-group px-0 pl-md-2">
                                         <label for="document_person">CPF/CNPJ</label>
                                         <input type="text" class="form-control bg-white" id="document_person"
@@ -104,8 +112,8 @@
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="street">Rua</label>
-                                        <input type="text" class="form-control bg-white" id="street" name="street"
-                                            value="{{ $client->street }}" disabled>
+                                        <input type="text" class="form-control bg-white" id="street"
+                                            name="street" value="{{ $client->street }}" disabled>
                                     </div>
                                 </div>
 

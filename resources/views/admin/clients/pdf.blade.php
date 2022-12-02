@@ -25,10 +25,15 @@
             <div class="card-body">
 
                 <div class="d-flex flex-wrap justify-content-between">
-                    <div class="col-8 form-group pr-2">
+                    <div class="col-4 form-group pr-2">
                         <label for="name">Nome</label>
                         <input type="text" class="form-control bg-white" id="name" name="name"
                             value="{{ $client->name }}" disabled>
+                    </div>
+                    <div class="col-4 form-group px-2">
+                        <label for="name">Vendedor</label>
+                        <input type="text" class="form-control bg-white" id="name" name="name"
+                            value="{{ $client->seller ? $client->seller->name : 'Não Informado' }}" disabled>
                     </div>
                     <div class="col-4 form-group pl-2">
                         <label for="document_person">CPF/CNPJ</label>
