@@ -43,7 +43,7 @@
                         @php
                             $heads = [['label' => 'ID', 'width' => 5], 'Nome', 'CPF', 'E-mail', 'Celular', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
                             $config = [
-                                'order' => [[1, 'desc']],
+                                'order' => [[1, 'asc']],
                                 'ajax' => url('/admin/sellers'),
                                 'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'document_person', 'name' => 'document_person'], ['data' => 'email', 'name' => 'email'], ['data' => 'cell', 'name' => 'cell'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
