@@ -14,6 +14,6 @@ class Client extends Model
     /** Accessors */
     public function getCreatedAtAttribute($value)
     {
-        return date('d/m/Y', strtotime($value));
+        return date('Y-m-d', strtotime($value));
     }
 }
