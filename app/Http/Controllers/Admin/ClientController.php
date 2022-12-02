@@ -35,11 +35,11 @@ class ClientController extends Controller
         switch ($role) {
             case 'Colaborador':
                 $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $clients = ViewsClient::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                $clients = ViewsClient::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $clients = ViewsClient::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                $clients = ViewsClient::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
                 break;
             default:
                 $clients = ViewsClient::all();
@@ -49,11 +49,23 @@ class ClientController extends Controller
         if ($request->ajax()) {
             return Datatables::of($clients)
                 ->addIndexColumn()
+                ->addColumn('trade_status', function ($row) {
+                    switch ($row->trade_status) {
+                        case 'Restrito':
+                            $trade_status = '<span class="btn btn-danger font-weight-bold">' . $row->trade_status . '</span>';
+                            break;
+                        default:
+                            $trade_status = $row->trade_status;
+                            break;
+                    }
+
+                    return $trade_status;
+                })
                 ->addColumn('action', function ($row) {
                     $btn = '<a class="btn btn-xs btn-dark mx-1 shadow" title="Timeline" href="clients/timeline/' . $row->id . '"><i class="fa fa-lg fa-fw fa-clock"></i></a>' . '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="clients/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="clients/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="clients/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste cliente?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'trade_status'])
                 ->make(true);
         }
 
@@ -177,14 +189,14 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $collaborators)
                         ->orWhere('subsidiary_id', null);
                 })->where('id', $id)->first();
                 break;
             case 'Gerente':
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $managers = Auth::user()->managers->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $managers)
                         ->orWhere('subsidiary_id', null);
@@ -220,7 +232,7 @@ class ClientController extends Controller
             case 'Colaborador':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $collaborators)
                         ->orWhere('subsidiary_id', null);
@@ -229,7 +241,7 @@ class ClientController extends Controller
             case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $managers = Auth::user()->managers->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $managers)
                         ->orWhere('subsidiary_id', null);
@@ -269,7 +281,7 @@ class ClientController extends Controller
             case 'Colaborador':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiary = Subsidiary::whereIn('id', $collaborators)->where('id', $data['subsidiary_id'])->first();
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $collaborators)
                         ->orWhere('subsidiary_id', null);
@@ -278,7 +290,7 @@ class ClientController extends Controller
             case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
                 $subsidiary = Subsidiary::whereIn('id', $managers)->where('id', $data['subsidiary_id'])->first();
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $managers = Auth::user()->managers->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $managers)
                         ->orWhere('subsidiary_id', null);
@@ -353,14 +365,14 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $collaborators)
                         ->orWhere('subsidiary_id', null);
                 })->where('id', $id)->first();
                 break;
             case 'Gerente':
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $managers = Auth::user()->managers->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $managers)
                         ->orWhere('subsidiary_id', null);
@@ -396,14 +408,14 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $collaborators)
                         ->orWhere('subsidiary_id', null);
                 })->where('id', $id)->first();
                 break;
             case 'Gerente':
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $managers = Auth::user()->managers->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $managers)
                         ->orWhere('subsidiary_id', null);
@@ -447,14 +459,14 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $collaborators)
                         ->orWhere('subsidiary_id', null);
                 })->where('id', $id)->first();
                 break;
             case 'Gerente':
-                $client = Client::where(function ($query) {
+                $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $managers = Auth::user()->managers->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $managers)
                         ->orWhere('subsidiary_id', null);

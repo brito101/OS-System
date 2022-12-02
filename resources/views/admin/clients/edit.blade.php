@@ -119,6 +119,25 @@
                                                 value="Cliente">
                                                 Cliente
                                             </option>
+                                            <option
+                                                {{ old('trade_status') == 'Ex Cliente' ? 'selected' : ($client->trade_status == 'Ex Cliente' ? 'selected' : '') }}
+                                                value="Ex Cliente">
+                                                Ex Cliente
+                                            </option>
+                                            <option
+                                                {{ old('trade_status') == 'Lead com Proposta' ? 'selected' : ($client->trade_status == 'Lead com Proposta' ? 'selected' : '') }}
+                                                value="Lead com Proposta">
+                                                Lead com Proposta
+                                            </option>
+                                            <option
+                                                {{ old('trade_status') == 'Lead Inativo' ? 'selected' : ($client->trade_status == 'Lead Inativo' ? 'selected' : '') }}
+                                                value="Lead Inativo">Lead Inativo</option>
+                                            <option
+                                                {{ old('trade_status') == 'Recusado' ? 'selected' : ($client->trade_status == 'Recusado' ? 'selected' : '') }}
+                                                value="Recusado">Recusado</option>
+                                            <option
+                                                {{ old('trade_status') == 'Restrito' ? 'selected' : ($client->trade_status == 'Restrito' ? 'selected' : '') }}
+                                                value="Restrito">Restrito</option>
                                         </x-adminlte-select2>
                                     </div>
 

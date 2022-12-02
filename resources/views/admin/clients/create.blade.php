@@ -90,16 +90,21 @@
                                         <label for="trade_status">Status</label>
                                         <x-adminlte-select2 name="trade_status">
                                             <option {{ old('trade_status') == 'Lead' ? 'selected' : '' }} value="Lead">
-                                                Lead
-                                            </option>
+                                                Lead</option>
                                             <option {{ old('trade_status') == 'Prospect' ? 'selected' : '' }}
-                                                value="Prospect">
-                                                Prospect
-                                            </option>
+                                                value="Prospect">Prospect</option>
                                             <option {{ old('trade_status') == 'Cliente' ? 'selected' : '' }}
-                                                value="Cliente">
-                                                Cliente
-                                            </option>
+                                                value="Cliente"> Cliente</option>
+                                            <option {{ old('trade_status') == 'Ex Cliente' ? 'selected' : '' }}
+                                                value="Ex Cliente"> Ex Cliente</option>
+                                            <option {{ old('trade_status') == 'Lead com Proposta' ? 'selected' : '' }}
+                                                value="Lead com Proposta">Lead com Proposta</option>
+                                            <option {{ old('trade_status') == 'Lead Inativo' ? 'selected' : '' }}
+                                                value="Lead Inativo">Lead Inativo</option>
+                                            <option {{ old('trade_status') == 'Recusado' ? 'selected' : '' }}
+                                                value="Recusado">Recusado</option>
+                                            <option {{ old('trade_status') == 'Restrito' ? 'selected' : '' }}
+                                                value="Restrito">Restrito</option>
                                         </x-adminlte-select2>
                                     </div>
 

@@ -42,7 +42,7 @@ class AdminController extends Controller
                 sort($states);
                 $statesSearch = implode(',', $states);
                 $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
-                $clients = Client::select('alias_name', 'trade_status')->whereIn('subsidiary_id', $managers)->orWhere('subsidiary_id', null)->get();
+                $clients = Client::select('alias_name', 'trade_status')->where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $managers)->orWhere('subsidiary_id', null)->get();
                 /** Users */
                 $users = ViewsUser::all('type');
                 $programmers = 0;
@@ -156,7 +156,7 @@ class AdminController extends Controller
                 sort($states);
                 $statesSearch = implode(',', $states);
                 $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
-                $clients = Client::select('alias_name', 'trade_status')->whereIn('subsidiary_id', $financiers)->orWhere('subsidiary_id', null)->get();
+                $clients = Client::select('alias_name', 'trade_status')->where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $financiers)->orWhere('subsidiary_id', null)->get();
                 /** Users */
                 $programmers = 0;
                 $administrators = 0;
@@ -231,7 +231,7 @@ class AdminController extends Controller
                 sort($states);
                 $statesSearch = implode(',', $states);
                 $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
-                $clients = Client::select('alias_name', 'trade_status')->whereIn('subsidiary_id', $collaborators)->orWhere('subsidiary_id', null)->get();
+                $clients = Client::select('alias_name', 'trade_status')->where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $collaborators)->orWhere('subsidiary_id', null)->get();
                 /** Users */
                 $programmers = 0;
                 $administrators = 0;
