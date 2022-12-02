@@ -224,8 +224,8 @@ class SellerController extends Controller
         if ($seller->delete()) {
             if (File::isFile($imagePath)) {
                 unlink($imagePath);
-                $user->photo = null;
-                $user->update();
+                $seller->photo = null;
+                $seller->update();
             }
 
             return redirect()
