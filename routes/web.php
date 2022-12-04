@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\{
     InventoryController,
     ProductController,
     ProviderController,
+    ScheduleController,
     SellerController,
     ServiceOrderController,
     SubsidiaryController,
@@ -129,6 +130,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('stocks-pdf/{id}', [InventoryController::class, 'pdf'])->name('stocks.pdf');
         Route::get('/stocks/destroy/{id}', [InventoryController::class, 'destroy']);
         Route::resource('stocks', InventoryController::class);
+
+        /** Schedule */
+        Route::get('schedule-day/{day?}', [ScheduleController::class, 'day']);
+        Route::resource('schedule', ScheduleController::class);
 
         /**
          * ACL

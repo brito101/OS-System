@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Collaborator;
 use App\Models\Commission;
 use App\Models\Financier;
+use App\Models\Guest;
 use App\Models\Inventory;
 use App\Models\Invoice;
 use App\Models\Manager;
 use App\Models\Product;
 use App\Models\PurchaseOrder;
+use App\Models\Schedule;
 use App\Models\Seller;
 use App\Models\Subsidiary as ModelsSubsidiary;
 use App\Models\User;
@@ -457,6 +459,14 @@ class AdminController extends Controller
                 break;
         }
 
+        /** Schedule */
+        $guests = Guest::where('user_id', Auth::user()->id)->pluck('schedule_id');
+        $schedules = Schedule::whereDate('start', '<=', date('Y-m-d'))
+            ->whereDate('end', '>=', date('Y-m-d'))
+            ->where('user_id', Auth::user()->id)
+            ->orWhereIn('id', $guests)
+            ->get();
+
         /** Statistics */
         $statistics = $this->accessStatistics();
         $onlineUsers = $statistics['onlineUsers'];
@@ -510,6 +520,8 @@ class AdminController extends Controller
             'percent',
             'access',
             'chart',
+
+            'schedules',
         ));
     }
 
