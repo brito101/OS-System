@@ -124,11 +124,11 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 5], 'Autor', 'Filial', 'Vendedor', 'Produto', 'Obra', 'Valor', 'Vencimento', 'Status', ['label' => 'Status', 'no-export' => true, 'width' => 5], ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Autor', 'Filial', 'Vendedor', 'Produto', 'Obra', 'Valor da Obra', 'Valor da Comissão', 'Vencimento', 'Status', ['label' => 'Status', 'no-export' => true, 'width' => 5], ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
                             $config = [
                                 'order' => [[0, 'desc']],
                                 'ajax' => url('/admin/commissions'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'author', 'name' => 'author', 'visible' => false], ['data' => 'subsidiary', 'name' => 'subsidiary', 'visible' => false], ['data' => 'seller', 'name' => 'seller'], ['data' => 'product', 'name' => 'product'], ['data' => 'job', 'name' => 'job'], ['data' => 'total_value', 'name' => 'total_value'], ['data' => 'due_date', 'name' => 'due_date'], ['data' => 'status', 'name' => 'status', 'visible' => false, 'searchable' => true], ['data' => 'btnStatus', 'name' => 'btnStatus'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'author', 'name' => 'author', 'visible' => false], ['data' => 'subsidiary', 'name' => 'subsidiary', 'visible' => false], ['data' => 'seller', 'name' => 'seller'], ['data' => 'product', 'name' => 'product'], ['data' => 'job', 'name' => 'job'], ['data' => 'job_value', 'name' => 'job_value'], ['data' => 'total_value', 'name' => 'total_value'], ['data' => 'due_date', 'name' => 'due_date'], ['data' => 'status', 'name' => 'status', 'visible' => false, 'searchable' => true], ['data' => 'btnStatus', 'name' => 'btnStatus'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,
