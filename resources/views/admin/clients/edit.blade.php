@@ -129,6 +129,11 @@
                                                 Prospect
                                             </option>
                                             <option
+                                                {{ old('trade_status') == 'Prospect com Interesse' ? 'selected' : ($client->trade_status == 'Prospect com Interesse' ? 'selected' : '') }}
+                                                value="Prospect com Interesse">
+                                                Prospect com Interesse
+                                            </option>
+                                            <option
                                                 {{ old('trade_status') == 'Cliente' ? 'selected' : ($client->trade_status == 'Cliente' ? 'selected' : '') }}
                                                 value="Cliente">
                                                 Cliente

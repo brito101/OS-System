@@ -65,7 +65,7 @@ class ClientImport implements ToModel, WithHeadingRow, WithValidation
             'observacoes' => 'nullable|max:4000000000',
             'servico' => 'nullable|max:65000',
             'tipo' => 'nullable|in:Administradora,Construtora,Síndico Profissional,Condomínio Comercial,Condomínio Residencial,Síndico Orgânico,Parceiro,Indicação,Outros',
-            'status' => 'nullable|in:Lead,Prospect,Cliente,Ex Cliente,Lead com Proposta,Lead Inativo,Recusado,Restrito',
+            'status' => 'nullable|in:Lead,Prospect,Prospect com Interesse,Cliente,Ex Cliente,Lead com Proposta,Lead Inativo,Recusado,Restrito',
             'origem' => 'nullable|in:Google,oHub,SindicoNet,Cota Síndicos,Feira,Indicação,Outros',
             'apartamentos' => 'nullable|integer|min:0|max:9999',
             'contato' => 'nullable|max:65000',

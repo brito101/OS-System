@@ -41,7 +41,7 @@ class ClientRequest extends FormRequest
             'observations' => 'nullable|max:4000000000',
             'service' => 'nullable|max:65000',
             'type' => 'nullable|in:Administradora,Construtora,Síndico Profissional,Condomínio Comercial,Condomínio Residencial,Síndico Orgânico,Parceiro,Indicação,Outros',
-            'trade_status' => 'nullable|in:Lead,Prospect,Cliente,Ex Cliente,Lead com Proposta,Lead Inativo,Recusado,Restrito',
+            'trade_status' => 'nullable|in:Lead,Prospect,Prospect com Interesse,Cliente,Ex Cliente,Lead com Proposta,Lead Inativo,Recusado,Restrito',
             'origin' => 'nullable|in:Google,oHub,SindicoNet,Cota Síndicos,Feira,Indicação,Outros',
             'apartments' => 'nullable|integer|min:0|max:9999',
             'contact' => 'nullable|max:65000',

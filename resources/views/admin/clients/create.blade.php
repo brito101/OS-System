@@ -105,6 +105,8 @@
                                                 Lead</option>
                                             <option {{ old('trade_status') == 'Prospect' ? 'selected' : '' }}
                                                 value="Prospect">Prospect</option>
+                                            <option {{ old('trade_status') == 'Prospect com Interesse' ? 'selected' : '' }}
+                                                value="Prospect com Interesse">Prospect com Interesse</option>
                                             <option {{ old('trade_status') == 'Cliente' ? 'selected' : '' }}
                                                 value="Cliente"> Cliente</option>
                                             <option {{ old('trade_status') == 'Ex Cliente' ? 'selected' : '' }}
