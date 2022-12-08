@@ -149,6 +149,13 @@ class AdminController extends Controller
                         'months' => $items
                     ];
                 }
+                // Schedule
+                $guests = Guest::where('user_id', Auth::user()->id)->pluck('schedule_id');
+                $schedules = Schedule::whereDate('start', '<=', date('Y-m-d'))
+                    ->whereDate('end', '>=', date('Y-m-d'))
+                    ->where('user_id', Auth::user()->id)
+                    ->orWhereIn('id', $guests)
+                    ->get();
                 break;
             case 'Financeiro':
                 /** Company */
@@ -224,6 +231,13 @@ class AdminController extends Controller
                 $commissions = Commission::where('status', 'pendente')->whereIn('subsidiary_id', $subsidiariesList->pluck('id'))->orderBy('due_date', 'desc')->get();
                 //Inventory
                 $stocks = [];
+                // Schedule
+                $guests = Guest::where('user_id', Auth::user()->id)->pluck('schedule_id');
+                $schedules = Schedule::whereDate('start', '<=', date('Y-m-d'))
+                    ->whereDate('end', '>=', date('Y-m-d'))
+                    ->where('user_id', Auth::user()->id)
+                    ->orWhereIn('id', $guests)
+                    ->get();
                 break;
             case 'Colaborador':
                 /** Company */
@@ -294,6 +308,13 @@ class AdminController extends Controller
                 $commissions = [];
                 //Inventory
                 $stocks = [];
+                // Schedule
+                $guests = Guest::where('user_id', Auth::user()->id)->pluck('schedule_id');
+                $schedules = Schedule::whereDate('start', '<=', date('Y-m-d'))
+                    ->whereDate('end', '>=', date('Y-m-d'))
+                    ->where('user_id', Auth::user()->id)
+                    ->orWhereIn('id', $guests)
+                    ->get();
                 break;
             case 'Estoquista':
                 /** Company */
@@ -352,6 +373,13 @@ class AdminController extends Controller
                         'months' => $items
                     ];
                 }
+                // Schedule
+                $guests = Guest::where('user_id', Auth::user()->id)->pluck('schedule_id');
+                $schedules = Schedule::whereDate('start', '<=', date('Y-m-d'))
+                    ->whereDate('end', '>=', date('Y-m-d'))
+                    ->where('user_id', Auth::user()->id)
+                    ->orWhereIn('id', $guests)
+                    ->get();
                 break;
             default:
                 /** Company */
@@ -456,16 +484,12 @@ class AdminController extends Controller
                         'months' => $items
                     ];
                 }
+                // Schedule
+                $schedules = Schedule::whereDate('start', '<=', date('Y-m-d'))
+                    ->whereDate('end', '>=', date('Y-m-d'))
+                    ->get();
                 break;
         }
-
-        /** Schedule */
-        $guests = Guest::where('user_id', Auth::user()->id)->pluck('schedule_id');
-        $schedules = Schedule::whereDate('start', '<=', date('Y-m-d'))
-            ->whereDate('end', '>=', date('Y-m-d'))
-            ->where('user_id', Auth::user()->id)
-            ->orWhereIn('id', $guests)
-            ->get();
 
         /** Statistics */
         $statistics = $this->accessStatistics();
