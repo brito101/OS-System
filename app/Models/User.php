@@ -67,4 +67,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Financier::class);
     }
+
+    public function routeNotificationForWhatsApp()
+    {
+        $number = '+55' . preg_replace('/\D/', '', $this->cell);
+        return $number;
+    }
 }

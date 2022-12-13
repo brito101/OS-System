@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use DataTables;
+use Twilio\Rest\Client as Twilio;
 
 class ServiceOrderController extends Controller
 {
@@ -103,18 +104,20 @@ class ServiceOrderController extends Controller
             case 'Colaborador':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $clients = Client::where('trade_status', '!=', 'Restrito')->orderBy('name')->get();
                 break;
             case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                $clients = Client::where('trade_status', '!=', 'Restrito')->orderBy('name')->get();
                 break;
             default:
                 $subsidiaries = Subsidiary::all();
+                $clients = Client::orderBy('name')->get();
                 break;
         }
 
         $activities = Activity::orderBy('name')->get();
-        $clients = Client::orderBy('name')->get();
         $participants = User::role(['Gerente', 'Colaborador'])
             ->where('id', '!=', Auth::user()->id)
             ->orderBy('name')
@@ -178,6 +181,9 @@ class ServiceOrderController extends Controller
         $serviceOrder = ServiceOrder::create($data);
 
         if ($serviceOrder->save()) {
+
+            // $this->sendSMS($serviceOrder);
+
             return redirect()
                 ->route('admin.service-orders.index')
                 ->with('success', 'Cadastro realizado!');
@@ -248,6 +254,7 @@ class ServiceOrderController extends Controller
                         $query->where('user_id', Auth::user()->id)
                             ->orWhere('author', Auth::user()->id);
                     })->first();
+                $clients = Client::where('trade_status', '!=', 'Restrito')->orderBy('name')->get();
                 break;
             case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
@@ -257,10 +264,12 @@ class ServiceOrderController extends Controller
                         ->orWhere('author', Auth::user()->id)
                         ->orWhereIn('subsidiary_id', $subsidiaries->pluck('id'));
                 })->where('id', $id)->first();
+                $clients = Client::where('trade_status', '!=', 'Restrito')->orderBy('name')->get();
                 break;
             default:
                 $serviceOrder = ServiceOrder::find($id);
                 $subsidiaries = Subsidiary::all();
+                $clients = Client::orderBy('name')->get();
                 break;
         }
 
@@ -271,7 +280,6 @@ class ServiceOrderController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         $activities = Activity::orderBy('name')->get();
-        $clients = Client::orderBy('name')->get();
         $participants = User::role(['Gerente', 'Colaborador'])
             ->where('id', '!=', Auth::user()->id)
             ->orderBy('name')
@@ -429,5 +437,27 @@ class ServiceOrderController extends Controller
         }
 
         return view('admin.service_order.pdf', compact('serviceOrder'));
+    }
+
+    private function sendSMS(ServiceOrder $order)
+    {
+        $user = User::find($order->user_id);
+        if ($user->cell) {
+            $orderUrl = url("/admin/service-orders/{$order->id}");
+            $text = ": - Nova OS para a sua execução criada pelo {$order->author->name}. Serviço:  {$order->activity->name} - Prioridade: {$order->priority} - Cliente: {$order->client->name} - Prazo: {$order->deadline}. Detalhes: {$orderUrl}";
+
+            $receiverNumber = $user->routeNotificationForWhatsApp();
+            $message = $text;
+
+            $account_sid = env("TWILIO_AUTH_SID");
+            $auth_token = env("TWILIO_AUTH_TOKEN");
+            $twilio_number = env("TWILIO_PHONE_NUMBER_SID");
+
+            $client = new Twilio($account_sid, $auth_token);
+            $client->messages->create($receiverNumber, [
+                'from' => $twilio_number,
+                'body' => $message
+            ]);
+        }
     }
 }
