@@ -102,4 +102,9 @@ class ServiceOrder extends Model
     {
         return $this->belongsTo(Subsidiary::class);
     }
+
+    public function photos()
+    {
+        return $this->hasMany(ServiceOrderPhoto::class);
+    }
 }

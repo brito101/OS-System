@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Collaborator;
 use App\Models\Manager;
 use App\Models\ServiceOrder;
+use App\Models\ServiceOrderPhoto;
 use App\Models\Subsidiary;
 use App\Models\User;
 use App\Models\Views\ServiceOrder as ViewsServiceOrder;
@@ -16,7 +17,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use DataTables;
+use Illuminate\Support\Facades\Validator;
 use Twilio\Rest\Client as Twilio;
+use Image;
 
 class ServiceOrderController extends Controller
 {
@@ -377,6 +380,39 @@ class ServiceOrderController extends Controller
             $data['costumer_signature'] = $fileName;
         }
 
+        if ($request->photos) {
+            $validator = Validator::make($request->only('photos'), ['photos.*' => 'image']);
+
+            $oldServiceOrders = ServiceOrderPhoto::where('service_order_id', $serviceOrder->id)->delete();
+
+            if ($validator->fails() === true) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Todas as imagens devem ser do tipo jpg, jpeg ou png.');
+            }
+
+            foreach ($request->photos as $image) {
+                $serviceOrderPhoto = new ServiceOrderPhoto();
+                $serviceOrderPhoto->service_order_id = $serviceOrder->id;
+
+                $name = time();
+                $extension = $image->extension();
+                $nameFile = "{$name}.{$extension}";
+
+                $destinationPath = storage_path() . '/app/public/service-orders/photos/';
+                $img = Image::make($image);
+                $img->resize(null, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                })->save($destinationPath . '/' . $nameFile);
+
+                $serviceOrderPhoto->photo = 'service-orders/photos/' . $nameFile;
+                $serviceOrderPhoto->user_id = Auth::user()->id;
+                $serviceOrderPhoto->save();
+                unset($serviceOrderPhoto);
+            }
+        }
+
         if ($serviceOrder->update($data)) {
             return redirect()
                 ->route('admin.service-orders.index')
@@ -414,6 +450,7 @@ class ServiceOrderController extends Controller
         }
 
         if ($serviceOrder->delete()) {
+            $oldServiceOrders = ServiceOrderPhoto::where('service_order_id', $serviceOrder->id)->delete();
             return redirect()
                 ->route('admin.service-orders.index')
                 ->with('success', 'Exclusão realizada!');

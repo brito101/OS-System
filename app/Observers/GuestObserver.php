@@ -6,6 +6,7 @@ use App\Mail\ScheduleMail;
 use App\Models\Guest;
 use App\Models\Schedule;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 
 class GuestObserver
@@ -21,7 +22,6 @@ class GuestObserver
         $schedule = Schedule::find($guest->schedule_id);
         $receiver = User::find($guest->user_id);
         if ($schedule && $receiver) {
-
             $data = [
                 'to' => $receiver->name,
                 'email' => $receiver->email,
@@ -34,7 +34,11 @@ class GuestObserver
             ];
 
             $email = new ScheduleMail($data);
-            Mail::send($email);
+            try {
+                Mail::send($email);
+            } catch (Exception $e) {
+                return;
+            }
         }
     }
 

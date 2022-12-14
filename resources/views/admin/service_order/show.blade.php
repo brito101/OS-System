@@ -225,6 +225,18 @@
                                     </div>
                                 @endif
 
+                                @if ($serviceOrder->photos->count() > 0)
+                                    <label>Imagens</label>
+                                    <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
+                                        @foreach ($serviceOrder->photos as $photo)
+                                            <div class="col-12 col-md-3 p-2 border rounded">
+                                                <img id="costumer_sig_img" class="img-fluid"
+                                                    src="{{ asset('storage/' . $photo->photo) }}" alt="">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+
                                 @if ($serviceOrder->costumer_signature)
                                     <div class="col-12 form-group px-0">
                                         <label>Assinatura do Cliente:</label>

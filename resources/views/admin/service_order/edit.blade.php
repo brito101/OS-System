@@ -1,6 +1,7 @@
 @extends('adminlte::page')
 @section('plugins.select2', true)
 @section('plugins.Summernote', true)
+@section('plugins.BsCustomFileInput', true)
 
 @section('adminlte_css')
     <style>
@@ -59,7 +60,8 @@
                             {{ $serviceOrder->created_at }} hs.</div>
 
                         <form method="POST"
-                            action="{{ route('admin.service-orders.update', ['service_order' => $serviceOrder->id]) }}">
+                            action="{{ route('admin.service-orders.update', ['service_order' => $serviceOrder->id]) }}"
+                            enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
                             <input type="hidden" name="id" value="{{ $serviceOrder->id }}">
@@ -478,6 +480,30 @@
                                     <button id="capture" class="btn btn-secondary"><i class="fa fa-camera mr-1"></i>
                                         Capturar</button>
                                 </div>
+
+                                <div class="col-12 form-group px-0 mt-2">
+                                    <x-adminlte-input-file id="photos" name="photos[]"
+                                        label="Enviar Fotos do dispositivo" placeholder="Escolha multiplas fotos..."
+                                        igroup-size="md" legend="Selecione" multiple>
+                                        <x-slot name="prependSlot">
+                                            <div class="input-group-text text-primary">
+                                                <i class="fas fa-file-upload"></i>
+                                            </div>
+                                        </x-slot>
+                                    </x-adminlte-input-file>
+                                </div>
+
+                                @if ($serviceOrder->photos->count() > 0)
+                                    <label>Imagens</label>
+                                    <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
+                                        @foreach ($serviceOrder->photos as $photo)
+                                            <div class="col-12 col-md-3 p-2 border rounded">
+                                                <img id="costumer_sig_img" class="img-fluid"
+                                                    src="{{ asset('storage/' . $photo->photo) }}" alt="">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
 
                                 <div class="col-12 form-group px-0">
                                     <label>Assinatura do Cliente:</label>
