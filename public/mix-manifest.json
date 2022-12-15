@@ -7,6 +7,7 @@
     "/img/logo.png": "/img/logo.png",
     "/js/company.js": "/js/company.js",
     "/js/address.js": "/js/address.js",
+    "/js/address-client.js": "/js/address-client.js",
     "/js/phone.js": "/js/phone.js",
     "/js/document-person.js": "/js/document-person.js",
     "/js/date.js": "/js/date.js",

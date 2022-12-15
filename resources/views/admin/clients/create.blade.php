@@ -225,10 +225,11 @@
 
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="subsidiary_id">Filial</label>
-                                        <x-adminlte-select2 name="subsidiary_id">
+                                        <x-adminlte-select2 name="subsidiary_id" id="subsidiary_id">
                                             @foreach ($subsidiaries as $subsidiary)
                                                 <option {{ old('subsidiary_id') == $subsidiary->id ? 'selected' : '' }}
-                                                    value="{{ $subsidiary->id }}">{{ $subsidiary->alias_name }}
+                                                    value="{{ $subsidiary->id }}" data-state={{ $subsidiary->state }}>
+                                                    {{ $subsidiary->alias_name }}
                                                 </option>
                                             @endforeach
                                         </x-adminlte-select2>
@@ -298,6 +299,6 @@
 
 @section('custom_js')
     <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/address.js') }}"></script>
+    <script src="{{ asset('js/address-client.js') }}"></script>
     <script src="{{ asset('js/phone.js') }}"></script>
 @endsection

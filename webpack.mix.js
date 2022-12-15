@@ -18,6 +18,7 @@ mix.js("resources/js/app.js", "public/js")
     /** Admin */
     .scripts(["resources/js/company.js"], "public/js/company.js")
     .scripts(["resources/js/address.js"], "public/js/address.js")
+    .scripts(["resources/js/address-client.js"], "public/js/address-client.js")
     .scripts(["resources/js/phone.js"], "public/js/phone.js")
     .scripts(
         ["resources/js/document-person.js"],

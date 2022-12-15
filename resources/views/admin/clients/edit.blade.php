@@ -281,7 +281,8 @@
                                             @foreach ($subsidiaries as $subsidiary)
                                                 <option
                                                     {{ old('subsidiary_id') == $subsidiary->id ? 'selected' : ($client->subsidiary_id == $subsidiary->id ? 'selected' : '') }}
-                                                    value="{{ $subsidiary->id }}">{{ $subsidiary->alias_name }}
+                                                    value="{{ $subsidiary->id }}" data-state={{ $subsidiary->state }}>
+                                                    {{ $subsidiary->alias_name }}
                                                 </option>
                                             @endforeach
                                         </x-adminlte-select2>
@@ -355,6 +356,6 @@
 
 @section('custom_js')
     <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/address.js') }}"></script>
+    <script src="{{ asset('js/address-client.js') }}"></script>
     <script src="{{ asset('js/phone.js') }}"></script>
 @endsection
