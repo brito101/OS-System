@@ -47,6 +47,6 @@ class FinanceExpense extends Model
 
     public function getSubsidiaryAttribute($value)
     {
-        return Subsidiary::find($this->subsidiary_id)->alias_name;
+        return Subsidiary::find($this->subsidiary_id)->alias_name ?? 'Todas';
     }
 }

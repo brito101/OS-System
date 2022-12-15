@@ -31,11 +31,11 @@ class ExpenseController extends Controller
         switch ($role) {
             case 'Financeiro':
                 $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->get();
+                $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->get();
+                $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
                 break;
             default:
                 $incomes = FinanceExpense::all();
@@ -118,12 +118,20 @@ class ExpenseController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $subsidiary = Subsidiary::where('id', $request->subsidiary_id)->first();
-        if (!$subsidiary) {
+        $data = $request->all();
+        if ($request->subsidiary_id != 'all') {
+            $subsidiary = Subsidiary::where('id', $request->subsidiary_id)->first();
+            if (!$subsidiary) {
+                abort(403, 'Acesso não autorizado');
+            } else {
+                $data['subsidiary_id'] = $subsidiary->id;
+            }
+        } elseif ($request->subsidiary_id == 'all') {
+            $data['subsidiary_id'] = null;
+        } else {
             abort(403, 'Acesso não autorizado');
         }
 
-        $data = $request->all();
         $data['user_id'] = Auth::user()->id;
         $data['type'] = 'despesa';
         if (!$request->quota) {
@@ -197,7 +205,12 @@ class ExpenseController extends Controller
                 break;
         }
 
-        $invoice = Invoice::where('id', $id)->where('type', 'despesa')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $invoice = Invoice::where('id', $id)->where('type', 'despesa')
+            ->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                    ->orWhere('subsidiary_id', null);
+            })
+            ->first();
 
         if (!$invoice) {
             abort(403, 'Acesso não autorizado');
@@ -237,7 +250,12 @@ class ExpenseController extends Controller
                 break;
         }
 
-        $invoice = Invoice::where('id', $id)->where('type', 'despesa')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $invoice = Invoice::where('id', $id)->where('type', 'despesa')
+            ->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                    ->orWhere('subsidiary_id', null);
+            })
+            ->first();
 
         if (!$invoice) {
             abort(403, 'Acesso não autorizado');
@@ -268,13 +286,29 @@ class ExpenseController extends Controller
                 break;
         }
 
-        $invoice = Invoice::where('id', $id)->where('type', 'despesa')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $invoice = Invoice::where('id', $id)->where('type', 'despesa')
+            ->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                    ->orWhere('subsidiary_id', null);
+            })->first();
 
         if (!$invoice) {
             abort(403, 'Acesso não autorizado');
         }
 
         $data = $request->all();
+        if ($request->subsidiary_id != 'all') {
+            $subsidiary = Subsidiary::where('id', $request->subsidiary_id)->first();
+            if (!$subsidiary) {
+                abort(403, 'Acesso não autorizado');
+            } else {
+                $data['subsidiary_id'] = $subsidiary->id;
+            }
+        } elseif ($request->subsidiary_id == 'all') {
+            $data['subsidiary_id'] = null;
+        } else {
+            abort(403, 'Acesso não autorizado');
+        }
 
         if (!$request->quota) {
             $data['quota'] = 1;
@@ -331,7 +365,11 @@ class ExpenseController extends Controller
                 break;
         }
 
-        $invoice = Invoice::where('id', $id)->where('type', 'despesa')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $invoice = Invoice::where('id', $id)->where('type', 'despesa')
+            ->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                    ->orWhere('subsidiary_id', null);
+            })->first();
 
         if (!$invoice) {
             abort(403, 'Acesso não autorizado');
@@ -371,7 +409,11 @@ class ExpenseController extends Controller
                 break;
         }
 
-        $invoice = Invoice::where('id', $id)->where('type', 'despesa')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $invoice = Invoice::where('id', $id)->where('type', 'despesa')
+            ->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                    ->orWhere('subsidiary_id', null);
+            })->first();
 
         if (!$invoice) {
             abort(403, 'Acesso não autorizado');
@@ -412,7 +454,11 @@ class ExpenseController extends Controller
                 break;
         }
 
-        $invoice = Invoice::where('id', $id)->where('type', 'despesa')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $invoice = Invoice::where('id', $id)->where('type', 'despesa')
+            ->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                    ->orWhere('subsidiary_id', null);
+            })->first();
 
         if (!$invoice) {
             abort(403, 'Acesso não autorizado');
@@ -453,7 +499,11 @@ class ExpenseController extends Controller
                 break;
         }
 
-        $invoice = Invoice::where('id', $id)->where('type', 'despesa')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $invoice = Invoice::where('id', $id)->where('type', 'despesa')
+            ->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                    ->orWhere('subsidiary_id', null);
+            })->first();
 
         if (!$invoice) {
             abort(403, 'Acesso não autorizado');
@@ -492,7 +542,11 @@ class ExpenseController extends Controller
         }
 
         foreach ($ids as $id) {
-            $invoice = Invoice::where('id', $id)->where('type', 'despesa')->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+            $invoice = Invoice::where('id', $id)->where('type', 'despesa')
+                ->where(function ($query) use ($subsidiaries) {
+                    $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                        ->orWhere('subsidiary_id', null);
+                })->first();
             if (!$invoice) {
                 abort(403, 'Acesso não autorizado');
             }

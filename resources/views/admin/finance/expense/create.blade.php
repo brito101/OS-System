@@ -116,6 +116,8 @@
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2 mb-0">
                                         <label for="subsidiary_id">Filial</label>
                                         <x-adminlte-select2 name="subsidiary_id">
+                                            <option value="all" {{ old('subsidiary_id' == '' ? 'selected' : '') }}>Todas
+                                            </option>
                                             @foreach ($subsidiaries as $subsidiary)
                                                 <option {{ old('subsidiary_id') == $subsidiary->id ? 'selected' : '' }}
                                                     value="{{ $subsidiary->id }}">{{ $subsidiary->alias_name }}

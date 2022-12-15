@@ -87,8 +87,10 @@ class AdminController extends Controller
                     $serviceOrdersPriorityChart['data'][] = count($value);
                 }
                 /** Finance */
-                $invoices = Invoice::where('subsidiary_id', $subsidiariesList->pluck('id'))
-                    ->whereYear('due_date', date('Y'))
+                $invoices = Invoice::where(function ($query) use ($subsidiariesList) {
+                    $query->whereIn('subsidiary_id', $subsidiariesList->pluck('id'))
+                        ->orWhere('subsidiary_id', null);
+                })->whereYear('due_date', date('Y'))
                     ->orderBy('due_date', 'desc')->get();
                 $financeIncomesChart = [];
                 $financeExpensesChart = [];
@@ -186,8 +188,10 @@ class AdminController extends Controller
                 $serviceOrdersSubsidiary = 0;
                 $serviceOrdersPriorityChart = [];
                 /** Finance */
-                $invoices = Invoice::where('subsidiary_id', $subsidiariesList->pluck('id'))
-                    ->whereYear('due_date', date('Y'))
+                $invoices = Invoice::where(function ($query) use ($subsidiariesList) {
+                    $query->whereIn('subsidiary_id', $subsidiariesList->pluck('id'))
+                        ->orWhere('subsidiary_id', null);
+                })->whereYear('due_date', date('Y'))
                     ->orderBy('due_date', 'desc')->get();
                 $financeIncomesChart = [];
                 $financeExpensesChart = [];
