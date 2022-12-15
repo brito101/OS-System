@@ -86,6 +86,10 @@
                                                 Única
                                             </option>
                                             <option
+                                                {{ old('repetition') == 'semanal' ? 'selected' : ($invoice->repetition == 'semanal' ? 'selected' : '') }}
+                                                value="semanal">
+                                                Semanal
+                                            <option
                                                 {{ old('repetition') == 'mensal' ? 'selected' : ($invoice->repetition == 'mensal' ? 'selected' : '') }}
                                                 value="mensal">
                                                 Mensal

@@ -40,7 +40,7 @@ class InvoiceRequest extends FormRequest
             'value' => 'required|numeric|between:0,999999999.999',
             'entrance' => 'nullable|numeric|between:0,999999999.999',
             'due_date' => 'required|date_format:Y-m-d',
-            'repetition' => 'nullable|in:única,mensal,semestral,anual',
+            'repetition' => 'nullable|in:única,semanal,mensal,anual',
             'quota' => 'nullable|integer',
             'status' => 'nullable|in:pago,pendente',
             'purchase_mode' => 'nullable|in:boleto,cartão de crédito,dinheiro,PIX,transferência',

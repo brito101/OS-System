@@ -78,6 +78,9 @@
                                             <option {{ old('repetition') == 'única' ? 'selected' : '' }} value="única">
                                                 Única
                                             </option>
+                                            <option {{ old('repetition') == 'semanal' ? 'selected' : '' }} value="semanal">
+                                                Semanal
+                                            </option>
                                             <option {{ old('repetition') == 'mensal' ? 'selected' : '' }} value="mensal">
                                                 Mensal
                                             </option>

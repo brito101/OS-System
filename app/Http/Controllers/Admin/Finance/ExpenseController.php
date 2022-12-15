@@ -148,9 +148,9 @@ class ExpenseController extends Controller
         $invoice = Invoice::create($data);
 
         if ($invoice->save()) {
-            if ($request->repetition == 'mensal' || $request->repetition == 'anual') {
+            if ($request->repetition == 'semanal' || $request->repetition == 'mensal' || $request->repetition == 'anual') {
                 $time = 1;
-                $unit = $request->repetition == 'mensal' ? 'month' : 'year';
+                $unit = $request->repetition == 'semanal' ? 'week' : ('mensal' ? 'month' : 'year');
                 for ($i = 1; $i < $invoice->quota; $i++) {
                     $part = $i + 1;
                     $newInvoice = $invoice->replicate();
