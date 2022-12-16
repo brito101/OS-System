@@ -40,11 +40,15 @@ class Invoice extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault([
+            'name' => 'Inexistente',
+        ]);
     }
 
     public function provider()
     {
-        return $this->belongsTo(Provider::class);
+        return $this->belongsTo(Provider::class)->withDefault([
+            'alias_name' => 'Inexistente',
+        ]);
     }
 }
