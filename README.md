@@ -1,6 +1,6 @@
 # Service Order Generator
 
-<p>Tarefas futuras<</p>
+<p>Tarefas futuras</p>
 <ol>
 <li>Colocar campos de controle para status de clientes de acordo com a planilha (funil)</li>
 <li>Quando houver um OS com a atividade "troca de medidor" e ela estiver concluída enviar e-mail para medicao@acquaxdobrasil.com.br</li>
