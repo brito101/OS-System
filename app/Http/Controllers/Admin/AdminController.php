@@ -358,6 +358,9 @@ class AdminController extends Controller
                 $purchases = null;
                 $exec_purchases = 0;
                 $unexec_purchases = 0;
+                //Commissions
+                $sellers = [];
+                $commissions = [];
                 //Inventory
                 $products = Product::select('id', 'name')->orderBy('name')->get();
                 $stocks = [];
