@@ -42,11 +42,11 @@ class FinanceIncome extends Model
     /** Aux */
     public function getAuthorAttribute($value)
     {
-        return User::find($this->user_id)->name;
+        return User::find($this->user_id)->name ?? 'Inexistente';
     }
 
     public function getSubsidiaryAttribute($value)
     {
-        return Subsidiary::find($this->subsidiary_id)->alias_name;
+        return Subsidiary::find($this->subsidiary_id)->alias_name ?? 'Inexistente';
     }
 }
