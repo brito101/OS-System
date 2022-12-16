@@ -497,9 +497,16 @@
                                     <label>Imagens</label>
                                     <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
                                         @foreach ($serviceOrder->photos as $photo)
-                                            <div class="col-12 col-md-3 p-2 border rounded">
-                                                <img id="costumer_sig_img" class="img-fluid"
-                                                    src="{{ asset('storage/' . $photo->photo) }}" alt="">
+                                            <div class="col-12 col-md-3 p-2 card" data-photo={{ $photo->id }}>
+                                                <div class="card-body">
+                                                    <img class="img-fluid" src="{{ asset('storage/' . $photo->photo) }}"
+                                                        alt="">
+                                                </div>
+                                                <div class="card-footer d-flex justify-content-center">
+                                                    <button class="btn btn-sm btn-danger photo-delete"
+                                                        data-id={{ $photo->id }}><i
+                                                            class="fa fa-trash"></i>Excluir</button>
+                                                </div>
                                             </div>
                                         @endforeach
                                     </div>
@@ -560,4 +567,29 @@
     <script src="{{ asset('js/jquery.ui.touch-punch.min.js') }}"></script>
     <script src="{{ asset('js/signature.js') }}"></script>
     <script src="{{ asset('js/capture.js') }}"></script>
+    <script>
+        $(".photo-delete").on('click', function(e) {
+            e.preventDefault();
+            if (confirm("Confirma a exclusão desta imagem?") == true) {
+                let photoRemove = e.target.dataset.id;
+                $.ajax({
+                    type: 'post',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ route('admin.service-orders-photo-delete') }}",
+                    data: {
+                        'id': photoRemove,
+                    },
+                    success: function(res) {
+                        if (res.message == 'success') {
+                            $("div").find(`[data-photo='${photoRemove}']`).remove();
+                        } else {
+                            alert('Falha ao remover a imagem');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 @endsection

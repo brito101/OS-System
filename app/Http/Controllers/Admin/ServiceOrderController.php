@@ -382,9 +382,6 @@ class ServiceOrderController extends Controller
 
         if ($request->photos) {
             $validator = Validator::make($request->only('photos'), ['photos.*' => 'image']);
-
-            $oldServiceOrders = ServiceOrderPhoto::where('service_order_id', $serviceOrder->id)->delete();
-
             if ($validator->fails() === true) {
                 return redirect()->back()
                     ->withInput()
@@ -495,6 +492,21 @@ class ServiceOrderController extends Controller
                 'from' => $twilio_number,
                 'body' => $message
             ]);
+        }
+    }
+
+    public function photoDelete(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Editar Ordens de Serviço')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $photo = ServiceOrderPhoto::find($request->id);
+        if ($photo) {
+            $photo->delete();
+            return response()->json(['message' => 'success']);
+        } else {
+            return response()->json(['message' => 'fail']);
         }
     }
 }

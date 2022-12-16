@@ -210,9 +210,10 @@
                     <label>Imagens</label>
                     <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
                         @foreach ($serviceOrder->photos as $photo)
-                            <div class="col-3 p-2 border rounded">
-                                <img id="costumer_sig_img" class="img-fluid"
-                                    src="{{ asset('storage/' . $photo->photo) }}" alt="">
+                            <div class="col-3 p-2 card">
+                                <div class="card-body">
+                                    <img class="img-fluid" src="{{ asset('storage/' . $photo->photo) }}" alt="">
+                                </div>
                             </div>
                         @endforeach
                     </div>

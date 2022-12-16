@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/service-orders/destroy/{id}', [ServiceOrderController::class, 'destroy']);
         Route::resource('service-orders', ServiceOrderController::class);
         Route::get('service-orders-pdf/{id}', [ServiceOrderController::class, 'pdf'])->name('service-orders.pdf');
+        Route::post('/service-orders/photo-delete', [ServiceOrderController::class, 'photoDelete'])->name('service-orders-photo-delete');
 
         /** Finance */
         /** Incomes */
