@@ -30,6 +30,10 @@ mix.js("resources/js/app.js", "public/js")
     .scripts(["resources/js/invoices.js"], "public/js/invoices.js")
     .scripts(["resources/js/material.js"], "public/js/material.js")
     .scripts(["resources/js/capture.js"], "public/js/capture.js")
+    .scripts(
+        ["resources/js/service_orders_observations.js"],
+        "public/js/service_orders_observations.js"
+    )
 
     .copy(
         "node_modules/jquery-ui/dist/jquery-ui.min.js",

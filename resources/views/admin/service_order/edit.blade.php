@@ -449,6 +449,63 @@
                                     </div>
                                 </div>
 
+                                @if ($observations->count() > 0)
+                                    <div class="d-flex flex-wrap justify-content-start" id="observation"
+                                        data-observation-qtd="{{ $observations->count() - 1 }}">
+                                        @foreach ($observations as $item)
+                                            <label for="observation_{{ $loop->index }}">Observação sobre Etapa de
+                                                Execução - Autor: {{ $item->user->name }} em
+                                                {{ date('d/m/Y H:i', strtotime($item->created_at)) }}</label>
+                                            <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start"
+                                                id="container_observation_{{ $loop->index }}">
+                                                <div class="col-12 col-md-9 px-0 pr-md-2">
+                                                    <textarea class="form-control" id="observation_{{ $loop->index }}" placeholder="Observação sobre a execução"
+                                                        name="observation_{{ $loop->index }}" rows="2">{{ old('observation_' . $loop->index) ?? $item->observation }}</textarea>
+                                                </div>
+                                                <div class="col-12 col-md-3 px-0 pl-md-2">
+                                                    <input class="form-control" type="date"
+                                                        id="observation_{{ $loop->index }}_date"
+                                                        name="observation_{{ $loop->index }}_date"
+                                                        value="{{ old('observation_' . $loop->index . '_date') ?? $item->date }}"
+                                                        required>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="d-flex flex-wrap justify-content-start" id="observation"
+                                        data-observation-qtd="0">
+                                        <div class="col-12 form-group px-0" id="container_observation_0">
+                                            <label for="observation_0">Observação sobre Etapa de Execução</label>
+                                            <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start"
+                                                id="container_observation_${item}">
+                                                <div class="col-12 col-md-9 px-0 pr-md-2">
+                                                    <textarea type="text" class="form-control" id="observation_0" placeholder="Descrição da Observação"
+                                                        name="observation_0" value="{{ old('observation_0') }}" rows="2"></textarea>
+                                                </div>
+                                                <div class="col-12 col-md-3 px-0 pl-md-2">
+                                                    <input class="form-control" type="date" id="observation_0_date"
+                                                        name="observation_0_date" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="d-flex flex-wrap justify-content-start">
+                                    <div class="col-12 col-md-2 form-group px-0 pr-md-2">
+                                        <button class="btn btn-info w-100" data-observation="open"><i
+                                                class="fa fa-plus"></i>
+                                            Nova Observação</button>
+                                    </div>
+
+                                    <div class="col-12 col-md-2 form-group px-0 pl-md-2">
+                                        <button class="btn btn-danger w-100" data-observation="close"><i
+                                                class="fa fa-minus"></i>
+                                            Remover Observação</button>
+                                    </div>
+                                </div>
+
                                 @if ($serviceOrder->photo != null)
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <div
@@ -592,4 +649,5 @@
             }
         });
     </script>
+    <script src="{{ asset('js/service_orders_observations.js') }}"></script>
 @endsection

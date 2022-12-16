@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Collaborator;
 use App\Models\Manager;
 use App\Models\ServiceOrder;
+use App\Models\ServiceOrderObservations;
 use App\Models\ServiceOrderPhoto;
 use App\Models\Subsidiary;
 use App\Models\User;
@@ -231,7 +232,9 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.service_order.show', compact('serviceOrder'));
+        $observations = ServiceOrderObservations::where('service_order_id', $serviceOrder->id)->orderBy('date')->get();
+
+        return view('admin.service_order.show', compact('serviceOrder', 'observations'));
     }
 
     /**
@@ -288,7 +291,9 @@ class ServiceOrderController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('admin.service_order.edit', compact('serviceOrder', 'activities', 'clients', 'participants', 'subsidiaries'));
+        $observations = ServiceOrderObservations::where('service_order_id', $serviceOrder->id)->orderBy('date')->get();
+
+        return view('admin.service_order.edit', compact('serviceOrder', 'activities', 'clients', 'participants', 'subsidiaries', 'observations'));
     }
 
     /**
@@ -410,7 +415,29 @@ class ServiceOrderController extends Controller
             }
         }
 
+        $observations = [];
+        $oi = 0;
+        foreach ($data as $key => $value) {
+            if (preg_match("/observation_(\d)$/", $key)) {
+                if (strlen($value) > 0) {
+                    $observations[$oi]['text'] = Str::limit($value, 400000);
+                    $observations[$oi]['date'] = $request->{$key . "_date"};
+                    $oi++;
+                }
+            }
+        }
         if ($serviceOrder->update($data)) {
+
+            ServiceOrderObservations::where('service_order_id', $serviceOrder->id)->delete();
+
+            foreach ($observations as $observation) {
+                $item = new ServiceOrderObservations();
+                $item->observation = $observation['text'];
+                $item->user_id = Auth::user()->id;
+                $item->service_order_id = $serviceOrder->id;
+                $item->date = $observation['date'];
+                $item->save();
+            }
             return redirect()
                 ->route('admin.service-orders.index')
                 ->with('success', 'Atualização realizada!');
@@ -447,7 +474,8 @@ class ServiceOrderController extends Controller
         }
 
         if ($serviceOrder->delete()) {
-            $oldServiceOrders = ServiceOrderPhoto::where('service_order_id', $serviceOrder->id)->delete();
+            ServiceOrderPhoto::where('service_order_id', $serviceOrder->id)->delete();
+            ServiceOrderObservations::where('service_order_id', $serviceOrder->id)->delete();
             return redirect()
                 ->route('admin.service-orders.index')
                 ->with('success', 'Exclusão realizada!');
@@ -470,7 +498,9 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.service_order.pdf', compact('serviceOrder'));
+        $observations = ServiceOrderObservations::where('service_order_id', $serviceOrder->id)->orderBy('date')->get();
+
+        return view('admin.service_order.pdf', compact('serviceOrder', 'observations'));
     }
 
     private function sendSMS(ServiceOrder $order)
