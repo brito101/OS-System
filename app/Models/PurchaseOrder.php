@@ -60,17 +60,23 @@ class PurchaseOrder extends Model
 
     public function subsidiary()
     {
-        return $this->belongsTo(Subsidiary::class);
+        return $this->belongsTo(Subsidiary::class)->withDefault([
+            'alias_name' => 'Inexistente',
+        ]);
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault([
+            'name' => 'Inexistente',
+        ]);
     }
 
     public function provider()
     {
-        return $this->belongsTo(Provider::class);
+        return $this->belongsTo(Provider::class)->withDefault([
+            'alias_name' => 'Inexistente',
+        ]);
     }
 
     public function material()
@@ -81,11 +87,11 @@ class PurchaseOrder extends Model
     /** Aux */
     public function getAuthorAttribute($value)
     {
-        return User::find($this->user_id)->name;
+        return User::find($this->user_id)->name ?? 'Inexistente';
     }
 
     public function getSubsidiaryAttribute($value)
     {
-        return Subsidiary::find($this->subsidiary_id)->alias_name;
+        return Subsidiary::find($this->subsidiary_id)->alias_name ?? 'Inexistente';
     }
 }

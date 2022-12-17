@@ -21,11 +21,15 @@ class Client extends Model
     /** Relationships */
     public function subsidiary()
     {
-        return $this->belongsTo(Subsidiary::class);
+        return $this->belongsTo(Subsidiary::class)->withDefault([
+            'alias_name' => 'Inexistente',
+        ]);
     }
 
     public function seller()
     {
-        return $this->belongsTo(Seller::class);
+        return $this->belongsTo(Seller::class)->withDefault([
+            'name' => 'Inexistente',
+        ]);
     }
 }

@@ -23,17 +23,23 @@ class ClientHistory extends Model
     /** Relationships */
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class)->withDefault([
+            'name' => 'Inexistente',
+        ]);
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault([
+            'name' => 'Inexistente',
+        ]);
     }
 
     public function subsidiary()
     {
-        return $this->belongsTo(Subsidiary::class);
+        return $this->belongsTo(Subsidiary::class)->withDefault([
+            'alias_name' => 'Inexistente',
+        ]);
     }
 
     /** Accessors */

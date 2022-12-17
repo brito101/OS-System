@@ -56,16 +56,16 @@ class Commission extends Model
     /** Aux */
     public function getSellerAttribute($value)
     {
-        return Seller::find($this->seller_id)->name;
+        return Seller::find($this->seller_id)->name ?? 'Inexistente';
     }
 
     public function getAuthorAttribute($value)
     {
-        return User::find($this->user_id)->name;
+        return User::find($this->user_id)->name ?? 'Inexistente';
     }
 
     public function getSubsidiaryAttribute($value)
     {
-        return Subsidiary::find($this->subsidiary_id)->alias_name;
+        return Subsidiary::find($this->subsidiary_id)->alias_name ?? 'Inexistente';
     }
 }

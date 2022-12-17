@@ -17,6 +17,8 @@ class Financier extends Model
     /** Relationships */
     public function subsidiary()
     {
-        return $this->belongsTo(Subsidiary::class);
+        return $this->belongsTo(Subsidiary::class)->withDefault([
+            'alias_name' => 'Inexistente',
+        ]);
     }
 }
