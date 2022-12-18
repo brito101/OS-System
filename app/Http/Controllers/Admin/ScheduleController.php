@@ -211,6 +211,8 @@ class ScheduleController extends Controller
                         }
                     }
                 }
+            } else {
+                $guest = Guest::where('schedule_id', $schedule->id)->delete();
             }
 
             return redirect()
