@@ -109,27 +109,27 @@
                                                 <option
                                                     {{ old('color') == 'warning' ? 'selected' : ($schedule->color == 'warning' ? 'selected' : '') }}
                                                     value="warning">
-                                                    Amarelo
+                                                    Vistoria Comercial (amarelo)
                                                 </option>
                                                 <option
                                                     {{ old('color') == 'primary' ? 'selected' : ($schedule->color == 'primary' ? 'selected' : '') }}
                                                     value="primary">
-                                                    Azul
+                                                    Medição (azul)
+                                                </option>
+                                                <option
+                                                    {{ old('color') == 'danger' ? 'selected' : ($schedule->color == 'danger' ? 'selected' : '') }}
+                                                    value="danger">
+                                                    Alto Consumo (vermelho)
+                                                </option>
+                                                <option
+                                                    {{ old('color') == 'success' ? 'selected' : ($schedule->color == 'success' ? 'success' : '') }}
+                                                    value="success">
+                                                    Caça Vazamento (verde)
                                                 </option>
                                                 <option
                                                     {{ old('color') == 'secondary' ? 'selected' : ($schedule->color == 'secondary' ? 'selected' : '') }}
                                                     value="secondary">
                                                     Cinza
-                                                </option>
-                                                <option
-                                                    {{ old('color') == 'danger' ? 'selected' : ($schedule->color == 'danger' ? 'selected' : '') }}
-                                                    value="danger">
-                                                    Vermelho
-                                                </option>
-                                                <option
-                                                    {{ old('color') == 'success' ? 'selected' : ($schedule->color == 'teal' ? 'success' : '') }}
-                                                    value="success">
-                                                    Verde
                                                 </option>
                                             </x-adminlte-select2>
                                         </div>
