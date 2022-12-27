@@ -3,6 +3,16 @@
 <p>Tarefas futuras</p>
 <ol>
 <li>Colocar campos de controle para status de clientes de acordo com a planilha (funil)</li>
+<li>Replicar módulo de clientes no módulo de medição digital</li>
+<li>Criação de OS exclusiva para medição com: 
+<ul>
+<li>status de: Não lido, Lido, Aguardando conta/digitado, Conferido, Enviado, Problema;</li>
+<li>Quando selecionado o problema, abrir campo "observação";</li>
+<li>Criar nova OS a partir de uma alteração de status de OS para "enviado" abrindo um campo para inserção de nova data</li>
+<li>Importação de OS por planilha</li>
+</ul>
+</li>
+<li>Módulo de comprovante de pagamento de passagens com campo para descrição de propósito</li>
 <li>Quando houver um OS com a atividade "troca de medidor" e ela estiver concluída enviar e-mail para medicao@acquaxdobrasil.com.br</li>
 <li>Colocar o disparo de SMS e WhatsApp para ordem de compra</li>
 <li>Módulo de medição digital</li>
