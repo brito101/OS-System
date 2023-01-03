@@ -1,6 +1,6 @@
 # Service Order Generator
 
-<h5>Tarefas futuras</h5>
+<h5>Pending Tasks</h5>
 <ol>
 <li>Colocar campos de controle para status de clientes de acordo com a planilha (funil)</li>
 <li>Replicar módulo de clientes no módulo de medição digital</li>
@@ -14,7 +14,7 @@
 <li>Colocar papel timbrado</li>
 <li>Criar OS dos seguintes serviços:
 <ul>
-<li>Torca de medidor;</li>
+<li>Troca de medidor;</li>
 <li>Visita Orçamentária de individualização de água;</li>
 <li>Visita Orçamentária de gás;</li>
 <li>Visita Orçamentária de bloqueador de ar;</li>
@@ -51,4 +51,11 @@
 <li>Colocar contrato e incluir novo estado para cliente e cadastrar contrato</li>
 <li>Módulo de compartilhamento de documentos padronizados entre gerentes</li>
 <li>Kanban</li>
+<li>Módulo de Central de atendimentos</li>
 </ol>
+
+<p>Useful commands</p>
+<ul>
+<li>php artisan queue:work --once --quiet</li>
+<li>php artisan queue:work --stop-when-empty</li>
+</ul>

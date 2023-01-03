@@ -25,7 +25,7 @@ class PurchaseOrderObserver
         ];
 
         $email = new PurchaseOrderMail($data);
-        Mail::send($email);
+        Mail::queue($email);
     }
 
     /**

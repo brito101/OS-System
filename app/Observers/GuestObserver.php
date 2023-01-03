@@ -35,7 +35,7 @@ class GuestObserver
 
             $email = new ScheduleMail($data);
             try {
-                Mail::send($email);
+                Mail::queue($email);
             } catch (Exception $e) {
                 return;
             }
