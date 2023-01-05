@@ -32,7 +32,7 @@ class InventoryController extends Controller
         switch ($role) {
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $stocks = Inventory::whereIn('subsidiary_id', $subsidiaries)->get();
+                $stocks = Inventory::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
                 break;
             default:
                 $stocks = Inventory::get();
@@ -145,7 +145,9 @@ class InventoryController extends Controller
         switch ($role) {
             case 'Gerente':
                 $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $stock = Inventory::whereIn('subsidiary_id', $managers)->where('id', $id)->first();
+                $stock = Inventory::where(function ($query) use ($managers) {
+                    $query->whereIn('subsidiary_id', $managers)->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 break;
             default:
@@ -186,7 +188,9 @@ class InventoryController extends Controller
         switch ($role) {
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $stock = Inventory::whereIn('subsidiary_id', $subsidiaries)->where('id', $id)->first();
+                $stock = Inventory::where(function ($query) use ($subsidiaries) {
+                    $query->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
                 break;
             default:
                 $stock = Inventory::find($id);
@@ -226,7 +230,9 @@ class InventoryController extends Controller
         switch ($role) {
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $stock = Inventory::whereIn('subsidiary_id', $subsidiaries)->where('id', $id)->first();
+                $stock = Inventory::where(function ($query) use ($subsidiaries) {
+                    $query->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null);
+                })->where('id', $id)->first();
                 break;
             default:
                 $stock = Inventory::find($id);

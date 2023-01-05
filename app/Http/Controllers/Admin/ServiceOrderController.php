@@ -403,10 +403,7 @@ class ServiceOrderController extends Controller
 
                 $destinationPath = storage_path() . '/app/public/service-orders/photos/';
                 $img = Image::make($image);
-                $img->resize(null, 300, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })->save($destinationPath . '/' . $nameFile);
+                $img->save($destinationPath . '/' . $nameFile);
 
                 $serviceOrderPhoto->photo = 'service-orders/photos/' . $nameFile;
                 $serviceOrderPhoto->user_id = Auth::user()->id;
