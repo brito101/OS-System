@@ -1,5 +1,13 @@
 @extends('adminlte::page')
 
+@section('adminlte_css')
+    <style>
+        textarea {
+            overflow: auto;
+        }
+    </style>
+@endsection
+
 @section('title', '- Ordem de Serviço')
 
 @section('content')

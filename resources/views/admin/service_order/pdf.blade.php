@@ -4,6 +4,10 @@
         @page {
             margin: 2cm;
         }
+
+        textarea {
+            overflow: auto;
+        }
     </style>
 @endsection
 

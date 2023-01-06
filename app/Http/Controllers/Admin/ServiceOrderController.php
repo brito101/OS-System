@@ -451,7 +451,7 @@ class ServiceOrderController extends Controller
             }
         }
 
-        if ($request->files) {
+        if ($request->file('files') != null) {
             $validator = Validator::make($request->only('files'), ['files.*' => 'file|mimes:pdf|max:125000']);
             if ($validator->fails() === true) {
                 return redirect()->back()
