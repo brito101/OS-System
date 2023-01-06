@@ -67,8 +67,8 @@
 <li>Função;</li>
 <li>Salário;</li>
 <li>Data da admissão;</li>
-<li>Data de demissçao;</li>
-<li>Mortivo da demissçao;</li>
+<li>Data de demissao;</li>
+<li>Mortivo da demissao;</li>
 </ul>
 </li>
 </ol>
