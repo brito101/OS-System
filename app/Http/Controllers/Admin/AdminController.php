@@ -243,6 +243,82 @@ class AdminController extends Controller
                     ->orWhereIn('id', $guests)
                     ->get();
                 break;
+            case 'Colaborador-NI':
+                /** Company */
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiariesList = ModelsSubsidiary::whereIn('id', $collaborators)->get();
+                $states = array_unique($subsidiariesList->pluck('state')->toArray());
+                sort($states);
+                $statesSearch = implode(',', $states);
+                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
+                $clients = Client::select('alias_name', 'trade_status')->where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $collaborators)->orWhere('subsidiary_id', null)->get();
+                /** Users */
+                $programmers = 0;
+                $administrators = 0;
+                $managers = 0;
+                $financiers = 0;
+                $collaborators = 0;
+                $stockists = 0;
+                /** Clients */
+                $clientsSubsidiary = $clients->groupBy('alias_name')->toArray();
+                $clientsSubsidiaryChart = [];
+                foreach ($clientsSubsidiary as $key => $value) {
+                    if ($key == '') {
+                        $key = 'Sem filial';
+                    }
+                    $clientsSubsidiaryChart['label'][] = $key;
+                    $clientsSubsidiaryChart['data'][] = count($value);
+                }
+                $clientsStatus = $clients->groupBy('trade_status')->toArray();
+                $clientsStatusChart = [];
+                foreach ($clientsStatus as $key => $value) {
+                    $clientsStatusChart['label'][] = $key;
+                    $clientsStatusChart['data'][] = count($value);
+                }
+                /** Service Orders */
+                $serviceOrders = ServiceOrder::select('status', 'priority', 'subsidiary')
+                    ->whereIn('subsidiary_id', $subsidiariesList->pluck('id'))
+                    ->orWhere('user_id', Auth::user()->id)
+                    ->orWhere('author_id', Auth::user()->id)->get();
+                $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
+                $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
+                $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
+                $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
+                $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
+                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')->groupBy('priority')->toArray();
+                $serviceOrdersPriorityChart = [];
+                foreach ($serviceOrdersPriority as $key => $value) {
+                    $serviceOrdersPriorityChart['label'][] = $key;
+                    $serviceOrdersPriorityChart['data'][] = count($value);
+                }
+                /** Finance */
+                $invoices = null;
+                $financeIncomesChart = [];
+                $financeExpensesChart = [];
+                $financeRefundsChart = [];
+                $paid_incomes = 0;
+                $unpaid_incomes = 0;
+                $paid_expenses = 0;
+                $unpaid_expenses = 0;
+                $paid_refunds = 0;
+                $unpaid_refunds = 0;
+                $purchases = 0;
+                $exec_purchases = 0;
+                $unexec_purchases = 0;
+                //Commissions
+                $sellers = [];
+                $commissions = [];
+                //Inventory
+                $stocks = [];
+                // Schedule
+                $guests = Guest::where('user_id', Auth::user()->id)->pluck('schedule_id');
+                $schedules = Schedule::whereDate('start', '<=', date('Y-m-d'))
+                    ->whereDate('end', '>=', date('Y-m-d'))
+                    ->where('user_id', Auth::user()->id)
+                    ->orWhereIn('id', $guests)
+                    ->get();
+                break;
             case 'Colaborador':
                 /** Company */
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');

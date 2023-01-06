@@ -60,9 +60,9 @@ class UserController extends Controller
             abort(403, 'Acesso não autorizado');
         }
         if (Auth::user()->hasRole('Programador')) {
-            $roles = Role::all();
+            $roles = Role::orderBy('name')->get();
         } elseif (Auth::user()->hasRole('Administrador')) {
-            $roles = Role::where('name', '!=', 'Programador')->get();
+            $roles = Role::where('name', '!=', 'Programador')->orderBy('name')->get();
         } else {
             $roles = [];
         }
@@ -146,10 +146,10 @@ class UserController extends Controller
         }
 
         if (Auth::user()->hasRole('Programador')) {
-            $roles = Role::all();
+            $roles = Role::orderBy('name')->get();
             $user = User::where('id', $id)->first();
         } elseif (Auth::user()->hasRole('Administrador')) {
-            $roles = Role::where('name', '!=', 'Programador')->get();
+            $roles = Role::where('name', '!=', 'Programador')->orderBy('name')->get();
             $user = User::where('id', $id)->first();
         } else {
             $roles = [];

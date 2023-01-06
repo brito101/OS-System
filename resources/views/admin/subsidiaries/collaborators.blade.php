@@ -73,6 +73,7 @@
                                                 <div class="row">
                                                     <div class="col-7">
                                                         <h2 class="lead"><b>{{ $user->name }}</b></h2>
+                                                        <small>{{ $user->roles->first()->name }}</small>
                                                     </div>
                                                     <div class="col-5 text-center">
                                                         @if ($user->photo)

@@ -31,7 +31,7 @@ class ProviderController extends Controller
 
         switch ($role) {
             case 'Colaborador':
-            case 'Financeiro':
+            case 'Colaborador-NI':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
                 $states = array_unique($subsidiaries->pluck('state')->toArray());

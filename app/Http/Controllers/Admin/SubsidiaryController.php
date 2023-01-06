@@ -57,7 +57,7 @@ class SubsidiaryController extends Controller
         }
 
         $managers = ViewsUser::whereIn('type', ['Gerente'])->get();
-        $collaborators = ViewsUser::whereIn('type', ['Colaborador'])->get();
+        $collaborators = ViewsUser::whereIn('type', ['Colaborador', 'Colaborador-NI'])->get();
         $financiers = ViewsUser::whereIn('type', ['Finaceiro'])->get();
 
         return view('admin.subsidiaries.create', compact('managers', 'collaborators', 'financiers'));
@@ -145,7 +145,7 @@ class SubsidiaryController extends Controller
         }
 
         $managers = ViewsUser::whereIn('type', ['Gerente'])->get();
-        $collaborators = ViewsUser::whereIn('type', ['Colaborador'])->get();
+        $collaborators = ViewsUser::whereIn('type', ['Colaborador', 'Colaborador-NI'])->get();
         $financiers = ViewsUser::whereIn('type', ['Financeiro'])->get();
 
         return view('admin.subsidiaries.edit', compact('subsidiary', 'managers', 'collaborators', 'financiers'));

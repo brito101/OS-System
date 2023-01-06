@@ -117,6 +117,10 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 15,
                 'role_id' => 6
             ],
+            [
+                'permission_id' => 15,
+                'role_id' => 7
+            ],
             /** */
             [
                 'permission_id' => 16,
@@ -250,6 +254,10 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 4
             ],
             [
+                'permission_id' => 30,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 31,
                 'role_id' => 1
             ],
@@ -264,6 +272,10 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 31,
                 'role_id' => 4
+            ],
+            [
+                'permission_id' => 31,
+                'role_id' => 7
             ],
             [
                 'permission_id' => 32,
@@ -282,6 +294,10 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 4
             ],
             [
+                'permission_id' => 32,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 33,
                 'role_id' => 1
             ],
@@ -298,6 +314,10 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 4
             ],
             [
+                'permission_id' => 33,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 34,
                 'role_id' => 1
             ],
@@ -312,6 +332,10 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 34,
                 'role_id' => 4
+            ],
+            [
+                'permission_id' => 34,
+                'role_id' => 7
             ],
             /** Service Orders 35 to 39 (programmer, administrator, managers, collaborator ) */
             [
@@ -331,6 +355,10 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 4
             ],
             [
+                'permission_id' => 35,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 36,
                 'role_id' => 1
             ],
@@ -345,6 +373,10 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 36,
                 'role_id' => 4
+            ],
+            [
+                'permission_id' => 36,
+                'role_id' => 7
             ],
             [
                 'permission_id' => 37,
@@ -363,6 +395,10 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 4
             ],
             [
+                'permission_id' => 37,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 38,
                 'role_id' => 1
             ],
@@ -379,6 +415,10 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 4
             ],
             [
+                'permission_id' => 38,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 39,
                 'role_id' => 1
             ],
@@ -393,6 +433,10 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 39,
                 'role_id' => 4
+            ],
+            [
+                'permission_id' => 39,
+                'role_id' => 7
             ],
             /** List Managers 40 (programmer, administrator ) */
             [
@@ -421,6 +465,10 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 4
             ],
             [
+                'permission_id' => 41,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 42,
                 'role_id' => 1
             ],
@@ -435,6 +483,10 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 42,
                 'role_id' => 4
+            ],
+            [
+                'permission_id' => 42,
+                'role_id' => 7
             ],
             [
                 'permission_id' => 43,
@@ -1139,6 +1191,14 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 5
             ],
             [
+                'permission_id' => 87,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 87,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 88,
                 'role_id' => 1
             ],
@@ -1159,6 +1219,14 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 5
             ],
             [
+                'permission_id' => 88,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 88,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 89,
                 'role_id' => 1
             ],
@@ -1179,6 +1247,14 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 5
             ],
             [
+                'permission_id' => 89,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 89,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 90,
                 'role_id' => 1
             ],
@@ -1199,6 +1275,14 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'role_id' => 5
             ],
             [
+                'permission_id' => 90,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 90,
+                'role_id' => 7
+            ],
+            [
                 'permission_id' => 91,
                 'role_id' => 1
             ],
@@ -1217,6 +1301,14 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 91,
                 'role_id' => 5
+            ],
+            [
+                'permission_id' => 91,
+                'role_id' => 6
+            ],
+            [
+                'permission_id' => 91,
+                'role_id' => 7
             ],
         ]);
     }

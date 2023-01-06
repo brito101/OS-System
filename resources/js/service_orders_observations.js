@@ -10,7 +10,7 @@ $(document).ready(function () {
                     <div class="col-12 col-md-9 px-0 pr-md-2">
                         <textarea class="form-control" id="observation_${item}" placeholder="Observação sobre a execução" name="observation_${item}" rows="2"></textarea>
                     </div>
-                     <div class="col-12 col-md-3 px-0 pl-md-2">
+                    <div class="col-12 col-md-3 px-0 pl-md-2 mt-2 mt-md-0">
                         <input class="form-control" type="date" id="observation_${item}_date" name="observation_${item}_date" required>
                     </div>
                 </div>`;

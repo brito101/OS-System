@@ -462,7 +462,7 @@
                                                     <textarea class="form-control" id="observation_{{ $loop->index }}" placeholder="Observação sobre a execução"
                                                         name="observation_{{ $loop->index }}" rows="2">{{ old('observation_' . $loop->index) ?? $item->observation }}</textarea>
                                                 </div>
-                                                <div class="col-12 col-md-3 px-0 pl-md-2">
+                                                <div class="col-12 col-md-3 px-0 pl-md-2 mt-2 mt-md-0">
                                                     <input class="form-control" type="date"
                                                         id="observation_{{ $loop->index }}_date"
                                                         name="observation_{{ $loop->index }}_date"
@@ -483,7 +483,7 @@
                                                     <textarea type="text" class="form-control" id="observation_0" placeholder="Descrição da Observação"
                                                         name="observation_0" value="{{ old('observation_0') }}" rows="2"></textarea>
                                                 </div>
-                                                <div class="col-12 col-md-3 px-0 pl-md-2">
+                                                <div class="col-12 col-md-3 px-0 pl-md-2 mt-2 mt-md-0">
                                                     <input class="form-control" type="date" id="observation_0_date"
                                                         name="observation_0_date" required>
                                                 </div>
@@ -493,13 +493,13 @@
                                 @endif
 
                                 <div class="d-flex flex-wrap justify-content-start">
-                                    <div class="col-12 col-md-2 form-group px-0 pr-md-2">
+                                    <div class="col-12 col-md-3 form-group px-0 pr-md-2">
                                         <button class="btn btn-info w-100" data-observation="open"><i
                                                 class="fa fa-plus"></i>
                                             Nova Observação</button>
                                     </div>
 
-                                    <div class="col-12 col-md-2 form-group px-0 pl-md-2">
+                                    <div class="col-12 col-md-3 form-group px-0 pl-md-2">
                                         <button class="btn btn-danger w-100" data-observation="close"><i
                                                 class="fa fa-minus"></i>
                                             Remover Observação</button>
@@ -518,29 +518,33 @@
                                     </div>
                                 @endif
 
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <label for="cover_base64">Capturar Foto</label>
-                                    <input type="hidden" id="cover_base64" name="cover_base64" />
-                                </div>
-
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div
-                                        class="embed-responsive embed-responsive-16by9 col-12 col-md-6 form-group px-0 pr-md-2">
-                                        <video id="player" autoplay class="embed-responsive-item"></video>
+                                <div class="capture_container">
+                                    <div class="d-flex flex-wrap justify-content-between">
+                                        <label for="cover_base64">Capturar
+                                            Foto</label>
+                                        <input type="hidden" id="cover_base64" name="cover_base64" />
                                     </div>
 
-                                    <div
-                                        class="embed-responsive embed-responsive-16by9 col-12 col-md-6 form-group px-0 pl-md-2">
-                                        <canvas id="canvas" class="embed-responsive-item"
-                                            style="max-width: 75%; left: 12.5%;"></canvas>
+                                    <div class="d-flex flex-wrap justify-content-between" id="cover_base64_container">
+                                        <div
+                                            class="embed-responsive embed-responsive-16by9 col-12 col-md-6 form-group px-0 pr-md-2">
+                                            <video id="player" autoplay class="embed-responsive-item"></video>
+                                        </div>
+
+                                        <div
+                                            class="embed-responsive embed-responsive-16by9 col-12 col-md-6 form-group px-0 pl-md-2">
+                                            <canvas id="canvas" class="embed-responsive-item"
+                                                style="max-width: 75%; left: 12.5%;"></canvas>
+                                        </div>
+                                        <button id="capture" class="btn btn-secondary"><i
+                                                class="fa fa-camera mr-1"></i>
+                                            Capturar</button>
                                     </div>
-                                    <button id="capture" class="btn btn-secondary"><i class="fa fa-camera mr-1"></i>
-                                        Capturar</button>
                                 </div>
 
                                 <div class="col-12 form-group px-0 mt-2">
                                     <x-adminlte-input-file id="photos" name="photos[]"
-                                        label="Enviar Fotos do dispositivo" placeholder="Escolha multiplas fotos..."
+                                        label="Enviar Fotos do dispositivo" placeholder="Escolha múltiplas fotos..."
                                         igroup-size="md" legend="Selecione" multiple>
                                         <x-slot name="prependSlot">
                                             <div class="input-group-text text-primary">
@@ -555,13 +559,44 @@
                                     <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
                                         @foreach ($serviceOrder->photos as $photo)
                                             <div class="col-12 col-md-3 p-2 card" data-photo={{ $photo->id }}>
-                                                <div class="card-body">
+                                                <div class="card-body d-flex justify-content-center align-items-center">
                                                     <img class="img-fluid" src="{{ asset('storage/' . $photo->photo) }}"
                                                         alt="">
                                                 </div>
                                                 <div class="card-footer d-flex justify-content-center">
                                                     <button class="btn btn-sm btn-danger photo-delete"
                                                         data-id={{ $photo->id }}><i
+                                                            class="fa fa-trash"></i>Excluir</button>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                                <div class="col-12 form-group px-0 mt-2">
+                                    <x-adminlte-input-file id="files" name="files[]" label="Enviar arquivos em PDF"
+                                        placeholder="Escolha múltiplos arquivos..." igroup-size="md" legend="Selecione"
+                                        multiple>
+                                        <x-slot name="prependSlot">
+                                            <div class="input-group-text text-primary">
+                                                <i class="fas fa-file-upload"></i>
+                                            </div>
+                                        </x-slot>
+                                    </x-adminlte-input-file>
+                                </div>
+
+                                @if ($serviceOrder->files->count() > 0)
+                                    <label>Arquivos em PDF</label>
+                                    <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
+                                        @foreach ($serviceOrder->files as $file)
+                                            <div class="col-12 p-2 card" data-file={{ $file->id }}>
+                                                <div class="card-body">
+                                                    <embed src="{{ url('storage/' . $file->file) }}"
+                                                        type="application/pdf" width="100%" height="500px">
+                                                </div>
+                                                <div class="card-footer d-flex justify-content-center">
+                                                    <button class="btn btn-sm btn-danger file-delete"
+                                                        data-id={{ $file->id }}><i
                                                             class="fa fa-trash"></i>Excluir</button>
                                                 </div>
                                             </div>
@@ -643,6 +678,30 @@
                             $("div").find(`[data-photo='${photoRemove}']`).remove();
                         } else {
                             alert('Falha ao remover a imagem');
+                        }
+                    }
+                });
+            }
+        });
+
+        $(".file-delete").on('click', function(e) {
+            e.preventDefault();
+            if (confirm("Confirma a exclusão deste arquivo?") == true) {
+                let fileRemove = e.target.dataset.id;
+                $.ajax({
+                    type: 'post',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ route('admin.service-orders-file-delete') }}",
+                    data: {
+                        'id': fileRemove,
+                    },
+                    success: function(res) {
+                        if (res.message == 'success') {
+                            $("div").find(`[data-file='${fileRemove}']`).remove();
+                        } else {
+                            alert('Falha ao remover a pdf');
                         }
                     }
                 });

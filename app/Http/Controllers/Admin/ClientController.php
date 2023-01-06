@@ -35,6 +35,7 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador-NI':
                 $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $clients = ViewsClient::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
                 break;
@@ -88,6 +89,7 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador-NI':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
                 break;
@@ -123,6 +125,7 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador-NI':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiary = Subsidiary::whereIn('id', $collaborators)->where('id', $data['subsidiary_id'])->first();
                 break;
@@ -192,6 +195,7 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador-NI':
                 $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $collaborators)
@@ -233,6 +237,7 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador-NI':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
                 $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
@@ -284,6 +289,7 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador-NI':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiary = Subsidiary::whereIn('id', $collaborators)->where('id', $data['subsidiary_id'])->first();
                 $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
@@ -370,6 +376,7 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador-NI':
                 $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $collaborators)
@@ -413,6 +420,7 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador-NI':
                 $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $collaborators)
@@ -464,6 +472,7 @@ class ClientController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador-NI':
                 $client = Client::where('trade_status', '!=', 'Restrito')->where(function ($query) {
                     $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                     $query->whereIn('subsidiary_id', $collaborators)

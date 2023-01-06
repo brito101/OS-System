@@ -254,9 +254,23 @@
                                     <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
                                         @foreach ($serviceOrder->photos as $photo)
                                             <div class="col-12 col-md-3 p-2 card">
-                                                <div class="card-body">
+                                                <div class="card-body d-flex justify-content-center align-items-center">
                                                     <img class="img-fluid" src="{{ asset('storage/' . $photo->photo) }}"
                                                         alt="">
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                                @if ($serviceOrder->files->count() > 0)
+                                    <label>Arquivos em PDF</label>
+                                    <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
+                                        @foreach ($serviceOrder->files as $file)
+                                            <div class="col-12 p-2 card" data-file={{ $file->id }}>
+                                                <div class="card-body">
+                                                    <embed src="{{ url('storage/' . $file->file) }}"
+                                                        type="application/pdf" width="100%" height="500px">
                                                 </div>
                                             </div>
                                         @endforeach

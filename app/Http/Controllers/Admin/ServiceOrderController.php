@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Collaborator;
 use App\Models\Manager;
 use App\Models\ServiceOrder;
+use App\Models\ServiceOrderFile;
 use App\Models\ServiceOrderObservations;
 use App\Models\ServiceOrderPhoto;
 use App\Models\Subsidiary;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use DataTables;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Twilio\Rest\Client as Twilio;
 use Image;
@@ -41,6 +43,13 @@ class ServiceOrderController extends Controller
             case 'Colaborador':
                 $serviceOrders = ViewsServiceOrder::where('user_id', Auth::user()->id)
                     ->orWhere('author_id', Auth::user()->id)->get();
+                break;
+            case 'Colaborador-NI':
+                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $serviceOrders = ViewsServiceOrder::where('user_id', Auth::user()->id)
+                    ->orWhere('author_id', Auth::user()->id)
+                    ->orWhereIn('subsidiary_id', $subsidiaries)
+                    ->get();
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
@@ -106,6 +115,7 @@ class ServiceOrderController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador-NI':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
                 $clients = Client::where('trade_status', '!=', 'Restrito')->orderBy('name')->get();
@@ -122,7 +132,7 @@ class ServiceOrderController extends Controller
         }
 
         $activities = Activity::orderBy('name')->get();
-        $participants = User::role(['Gerente', 'Colaborador'])
+        $participants = User::role(['Gerente', 'Colaborador', 'Colaborador-NI'])
             ->where('id', '!=', Auth::user()->id)
             ->orderBy('name')
             ->get();
@@ -215,6 +225,15 @@ class ServiceOrderController extends Controller
                             ->orWhere('author', Auth::user()->id);
                     })->first();
                 break;
+            case 'Colaborador-NI':
+                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $serviceOrder = ServiceOrder::where('id', $id)
+                    ->where(function ($query) use ($subsidiaries) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id)
+                            ->orWhereIn('subsidiary_id', $subsidiaries);
+                    })->first();
+                break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $serviceOrder = ServiceOrder::where(function ($query) use ($subsidiaries) {
@@ -262,6 +281,17 @@ class ServiceOrderController extends Controller
                     })->first();
                 $clients = Client::where('trade_status', '!=', 'Restrito')->orderBy('name')->get();
                 break;
+            case 'Colaborador-NI':
+                $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
+                $serviceOrder = ServiceOrder::where('id', $id)
+                    ->where(function ($query) use ($subsidiaries) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id)
+                            ->orWhereIn('subsidiary_id', $subsidiaries->pluck('id'));
+                    })->first();
+                $clients = Client::where('trade_status', '!=', 'Restrito')->orderBy('name')->get();
+                break;
             case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
@@ -286,7 +316,7 @@ class ServiceOrderController extends Controller
         $role = Auth::user()->roles->first()->name;
 
         $activities = Activity::orderBy('name')->get();
-        $participants = User::role(['Gerente', 'Colaborador'])
+        $participants = User::role(['Gerente', 'Colaborador', 'Colaborador-NI'])
             ->where('id', '!=', Auth::user()->id)
             ->orderBy('name')
             ->get();
@@ -319,6 +349,15 @@ class ServiceOrderController extends Controller
                             ->orWhere('author', Auth::user()->id);
                     })->first();
                 break;
+            case 'Colaborador-NI':
+                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $serviceOrder = ServiceOrder::where('id', $id)
+                    ->where(function ($query) use ($subsidiaries) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id)
+                            ->orWhereIn('subsidiary_id', $subsidiaries);
+                    })->first();
+                break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $serviceOrder = ServiceOrder::where(function ($query) use ($subsidiaries) {
@@ -336,7 +375,7 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
+        if (Auth::user()->hasAnyRole('Gerente|Colaborador|Colaborador-NI')) {
             if ($serviceOrder->author->id == Auth::user()->id) {
                 $data = $request->all();
             } else {
@@ -412,6 +451,27 @@ class ServiceOrderController extends Controller
             }
         }
 
+        if ($request->files) {
+            $validator = Validator::make($request->only('files'), ['files.*' => 'file|mimes:pdf|max:125000']);
+            if ($validator->fails() === true) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Todos os arquivos devem ser pdf com no máximo 1GB total');
+            }
+
+            $files = $request->file('files');
+
+            foreach ($files as $file) {
+                $serviceOrderFile = new ServiceOrderFile();
+                $serviceOrderFile->service_order_id = $serviceOrder->id;
+                $path = Storage::putFile('service-orders/files', $file);
+                $serviceOrderFile->file = $path;
+                $serviceOrderFile->user_id = Auth::user()->id;
+                $serviceOrderFile->save();
+                unset($serviceOrderFile);
+            }
+        }
+
         $observations = [];
         $oi = 0;
         foreach ($data as $key => $value) {
@@ -458,7 +518,7 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasAnyRole('Gerente|Colaborador')) {
+        if (Auth::user()->hasAnyRole('Gerente|Colaborador|Colaborador-NI')) {
             $serviceOrder = ServiceOrder::where('id', $id)
                 ->where('author', Auth::user()->id)
                 ->first();
@@ -472,6 +532,7 @@ class ServiceOrderController extends Controller
 
         if ($serviceOrder->delete()) {
             ServiceOrderPhoto::where('service_order_id', $serviceOrder->id)->delete();
+            ServiceOrderFile::where('service_order_id', $serviceOrder->id)->delete();
             ServiceOrderObservations::where('service_order_id', $serviceOrder->id)->delete();
             return redirect()
                 ->route('admin.service-orders.index')
@@ -531,6 +592,21 @@ class ServiceOrderController extends Controller
         $photo = ServiceOrderPhoto::find($request->id);
         if ($photo) {
             $photo->delete();
+            return response()->json(['message' => 'success']);
+        } else {
+            return response()->json(['message' => 'fail']);
+        }
+    }
+
+    public function fileDelete(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Editar Ordens de Serviço')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $file = ServiceOrderFile::find($request->id);
+        if ($file) {
+            $file->delete();
             return response()->json(['message' => 'success']);
         } else {
             return response()->json(['message' => 'fail']);

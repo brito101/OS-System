@@ -58,7 +58,7 @@
                 @include('admin.home.components.financier')
             @endif
 
-            @if (Auth::user()->hasRole('Colaborador'))
+            @if (Auth::user()->hasRole('Colaborador|Colaborador-NI'))
                 @include('admin.home.components.colaborator')
             @endif
 
@@ -72,7 +72,7 @@
 
 @section('custom_js')
     {{-- Clients --}}
-    @if (Auth::user()->hasRole('Programador|Administrador|Gerente|Colaborador'))
+    @if (Auth::user()->hasRole('Programador|Administrador|Gerente|Colaborador|Colaborador-NI'))
         <script>
             const clientsSubsidiary = document.getElementById('clients-subsidiary-chart');
             if (clientsSubsidiary) {
@@ -160,7 +160,7 @@
         </script>
     @endif
     {{-- Service Orders --}}
-    @if (Auth::user()->hasRole('Programador|Administrador|Gerente|Colaborador'))
+    @if (Auth::user()->hasRole('Programador|Administrador|Gerente|Colaborador|Colaborador-NI'))
         <script>
             const serviceOrdersPriority = document.getElementById('service-orders-priority-chart');
             if (serviceOrdersPriority) {
@@ -266,6 +266,7 @@
                             }
                         },
                         responsive: true,
+                        maintainAspectRatio: false,
                         scales: {
                             yAxes: [{
                                 ticks: {
@@ -304,6 +305,7 @@
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         scales: {
                             y: {
                                 beginAtZero: true

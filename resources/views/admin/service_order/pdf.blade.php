@@ -235,7 +235,7 @@
                     <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
                         @foreach ($serviceOrder->photos as $photo)
                             <div class="col-3 p-2 card">
-                                <div class="card-body">
+                                <div class="card-body d-flex justify-content-center align-items-center">
                                     <img class="img-fluid" src="{{ asset('storage/' . $photo->photo) }}" alt="">
                                 </div>
                             </div>

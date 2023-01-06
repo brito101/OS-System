@@ -6,7 +6,7 @@ $(document).ready(function () {
     const hidden = document.getElementById("cover_base64");
     const constraints = {
         video: {
-            facingMode: 'environment',
+            facingMode: "environment",
         },
     };
     captureButton.addEventListener("click", (e) => {
@@ -14,7 +14,13 @@ $(document).ready(function () {
         context.drawImage(player, 0, 0, canvas.width, canvas.height);
         hidden.value = canvas.toDataURL("image/jpeg", 0.5);
     });
-    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-        player.srcObject = stream;
-    });
+    navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then((stream) => {
+            player.srcObject = stream;
+        })
+        .catch(function (err) {
+            $(".capture_container").hide();
+            console.log(`Cam error: ${err.name}`);
+        });
 });

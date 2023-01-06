@@ -45,6 +45,46 @@ class ServiceOrder extends Model
         'subsidiary_id',
     ];
 
+
+    /** Relationships */
+    public function activity()
+    {
+        return $this->belongsTo(Activity::class)->withDefault([
+            'name' => 'Inexistente',
+        ]);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class)->withDefault([
+            'name' => 'Inexistente',
+        ]);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class)->withDefault([
+            'name' => 'Inexistente',
+        ]);
+    }
+
+    public function subsidiary()
+    {
+        return $this->belongsTo(Subsidiary::class)->withDefault([
+            'alias_name' => 'Inexistente',
+        ]);
+    }
+
+    public function photos()
+    {
+        return $this->hasMany(ServiceOrderPhoto::class);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(ServiceOrderFile::class);
+    }
+
     /** Accessor */
     public function getExecutionDateAttribute($value)
     {
@@ -80,39 +120,5 @@ class ServiceOrder extends Model
     public function getEndTimeAttribute($value)
     {
         return $value ? date("H:i", strtotime($value)) : null;
-    }
-
-    /** Relationships */
-    public function activity()
-    {
-        return $this->belongsTo(Activity::class)->withDefault([
-            'name' => 'Inexistente',
-        ]);
-    }
-
-    public function client()
-    {
-        return $this->belongsTo(Client::class)->withDefault([
-            'name' => 'Inexistente',
-        ]);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class)->withDefault([
-            'name' => 'Inexistente',
-        ]);
-    }
-
-    public function subsidiary()
-    {
-        return $this->belongsTo(Subsidiary::class)->withDefault([
-            'alias_name' => 'Inexistente',
-        ]);
-    }
-
-    public function photos()
-    {
-        return $this->hasMany(ServiceOrderPhoto::class);
     }
 }
