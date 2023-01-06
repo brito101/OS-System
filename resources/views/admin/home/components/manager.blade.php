@@ -242,8 +242,8 @@
                                 <div class=""></div>
                             </div>
                         </div>
-                        <canvas id="finance-chart" style="display: block; width: 489px; height: 200px;"
-                            class="chartjs-render-monitor" width="800" height="200"></canvas>
+                        <canvas id="finance-chart" style="display: block; width: 489px; height: 300px;"
+                            class="chartjs-render-monitor" width="489" height="300"></canvas>
                     </div>
                 </div>
             </div>
