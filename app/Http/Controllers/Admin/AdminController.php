@@ -80,7 +80,11 @@ class AdminController extends Controller
                 $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
                 $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
                 $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
-                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')->groupBy('priority')->toArray();
+                $order = ['Baixa', 'Média', 'Alta', 'Urgente'];
+                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')
+                    ->sortBy(function ($item) use ($order) {
+                        return array_search($item["priority"], $order);
+                    })->groupBy('priority')->toArray();
                 $serviceOrdersPriorityChart = [];
                 foreach ($serviceOrdersPriority as $key => $value) {
                     $serviceOrdersPriorityChart['label'][] = $key;
@@ -286,7 +290,11 @@ class AdminController extends Controller
                 $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
                 $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
                 $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
-                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')->groupBy('priority')->toArray();
+                $order = ['Baixa', 'Média', 'Alta', 'Urgente'];
+                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')
+                    ->sortBy(function ($item) use ($order) {
+                        return array_search($item["priority"], $order);
+                    })->groupBy('priority')->toArray();
                 $serviceOrdersPriorityChart = [];
                 foreach ($serviceOrdersPriority as $key => $value) {
                     $serviceOrdersPriorityChart['label'][] = $key;
@@ -363,7 +371,11 @@ class AdminController extends Controller
                 $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
                 $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
                 $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
-                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')->groupBy('priority')->toArray();
+                $order = ['Baixa', 'Média', 'Alta', 'Urgente'];
+                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')
+                    ->sortBy(function ($item) use ($order) {
+                        return array_search($item["priority"], $order);
+                    })->groupBy('priority')->toArray();
                 $serviceOrdersPriorityChart = [];
                 foreach ($serviceOrdersPriority as $key => $value) {
                     $serviceOrdersPriorityChart['label'][] = $key;
@@ -501,7 +513,11 @@ class AdminController extends Controller
                 $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
                 $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
                 $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
-                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')->groupBy('priority')->toArray();
+                $order = ['Baixa', 'Média', 'Alta', 'Urgente'];
+                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')
+                    ->sortBy(function ($item) use ($order) {
+                        return array_search($item["priority"], $order);
+                    })->groupBy('priority')->toArray();
                 $serviceOrdersPriorityChart = [];
                 foreach ($serviceOrdersPriority as $key => $value) {
                     $serviceOrdersPriorityChart['label'][] = $key;
