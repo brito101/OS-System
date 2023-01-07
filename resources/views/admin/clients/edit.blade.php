@@ -1,6 +1,7 @@
 @extends('adminlte::page')
-@section('plugins.Summernote', true)
 @section('plugins.select2', true)
+@section('plugins.Summernote', true)
+@section('plugins.BsCustomFileInput', true)
 
 @section('title', '- Edição de Cliente')
 
@@ -35,7 +36,8 @@
                             <h3 class="card-title">Dados Cadastrais do Cliente</h3>
                         </div>
 
-                        <form method="POST" action="{{ route('admin.clients.update', ['client' => $client->id]) }}">
+                        <form method="POST" action="{{ route('admin.clients.update', ['client' => $client->id]) }}"
+                            enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
                             <input type="hidden" name="id" value="{{ $client->id }}">
@@ -120,10 +122,6 @@
                                         <label for="trade_status">Status</label>
                                         <x-adminlte-select2 name="trade_status">
                                             <option
-                                                {{ old('trade_status') == 'Lead' ? 'selected' : ($client->trade_status == 'Lead' ? 'selected' : '') }}
-                                                value="Lead">Lead
-                                            </option>
-                                            <option
                                                 {{ old('trade_status') == 'Prospect' ? 'selected' : ($client->trade_status == 'Prospect' ? 'selected' : '') }}
                                                 value="Prospect">
                                                 Prospect
@@ -134,14 +132,8 @@
                                                 Prospect com Interesse
                                             </option>
                                             <option
-                                                {{ old('trade_status') == 'Cliente' ? 'selected' : ($client->trade_status == 'Cliente' ? 'selected' : '') }}
-                                                value="Cliente">
-                                                Cliente
-                                            </option>
-                                            <option
-                                                {{ old('trade_status') == 'Ex Cliente' ? 'selected' : ($client->trade_status == 'Ex Cliente' ? 'selected' : '') }}
-                                                value="Ex Cliente">
-                                                Ex Cliente
+                                                {{ old('trade_status') == 'Lead' ? 'selected' : ($client->trade_status == 'Lead' ? 'selected' : '') }}
+                                                value="Lead">Lead
                                             </option>
                                             <option
                                                 {{ old('trade_status') == 'Lead com Proposta' ? 'selected' : ($client->trade_status == 'Lead com Proposta' ? 'selected' : '') }}
@@ -151,6 +143,40 @@
                                             <option
                                                 {{ old('trade_status') == 'Lead Inativo' ? 'selected' : ($client->trade_status == 'Lead Inativo' ? 'selected' : '') }}
                                                 value="Lead Inativo">Lead Inativo</option>
+                                            <option
+                                                {{ old('trade_status') == 'Contato Realizado' ? 'selected' : ($client->trade_status == 'Contato Realizado' ? 'selected' : '') }}
+                                                value="Contato Realizado">Contato Realizado
+                                            </option>
+                                            <option
+                                                {{ old('trade_status') == 'Vistoria Marcada' ? 'selected' : ($client->trade_status == 'Vistoria Marcada' ? 'selected' : '') }}
+                                                value="Vistoria Marcada">
+                                                Vistoria Marcada
+                                            </option>
+                                            <option
+                                                {{ old('trade_status') == 'Aguardando Orçamento' ? 'selected' : ($client->trade_status == 'Aguardando Orçamento' ? 'selected' : '') }}
+                                                value="Aguardando Orçamento">Aguardando Orçamento</option>
+                                            <option
+                                                {{ old('trade_status') == 'Orçamento Enviado' ? 'selected' : ($client->trade_status == 'Orçamento Enviado' ? 'selected' : '') }}
+                                                value="Orçamento Enviado">Orçamento Enviado</option>
+                                            <option
+                                                {{ old('trade_status') == 'Assembléia Marcada' ? 'selected' : ($client->trade_status == 'Assembléia Marcada' ? 'selected' : '') }}
+                                                value="Assembléia Marcada">Assembléia Marcada</option>
+                                            <option
+                                                {{ old('trade_status') == 'Negociação' ? 'selected' : ($client->trade_status == 'Negociação' ? 'selected' : '') }}
+                                                value="Negociação">Negociação</option>
+                                            <option
+                                                {{ old('trade_status') == 'Venda Realizada' ? 'selected' : ($client->trade_status == 'Venda Realizada' ? 'selected' : '') }}
+                                                value="Venda Realizada">Venda Realizada</option>
+                                            <option
+                                                {{ old('trade_status') == 'Cliente' ? 'selected' : ($client->trade_status == 'Cliente' ? 'selected' : '') }}
+                                                value="Cliente">
+                                                Cliente
+                                            </option>
+                                            <option
+                                                {{ old('trade_status') == 'Ex Cliente' ? 'selected' : ($client->trade_status == 'Ex Cliente' ? 'selected' : '') }}
+                                                value="Ex Cliente">
+                                                Ex Cliente
+                                            </option>
                                             <option
                                                 {{ old('trade_status') == 'Recusado' ? 'selected' : ($client->trade_status == 'Recusado' ? 'selected' : '') }}
                                                 value="Recusado">Recusado</option>
@@ -200,11 +226,73 @@
                                     </div>
                                 </div>
 
+                                <div class="d-flex flex-wrap justify-content-start mb-0" id="complement_trade_status">
+                                    <div class="col-12 col-md-4 form-group px-0 pr-md-2 mb-0" id="status_sale_container">
+                                        <label for="status_sale">Status da Venda Realizada</label>
+                                        <x-adminlte-select2 name="status_sale">
+                                            <option
+                                                {{ old('status_sale') == 'Contrato em Confecção' ? 'selected' : ($client->status_sale == 'Contrato em Confecção' ? 'selected' : '') }}
+                                                value="Contrato em Confecção">Contrato em Confecção
+                                            </option>
+                                            <option
+                                                {{ old('status_sale') == 'Contrato Assinado' ? 'selected' : ($client->status_sale == 'Contrato Assinado' ? 'selected' : '') }}
+                                                value="Contrato Assinado">Contrato Assinado
+                                            </option>
+                                            <option
+                                                {{ old('status_sale') == 'Aguardando PG' ? 'selected' : ($client->status_sale == 'Aguardando PG' ? 'selected' : '') }}
+                                                value="Aguardando PG">Aguardando PG
+                                            </option>
+                                            <option
+                                                {{ old('status_sale') == 'Entrada PG' ? 'selected' : ($client->status_sale == 'Entrada PG' ? 'selected' : '') }}
+                                                value="Entrada PG">Entrada PG
+                                            </option>
+                                            <option
+                                                {{ old('status_sale') == 'Aguardando Vistoria para Obra' ? 'selected' : ($client->status_sale == 'Aguardando Vistoria para Obra' ? 'selected' : '') }}
+                                                value="Aguardando Vistoria para Obra">Aguardando Vistoria para Obra
+                                            </option>
+                                            <option
+                                                {{ old('status_sale') == 'Início de Obra' ? 'selected' : ($client->status_sale == 'Início de Obra' ? 'selected' : '') }}
+                                                value="Início de Obra">Início de Obra
+                                            </option>
+                                            <option
+                                                {{ old('status_sale') == 'Obra em andamento' ? 'selected' : ($client->status_sale == 'Obra em andamento' ? 'selected' : '') }}
+                                                value="Obra em andamento">Obra em andamento
+                                            </option>
+                                            <option
+                                                {{ old('status_sale') == 'Obra Finalizada' ? 'selected' : ($client->status_sale == 'Obra Finalizada' ? 'selected' : '') }}
+                                                value="Obra Finalizada">Obra Finalizada
+                                            </option>
+                                            <option
+                                                {{ old('status_sale') == 'Obra Entregue' ? 'selected' : ($client->status_sale == 'Obra Entregue' ? 'selected' : '') }}
+                                                value="Obra Entregue">Obra Entregue
+                                            </option>
+                                            <option
+                                                {{ old('status_sale') == 'Início de Leitura' ? 'selected' : ($client->status_sale == 'Início de Leitura' ? 'selected' : '') }}
+                                                value="Início de Leitura">Início de Leitura
+                                            </option>
+                                        </x-adminlte-select2>
+                                    </div>
+
+                                    <div class="col-12 form-group px-0" id="reason_refusal_container">
+                                        <label for="reason_refusal">Motivo da Recusa</label>
+                                        <input type="text" class="form-control" id="reason_refusal"
+                                            placeholder="Descrição do Motivo" name="reason_refusal"
+                                            value="{{ old('reason_refusal') ?? $client->reason_refusal }}">
+                                    </div>
+                                </div>
+
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 form-group px-0 ">
-                                        <label for="contact">Dados do Contato</label>
-                                        <textarea type="text" class="form-control" id="contact" placeholder="Nome de um ou mais contatos" name="contact"
-                                            rows="1">{{ old('contact') ?? $client->contact }}</textarea>
+                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
+                                        <label for="contact">Nome do Contato</label>
+                                        <input type="text" class="form-control" id="contact"
+                                            placeholder="Nome do contato" name="contact"
+                                            value="{{ old('contact') ?? $client->contact }}">
+                                    </div>
+                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
+                                        <label for="contact_function">Função do Contato</label>
+                                        <input type="text" class="form-control" id="contact_function"
+                                            placeholder="Função do contato" name="contact_function"
+                                            value="{{ old('contact_function') ?? $client->contact_function }}">
                                     </div>
                                 </div>
 
@@ -292,26 +380,81 @@
 
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 form-group px-0">
-                                        <label for="service">Serviço</label>
+                                        <label for="service">Serviço/Produto</label>
                                         <textarea name="service" rows="2" class="form-control" id="service"
-                                            placeholder="Tipo de serviço disponibilizado">{{ old('service') ?? $client->service }}</textarea>
+                                            placeholder="Tipo de serviço ou produto disponibilizado">{{ old('service') ?? $client->service }}</textarea>
                                     </div>
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-8 form-group px-0 pr-md-2">
+                                    <div class="col-12 form-group px-0">
                                         <label for="company">Empresa</label>
                                         <input type="text" class="form-control" id="company"
                                             placeholder="Nome da Empresa" name="company"
                                             value="{{ old('company') ?? $client->company }}">
                                     </div>
+                                </div>
 
-                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2">
-                                        <label for="apartments">Nº de Apartamentos</label>
+                                <div class="d-flex flex-wrap justify-content-start">
+                                    <div class="col-12 col-md-4 form-group px-0 pr-md-2">
+                                        <label for="value_per_apartment">Valor por Apartamento</label>
+                                        <input type="text" class="form-control money_format_2"
+                                            id="value_per_apartment" name="value_per_apartment"
+                                            value="{{ old('value_per_apartment') ?? $client->value_per_apartment }}"
+                                            onchange="calc()">
+                                    </div>
+                                    <div class="col-12 col-md-4 form-group px-0 px-md-2">
+                                        <label for="apartments">Qtd de Apartamentos</label>
                                         <input type="number" class="form-control" id="apartments" name="apartments"
-                                            min="0" value="{{ old('apartments') ?? $client->apartments }}">
+                                            min="0" value="{{ old('apartments') ?? $client->apartments }}"
+                                            onchange="calc()">
+                                    </div>
+                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2">
+                                        <label for="total_value">Valor Total</label>
+                                        <input type="text" class="form-control money_format_2" id="total_value"
+                                            name="total_value" value="{{ old('total_value') ?? $client->total_value }}">
                                     </div>
                                 </div>
+
+                                <div class="d-flex flex-wrap justify-content-start">
+                                    <div class="col-12 col-md-3 form-group px-0 pr-md-2">
+                                        <label for="meeting">Data da Assembléia</label>
+                                        <input type="date" class="form-control" id="meeting" name="meeting"
+                                            value="{{ old('meeting') ?? $client->meeting }}">
+                                    </div>
+
+                                    <div class="col-12 col-md-9 form-group px-0 pl-md-2">
+                                        <x-adminlte-input-file id="attached_documents" name="attached_documents[]"
+                                            label="Documentos em anexo (arquivos em PDF)"
+                                            placeholder="Escolha múltiplas fotos..." igroup-size="md" legend="Selecione"
+                                            multiple>
+                                            <x-slot name="prependSlot">
+                                                <div class="input-group-text text-primary">
+                                                    <i class="fas fa-file-upload"></i>
+                                                </div>
+                                            </x-slot>
+                                        </x-adminlte-input-file>
+                                    </div>
+                                </div>
+
+                                @if ($client->files->count() > 0)
+                                    <label>Documentos anexados</label>
+                                    <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
+                                        @foreach ($client->files as $file)
+                                            <div class="col-12 p-2 card" data-file={{ $file->id }}>
+                                                <div class="card-body">
+                                                    <embed src="{{ url('storage/' . $file->file) }}"
+                                                        type="application/pdf" width="100%" height="500px">
+                                                </div>
+                                                <div class="card-footer d-flex justify-content-center">
+                                                    <button class="btn btn-sm btn-danger file-delete"
+                                                        data-id={{ $file->id }}><i
+                                                            class="fa fa-trash"></i>Excluir</button>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
 
                                 @php
                                     $config = [
@@ -358,4 +501,43 @@
     <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('js/address-client.js') }}"></script>
     <script src="{{ asset('js/phone.js') }}"></script>
+    <script src="{{ asset('js/money.js') }}"></script>
+    <script src="{{ asset('js/trade-status.js') }}"></script>
+    <script>
+        function calc() {
+            let value_per_apartment = Number($("#value_per_apartment").val().toString().replace(["R$ ", ","], ['', "."]));
+            let apartments = Number($("#apartments").val());
+            total_value = (value_per_apartment * apartments).toLocaleString(
+                'pt-br', {
+                    style: 'currency',
+                    currency: 'BRL'
+                });
+            $("#total_value").val(total_value);
+        }
+        calc();
+
+        $(".file-delete").on('click', function(e) {
+            e.preventDefault();
+            if (confirm("Confirma a exclusão deste arquivo?") == true) {
+                let fileRemove = e.target.dataset.id;
+                $.ajax({
+                    type: 'post',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ route('admin.clients-file-delete') }}",
+                    data: {
+                        'id': fileRemove,
+                    },
+                    success: function(res) {
+                        if (res.message == 'success') {
+                            $("div").find(`[data-file='${fileRemove}']`).remove();
+                        } else {
+                            alert('Falha ao remover a pdf');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 @endsection

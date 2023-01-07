@@ -287,6 +287,12 @@ return [
         'job_value' => 'valor da obra',
         'percentage' => 'percentual de comissão',
         'total_value' => 'valor total',
+        'contact_function' => 'função do contato',
+        'value_per_apartment' => 'valor por apartamento',
+        'total_value' => 'valor total',
+        'meeting' => 'assembléia',
+        'status_sale' => 'status após a venda',
+        'reason_refusal' => 'motivo da recusa',
     ],
 
 ];

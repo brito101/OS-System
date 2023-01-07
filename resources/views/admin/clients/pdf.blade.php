@@ -4,6 +4,10 @@
         @page {
             margin: 2cm;
         }
+
+        textarea {
+            overflow: auto;
+        }
     </style>
 @endsection
 
@@ -63,10 +67,34 @@
                     </div>
                 </div>
 
+                <div class="d-flex flex-wrap justify-content-start">
+                    @if ($client->status_sale)
+                        <div class="col-4 form-group pr-2">
+                            <label for="status_sale">Status da Venda Realizada</label>
+                            <input type="text" class="form-control bg-white" id="status_sale" name="status_sale"
+                                value="{{ $client->status_sale }}" disabled>
+                        </div>
+                    @endif
+
+                    @if ($client->reason_refusal)
+                        <div class="col-12 form-group px-0" id="reason_refusal_container">
+                            <label for="reason_refusal">Motivo da Recusa</label>
+                            <input type="text" class="form-control bg-white" id="reason_refusal" name="reason_refusal"
+                                value="{{ $client->reason_refusal }}" disabled>
+                        </div>
+                    @endif
+                </div>
+
                 <div class="d-flex flex-wrap justify-content-between">
-                    <div class="col-12 form-group px-2">
-                        <label for="contact">Dados do Contato</label>
-                        <textarea type="text" class="form-control bg-white" id="contact" name="contact" rows="1" disabled>{{ $client->contact }}</textarea>
+                    <div class="col-6 form-group pr-2">
+                        <label for="contact">Nome do Contato</label>
+                        <input type="text" class="form-control bg-white" id="contact" name="contact"
+                            value="{{ $client->contact }}" disabled>
+                    </div>
+                    <div class="col-6 form-group pl-2">
+                        <label for="contact_function">Função do Contato</label>
+                        <input type="text" class="form-control bg-white" id="contact_function" name="contact_function"
+                            value="{{ $client->contact_function }}" disabled>
                     </div>
                 </div>
 
@@ -152,16 +180,36 @@
                 </div>
 
                 <div class="d-flex flex-wrap justify-content-between">
-                    <div class="col-8 form-group pr-2">
+                    <div class="col-12 form-group px-2">
                         <label for="company">Empresa</label>
                         <input type="text" class="form-control bg-white" id="company" name="company"
                             value="{{ $client->company }}" disabled>
                     </div>
+                </div>
 
-                    <div class="col-4 form-group pl-2">
-                        <label for="apartments">Nº de Apartamentos</label>
+                <div class="d-flex flex-wrap justify-content-start">
+                    <div class="col-4 form-group pr-2">
+                        <label for="value_per_apartment">Valor por Apartamento</label>
+                        <input type="text" class="form-control bg-white" id="value_per_apartment"
+                            name="value_per_apartment" value="{{ $client->value_per_apartment }}" disabled>
+                    </div>
+                    <div class="col-4 form-group px-2">
+                        <label for="apartments">Qtd de Apartamentos</label>
                         <input type="text" class="form-control bg-white" id="apartments" name="apartments"
                             value="{{ $client->apartments }}" disabled>
+                    </div>
+                    <div class="col-4 form-group pl-2">
+                        <label for="total_value">Valor Total</label>
+                        <input type="text" class="form-control bg-white" id="total_value" name="total_value"
+                            value="{{ $client->total_value }}" disabled>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-start">
+                    <div class="col-3 form-group pr-2">
+                        <label for="meeting">Data da Assembléia</label>
+                        <input type="text" class="form-control bg-white" id="meeting" name="meeting"
+                            value="{{ $client->meeting ? date('d/m/Y', strtotime($client->meeting)) : '' }}" disabled>
                     </div>
                 </div>
 

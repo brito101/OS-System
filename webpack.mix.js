@@ -34,6 +34,7 @@ mix.js("resources/js/app.js", "public/js")
         ["resources/js/service_orders_observations.js"],
         "public/js/service_orders_observations.js"
     )
+    .scripts(["resources/js/trade-status.js"], "public/js/trade-status.js")
 
     .copy(
         "node_modules/jquery-ui/dist/jquery-ui.min.js",

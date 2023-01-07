@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ClientRequest extends FormRequest
@@ -14,6 +15,16 @@ class ClientRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'value_per_apartment'  => $this->value_per_apartment ? str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value_per_apartment))) : null,
+            'total_value'  => $this->total_value ? str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->total_value))) : null,
+            'status_sale' => $this->trade_status == 'Venda Realizada' ? $this->status_sale : null,
+            'reason_refusal' => $this->trade_status == 'Recusado' ? $this->reason_refusal : null,
+        ]);
     }
 
     /**
@@ -41,12 +52,26 @@ class ClientRequest extends FormRequest
             'observations' => 'nullable|max:4000000000',
             'service' => 'nullable|max:65000',
             'type' => 'nullable|in:Administradora,Construtora,Síndico Profissional,Condomínio Comercial,Condomínio Residencial,Síndico Orgânico,Parceiro,Indicação,Outros',
-            'trade_status' => 'nullable|in:Lead,Prospect,Prospect com Interesse,Cliente,Ex Cliente,Lead com Proposta,Lead Inativo,Recusado,Restrito',
+            'trade_status' => 'nullable|in:Prospect,Prospect com Interesse,Lead,Lead com Proposta,Lead Inativo,Contato Realizado,Vistoria Marcada,Aguardando Orçamento,Orçamento Enviado,Assembléia Marcada,Negociação,Venda Realizada,Cliente,Ex Cliente,Recusado,Restrito',
             'origin' => 'nullable|in:Google,oHub,SindicoNet,Cota Síndicos,Feira,Indicação,Outros',
             'apartments' => 'nullable|integer|min:0|max:9999',
             'contact' => 'nullable|max:65000',
             'subsidiary_id' => 'required|exists:subsidiaries,id',
-            'seller_id' => 'nullable|exists:sellers,id'
+            'seller_id' => 'nullable|exists:sellers,id',
+            'contact_function' => 'nullable|max:191',
+            'value_per_apartment' => 'nullable|numeric|between:0,999999999.99',
+            'total_value'  => 'nullable|numeric|between:0,999999999.99',
+            'meeting' => 'nullable|date_format:Y-m-d',
+            'status_sale' => 'required_if:trade_status,Venda Realizada|in:,Contrato em Confecção,Contrato Assinado,Aguardando PG,Entrada PG,Aguardando Vistoria para Obra,Início de Obra,Obra em andamento,Obra Finalizada,Obra Entregue,Início de Leitura',
+            'reason_refusal' => 'required_if:trade_status,Recusado|max:191',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'value_per_apartment.between' => 'O valor deve ser entre 0 e 999.999.999,99.',
+            'total_value.between' => 'O valor deve ser entre 0 e 999.999.999,99.',
         ];
     }
 }

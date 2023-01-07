@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ClientRequest;
 use App\Imports\ClientImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Client;
+use App\Models\ClientFile;
 use App\Models\ClientHistory;
 use App\Models\Collaborator;
 use App\Models\Manager;
@@ -16,6 +17,8 @@ use App\Models\Views\Client as ViewsClient;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ClientController extends Controller
@@ -173,7 +176,31 @@ class ClientController extends Controller
 
         $client = Client::create($data);
 
+        $files = null;
+        if ($request->file('attached_documents') != null) {
+            $validator = Validator::make($request->only('attached_documents'), ['attached_documents.*' => 'file|mimes:pdf|max:125000']);
+
+            if ($validator->fails() === true) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Todos os arquivos devem ser pdf com no máximo 1GB total');
+            }
+            $files = $request->file('attached_documents');
+        }
+
         if ($client->save()) {
+            if ($files) {
+                foreach ($files as $file) {
+                    $clientFile = new ClientFile();
+                    $clientFile->client_id = $client->id;
+                    $path = Storage::putFile('clients/files', $file);
+                    $clientFile->file = $path;
+                    $clientFile->user_id = Auth::user()->id;
+                    $clientFile->save();
+                    unset($clientFile);
+                }
+            }
+
             return redirect()
                 ->route('admin.clients.index')
                 ->with('success', 'Cadastro realizado!');
@@ -348,6 +375,28 @@ class ClientController extends Controller
             $data['observations'] = $observations;
         }
 
+        if ($request->file('attached_documents') != null) {
+            $validator = Validator::make($request->only('attached_documents'), ['attached_documents.*' => 'file|mimes:pdf|max:125000']);
+
+            if ($validator->fails() === true) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Todos os arquivos devem ser pdf com no máximo 1GB total');
+            }
+
+            $files = $request->file('attached_documents');
+
+            foreach ($files as $file) {
+                $clientFile = new ClientFile();
+                $clientFile->client_id = $client->id;
+                $path = Storage::putFile('clients/files', $file);
+                $clientFile->file = $path;
+                $clientFile->user_id = Auth::user()->id;
+                $clientFile->save();
+                unset($clientFile);
+            }
+        }
+
         if ($client->update($data)) {
             return redirect()
                 ->route('admin.clients.index')
@@ -400,6 +449,7 @@ class ClientController extends Controller
         }
 
         if ($client->delete()) {
+            ClientFile::where('client_id', $client->id)->delete();
             return redirect()
                 ->route('admin.clients.index')
                 ->with('success', 'Exclusão realizada!');
@@ -502,5 +552,20 @@ class ClientController extends Controller
             ->get();
 
         return view('admin.clients.history', compact('client', 'histories'));
+    }
+
+    public function fileDelete(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Editar Clientes')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $file = ClientFile::find($request->id);
+        if ($file) {
+            $file->delete();
+            return response()->json(['message' => 'success']);
+        } else {
+            return response()->json(['message' => 'fail']);
+        }
     }
 }

@@ -15,7 +15,7 @@ class Client extends Model
     protected $fillable = [
         'name', 'document_person', 'document_registry',
         'email', 'telephone', 'cell', 'zipcode', 'street', 'number', 'complement',
-        'neighborhood', 'state', 'city', 'company', 'observations', 'service', 'trade_status', 'type', 'origin', 'apartments', 'contact', 'subsidiary_id', 'seller_id'
+        'neighborhood', 'state', 'city', 'company', 'observations', 'service', 'trade_status', 'type', 'origin', 'apartments', 'contact', 'subsidiary_id', 'seller_id', 'contact_function', 'value_per_apartment', 'total_value', 'meeting', 'status_sale', 'reason_refusal',
     ];
 
     /** Relationships */
@@ -31,5 +31,21 @@ class Client extends Model
         return $this->belongsTo(Seller::class)->withDefault([
             'name' => 'Inexistente',
         ]);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(ClientFile::class);
+    }
+
+    /** Accessors */
+    public function getValuePerApartmentAttribute($value)
+    {
+        return 'R$ ' . \number_format($value, 2, ',', '.');
+    }
+
+    public function getTotalValueAttribute($value)
+    {
+        return 'R$ ' . \number_format($value, 2, ',', '.');
     }
 }

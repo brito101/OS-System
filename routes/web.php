@@ -62,6 +62,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('clients', ClientController::class);
         Route::get('clients-pdf/{id}', [ClientController::class, 'pdf'])->name('clients.pdf');
         Route::post('clients-import', [ClientController::class, 'fileImport'])->name('clients.import');
+        Route::post('/clients/file-delete', [ClientController::class, 'fileDelete'])->name('clients-file-delete');
 
         /** Providers */
         Route::get('/providers/destroy/{id}', [ProviderController::class, 'destroy']);

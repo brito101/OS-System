@@ -1,5 +1,13 @@
 @extends('adminlte::page')
 
+@section('adminlte_css')
+    <style>
+        textarea {
+            overflow: auto;
+        }
+    </style>
+@endsection
+
 @section('title', '- Ficha de Cliente')
 
 @section('content')
@@ -78,10 +86,34 @@
                                     </div>
                                 </div>
 
+                                <div class="d-flex flex-wrap justify-content-start">
+                                    @if ($client->status_sale)
+                                        <div class="col-12 col-md-4 form-group px-0 pr-md-2">
+                                            <label for="status_sale">Status da Venda Realizada</label>
+                                            <input type="text" class="form-control bg-white" id="status_sale"
+                                                name="status_sale" value="{{ $client->status_sale }}" disabled>
+                                        </div>
+                                    @endif
+
+                                    @if ($client->reason_refusal)
+                                        <div class="col-12 form-group px-0" id="reason_refusal_container">
+                                            <label for="reason_refusal">Motivo da Recusa</label>
+                                            <input type="text" class="form-control bg-white" id="reason_refusal"
+                                                name="reason_refusal" value="{{ $client->reason_refusal }}" disabled>
+                                        </div>
+                                    @endif
+                                </div>
+
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 form-group px-0 ">
-                                        <label for="contact">Dados do Contato</label>
-                                        <textarea type="text" class="form-control bg-white" id="contact" name="contact" rows="1" disabled>{{ $client->contact }}</textarea>
+                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
+                                        <label for="contact">Nome do Contato</label>
+                                        <input type="text" class="form-control bg-white" id="contact" name="contact"
+                                            value="{{ $client->contact }}" disabled>
+                                    </div>
+                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
+                                        <label for="contact_function">Função do Contato</label>
+                                        <input type="text" class="form-control bg-white" id="contact_function"
+                                            name="contact_function" value="{{ $client->contact_function }}" disabled>
                                     </div>
                                 </div>
 
@@ -94,21 +126,21 @@
 
                                     <div class="col-12 col-md-4 form-group px-0 px-md-2">
                                         <label for="telephone">Telefone</label>
-                                        <input type="text" class="form-control bg-white" id="telephone" name="telephone"
-                                            value="{{ $client->telephone }}" disabled>
+                                        <input type="text" class="form-control bg-white" id="telephone"
+                                            name="telephone" value="{{ $client->telephone }}" disabled>
                                     </div>
                                     <div class="col-12 col-md-4 form-group px-0 pl-md-2">
                                         <label for="cell">Celular</label>
-                                        <input type="text" class="form-control bg-white" id="cell" name="cell"
-                                            value="{{ $client->cell }}" disabled>
+                                        <input type="text" class="form-control bg-white" id="cell"
+                                            name="cell" value="{{ $client->cell }}" disabled>
                                     </div>
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2">
                                         <label for="zipcode">CEP</label>
-                                        <input type="text" class="form-control bg-white" id="zipcode" name="zipcode"
-                                            value="{{ $client->zipcode }}" disabled>
+                                        <input type="text" class="form-control bg-white" id="zipcode"
+                                            name="zipcode" value="{{ $client->zipcode }}" disabled>
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="street">Rua</label>
@@ -168,18 +200,55 @@
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-8 form-group px-0 pr-md-2">
+                                    <div class="col-12 form-group px-0">
                                         <label for="company">Empresa</label>
                                         <input type="text" class="form-control bg-white" id="company"
                                             name="company" value="{{ $client->company }}" disabled>
                                     </div>
+                                </div>
 
-                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2">
-                                        <label for="apartments">Nº de Apartamentos</label>
+                                <div class="d-flex flex-wrap justify-content-start">
+                                    <div class="col-12 col-md-4 form-group px-0 pr-md-2">
+                                        <label for="value_per_apartment">Valor por Apartamento</label>
+                                        <input type="text" class="form-control bg-white" id="value_per_apartment"
+                                            name="value_per_apartment" value="{{ $client->value_per_apartment }}"
+                                            disabled>
+                                    </div>
+                                    <div class="col-12 col-md-4 form-group px-0 px-md-2">
+                                        <label for="apartments">Qtd de Apartamentos</label>
                                         <input type="text" class="form-control bg-white" id="apartments"
                                             name="apartments" value="{{ $client->apartments }}" disabled>
                                     </div>
+                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2">
+                                        <label for="total_value">Valor Total</label>
+                                        <input type="text" class="form-control bg-white" id="total_value"
+                                            name="total_value" value="{{ $client->total_value }}" disabled>
+                                    </div>
                                 </div>
+
+                                <div class="d-flex flex-wrap justify-content-start">
+                                    <div class="col-12 col-md-3 form-group px-0 pr-md-2">
+                                        <label for="meeting">Data da Assembléia</label>
+                                        <input type="text" class="form-control bg-white" id="meeting"
+                                            name="meeting"
+                                            value="{{ $client->meeting ? date('d/m/Y', strtotime($client->meeting)) : '' }}"
+                                            disabled>
+                                    </div>
+                                </div>
+
+                                @if ($client->files->count() > 0)
+                                    <label>Documentos anexados</label>
+                                    <div class="col-12 form-group px-0 d-flex flex-wrap justify-content-start">
+                                        @foreach ($client->files as $file)
+                                            <div class="col-12 p-2 card" data-file={{ $file->id }}>
+                                                <div class="card-body">
+                                                    <embed src="{{ url('storage/' . $file->file) }}"
+                                                        type="application/pdf" width="100%" height="500px">
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
 
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 form-group px-0">
