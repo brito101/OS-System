@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Client;
 use App\Models\Seller;
 use App\Models\Subsidiary;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -43,7 +44,22 @@ class ClientImport implements ToModel, WithHeadingRow, WithValidation
             'subsidiary_id' => Subsidiary::where('alias_name', $row['filial'])->first()->id ?? null,
             'user_id' => Auth::user()->id,
             'seller_id' => Seller::where('name', $row['vendedor'])->first()->id ?? null,
+            'contact_function' => $row['funcao_contato'],
+            'value_per_apartment' =>  $row['valor_por_apartamento'],
+            'total_value' => $row['valor_total'],
+            'meeting' => $row['assembleia'],
+            'status_sale' => $row['status_venda_realizada'],
+            'reason_refusal' => $row['motivo_recusa'],
         ]);
+    }
+
+    public function prepareForValidation($data, $index)
+    {
+        $data['valor_por_apartamento'] =  $data['valor_por_apartamento'] ? str_replace(',', '.', $data['valor_por_apartamento']) : null;
+        $data['valor_total'] =  $data['valor_total'] ? str_replace(',', '.', $data['valor_total']) : null;
+        $data['assembleia'] = $data['assembleia'] ? Carbon::createFromFormat('d/m/Y', $data['assembleia'])->format('Y-m-d') : null;
+
+        return $data;
     }
 
     public function rules(): array
@@ -69,7 +85,13 @@ class ClientImport implements ToModel, WithHeadingRow, WithValidation
             'origem' => 'nullable|in:Google,oHub,SindicoNet,Cota Síndicos,Feira,Indicação,Outros',
             'apartamentos' => 'nullable|integer|min:0|max:9999',
             'contato' => 'nullable|max:65000',
-            'filial' => 'nullable|exists:subsidiaries,alias_name'
+            'filial' => 'nullable|exists:subsidiaries,alias_name',
+            'funcao_contato' => 'nullable|max:191',
+            'valor_por_apartamento' => 'nullable|numeric|between:0,999999999.99',
+            'valor_total'  => 'nullable|numeric|between:0,999999999.99',
+            'assembleia' => 'nullable|date_format:Y-m-d',
+            'status_venda_realizada' => 'nullable|in:,Contrato em Confecção,Contrato Assinado,Aguardando PG,Entrada PG,Aguardando Vistoria para Obra,Início de Obra,Obra em andamento,Obra Finalizada,Obra Entregue,Início de Leitura',
+            'motivo_recusa' => 'nullable|max:191',
         ];
     }
 }

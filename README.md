@@ -76,4 +76,5 @@
 <ul>
 <li>php artisan queue:work --once --quiet</li>
 <li>php artisan queue:work --stop-when-empty</li>
+<li>php artisan cache:clear</li>
 </ul>
