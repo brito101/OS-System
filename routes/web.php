@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\{
     AdminController,
     ClientController,
     CommissionController,
+    EmployeeController,
     InventoryController,
     ProductController,
     ProviderController,
@@ -113,6 +114,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/sellers/destroy/{id}', [SellerController::class, 'destroy']);
         Route::get('/sellers/commissions/{id}', [SellerController::class, 'commissions'])->name('sellers.commissions');
         Route::resource('sellers', SellerController::class);
+
+        /** Employees */
+        Route::get('employees-pdf/{id}', [EmployeeController::class, 'pdf'])->name('employees.pdf');
+        Route::get('/employees/destroy/{id}', [EmployeeController::class, 'destroy']);
+        Route::resource('employees', EmployeeController::class);
+        Route::post('employees-import', [EmployeeController::class, 'fileImport'])->name('employees.import');
 
         /** Comissions */
         Route::get('/commissions/receipt/{id}', [CommissionController::class, 'receipt'])->name('commissions.receipt');

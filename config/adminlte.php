@@ -302,6 +302,26 @@ return [
             ],
         ],
         [
+            'text'        => 'Funcionários',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-users-cog',
+            'can'         => 'Acessar Funcionários',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Funcionários',
+                    'url'  => 'admin/employees',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Funcionários',
+                ],
+                [
+                    'text' => 'Cadastro de Funcionário',
+                    'url'  => 'admin/employees/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Funcionários',
+                ],
+            ],
+        ],
+        [
             'text'        => 'Vendedores',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-id-badge',
@@ -358,26 +378,6 @@ return [
                     'url'  => 'admin/providers/create',
                     'icon' => 'fas fa-fw fa-chevron-right',
                     'can'  => 'Criar Fornecedores',
-                ],
-            ],
-        ],
-        [
-            'text'        => 'Atividades',
-            'url'         => '#',
-            'icon'        => 'fas fa-fw fa-clipboard-list',
-            'can'         => 'Acessar Atividades',
-            'submenu' => [
-                [
-                    'text' => 'Listagem de Atividades',
-                    'url'  => 'admin/activities',
-                    'icon' => 'fas fa-fw fa-chevron-right',
-                    'can'  => 'Listar Atividades',
-                ],
-                [
-                    'text' => 'Cadastro de Atividades',
-                    'url'  => 'admin/activities/create',
-                    'icon' => 'fas fa-fw fa-chevron-right',
-                    'can'  => 'Criar Atividades',
                 ],
             ],
         ],
@@ -533,6 +533,26 @@ return [
                     'url'  => 'admin/schedule/create',
                     'icon' => 'fas fa-fw fa-chevron-right',
                     'can'  => 'Criar Eventos na Agenda',
+                ],
+            ],
+        ],
+        [
+            'text'        => 'Atividades',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-clipboard-list',
+            'can'         => 'Acessar Atividades',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Atividades',
+                    'url'  => 'admin/activities',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Atividades',
+                ],
+                [
+                    'text' => 'Cadastro de Atividades',
+                    'url'  => 'admin/activities/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Atividades',
                 ],
             ],
         ],

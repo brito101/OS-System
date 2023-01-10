@@ -2,25 +2,6 @@
 
 <h5>Pending Tasks</h5>
 <ol>
-    <li>Módulo de cadastro de funcionários com: 
-        <ul>
-            <li>Nome;</li>
-            <li>Telefone;</li>
-            <li>Endereço;</li>
-            <li>CPF;</li>
-            <li>CNH;</li>
-            <li>Título de eleitor;</li>
-            <li>Estado civil;</li>
-            <li>Cônjuge;</li>
-            <li>Filhos;</li>
-            <li>Dados bancários;</li>
-            <li>Função;</li>
-            <li>Salário;</li>
-            <li>Data da admissão;</li>
-            <li>Data de demissão;</li>
-            <li>Mortivo da demissão;</li>
-        </ul>
-    </li>
     <li>Módulo de comprovante de pagamento de passagens com campo para descrição de propósito</li>
     <li>Replicar módulo de clientes no módulo de medição digital</li>
     <li>Exclusão parcelamentos em lote</li>

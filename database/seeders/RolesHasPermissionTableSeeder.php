@@ -1310,6 +1310,87 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 91,
                 'role_id' => 7
             ],
+            /** Employees 92 to 96 (programmer, administrator, managers, financiers) */
+            [
+                'permission_id' => 92,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 92,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 92,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 92,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 93,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 93,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 93,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 93,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 94,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 94,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 94,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 94,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 95,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 95,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 95,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 95,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 96,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 96,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 96,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 96,
+                'role_id' => 5
+            ],
         ]);
     }
 }
