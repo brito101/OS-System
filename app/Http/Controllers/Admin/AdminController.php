@@ -85,7 +85,7 @@ class AdminController extends Controller
                     ->sortBy(function ($item) use ($order) {
                         return array_search($item["priority"], $order);
                     })->groupBy('priority')->toArray();
-                $serviceOrdersPriorityChart = [];
+                $serviceOrdersPriorityChart = ['label' => [], 'data' => []];
                 foreach ($serviceOrdersPriority as $key => $value) {
                     $serviceOrdersPriorityChart['label'][] = $key;
                     $serviceOrdersPriorityChart['data'][] = count($value);
@@ -295,7 +295,7 @@ class AdminController extends Controller
                     ->sortBy(function ($item) use ($order) {
                         return array_search($item["priority"], $order);
                     })->groupBy('priority')->toArray();
-                $serviceOrdersPriorityChart = [];
+                $serviceOrdersPriorityChart = ['label' => [], 'data' => []];
                 foreach ($serviceOrdersPriority as $key => $value) {
                     $serviceOrdersPriorityChart['label'][] = $key;
                     $serviceOrdersPriorityChart['data'][] = count($value);
@@ -376,7 +376,7 @@ class AdminController extends Controller
                     ->sortBy(function ($item) use ($order) {
                         return array_search($item["priority"], $order);
                     })->groupBy('priority')->toArray();
-                $serviceOrdersPriorityChart = [];
+                $serviceOrdersPriorityChart = ['label' => [], 'data' => []];
                 foreach ($serviceOrdersPriority as $key => $value) {
                     $serviceOrdersPriorityChart['label'][] = $key;
                     $serviceOrdersPriorityChart['data'][] = count($value);
@@ -518,7 +518,7 @@ class AdminController extends Controller
                     ->sortBy(function ($item) use ($order) {
                         return array_search($item["priority"], $order);
                     })->groupBy('priority')->toArray();
-                $serviceOrdersPriorityChart = [];
+                $serviceOrdersPriorityChart = ['label' => [], 'data' => []];
                 foreach ($serviceOrdersPriority as $key => $value) {
                     $serviceOrdersPriorityChart['label'][] = $key;
                     $serviceOrdersPriorityChart['data'][] = count($value);
