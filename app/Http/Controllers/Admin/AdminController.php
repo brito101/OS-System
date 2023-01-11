@@ -74,6 +74,8 @@ class AdminController extends Controller
                     ->whereIn('subsidiary_id', $subsidiariesList->pluck('id'))
                     ->orWhere('user_id', Auth::user()->id)
                     ->orWhere('author_id', Auth::user()->id)->get();
+                $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
                 $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
@@ -184,6 +186,8 @@ class AdminController extends Controller
                 $clientsSubsidiaryChart = [];
                 /** Service Orders */
                 $serviceOrders = null;
+                $serviceOrderHoldingBudget = 0;
+                $serviceOrderAwaitingReport = 0;
                 $serviceOrdersNotStarted = 0;
                 $serviceOrdersLate = 0;
                 $serviceOrdersStarted = 0;
@@ -284,6 +288,8 @@ class AdminController extends Controller
                     ->whereIn('subsidiary_id', $subsidiariesList->pluck('id'))
                     ->orWhere('user_id', Auth::user()->id)
                     ->orWhere('author_id', Auth::user()->id)->get();
+                $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
                 $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
@@ -365,6 +371,8 @@ class AdminController extends Controller
                         $query->where('user_id', Auth::user()->id)
                             ->orWhere('author', Auth::user()->id);
                     })->get();
+                $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
                 $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
@@ -425,6 +433,8 @@ class AdminController extends Controller
                 $clientsStatusChart = [];
                 /** Service Orders */
                 $serviceOrders = null;
+                $serviceOrderHoldingBudget = 0;
+                $serviceOrderAwaitingReport = 0;
                 $serviceOrdersNotStarted = 0;
                 $serviceOrdersLate = 0;
                 $serviceOrdersStarted = 0;
@@ -507,6 +517,8 @@ class AdminController extends Controller
                 }
                 /** Service Orders */
                 $serviceOrders = ServiceOrder::all('status', 'priority', 'subsidiary');
+                $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
                 $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
@@ -612,6 +624,8 @@ class AdminController extends Controller
             'clientsStatusChart',
 
             'serviceOrders',
+            'serviceOrderHoldingBudget',
+            'serviceOrderAwaitingReport',
             'serviceOrdersNotStarted',
             'serviceOrdersLate',
             'serviceOrdersStarted',

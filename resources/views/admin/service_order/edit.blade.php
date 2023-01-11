@@ -398,6 +398,12 @@
                                         <label for="status">Status</label>
                                         <x-adminlte-select2 name="status" required>
                                             <option
+                                                {{ old('status') == 'Aguardando orçamento' ? 'selected' : ($serviceOrder->status == 'Aguardando orçamento' ? 'selected' : '') }}
+                                                value="Aguardando orçamento">Aguardando orçamento</option>
+                                            <option
+                                                {{ old('status') == 'Aguardando laudo' ? 'selected' : ($serviceOrder->status == 'Aguardando laudo' ? 'selected' : '') }}
+                                                value="Aguardando laudo">Aguardando laudo</option>
+                                            <option
                                                 {{ old('status') == 'Não iniciado' ? 'selected' : ($serviceOrder->status == 'Não iniciado' ? 'selected' : '') }}
                                                 value="Não iniciado">
                                                 Não iniciado</option>
