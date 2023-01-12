@@ -34,10 +34,10 @@ class EmployeeController extends Controller
 
         switch ($role) {
             case 'Financeiro':
-                $employees = Employee::whereIn('subsidiary_id', Auth::user()->financiers->pluck('subsidiary_id'))->orWhere('subsidiary_id', null)->query();
+                $employees = ViewsEmployee::whereIn('subsidiary_id', Auth::user()->financiers->pluck('subsidiary_id'))->orWhere('subsidiary_id', null)->get();
                 break;
             case 'Gerente':
-                $employees = Employee::whereIn('subsidiary_id', Auth::user()->managers->pluck('subsidiary_id'))->orWhere('subsidiary_id', null)->query();
+                $employees = ViewsEmployee::whereIn('subsidiary_id', Auth::user()->managers->pluck('subsidiary_id'))->orWhere('subsidiary_id', null)->get();
                 break;
             default:
                 $employees = ViewsEmployee::query();

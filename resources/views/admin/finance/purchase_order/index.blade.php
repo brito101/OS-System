@@ -75,11 +75,11 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 5], 'Autor', 'Filial', 'NS', 'Data', 'Obra', 'Solicitante', 'Entrega', 'Valor', 'Status', ['label' => 'Status', 'no-export' => true, 'width' => 5], ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Autor', 'Filial', 'NS', 'Data', ['label' => 'Data', 'no-export' => true], 'Obra', 'Solicitante', 'Entrega', ['label' => 'Entrega', 'no-export' => true], 'Valor', 'Status', ['label' => 'Status', 'no-export' => true, 'width' => 5], ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
                             $config = [
                                 'order' => [[0, 'desc']],
                                 'ajax' => url('/admin/finance-purchase-orders'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'author', 'name' => 'author', 'visible' => false], ['data' => 'subsidiary', 'name' => 'subsidiary', 'visible' => false], ['data' => 'number_series', 'name' => 'number_series'], ['data' => 'date_pt', 'name' => 'date'], ['data' => 'job', 'name' => 'job'], ['data' => 'requester', 'name' => 'requester'], ['data' => 'forecast_pt', 'name' => 'forecast'], ['data' => 'value', 'name' => 'value'], ['data' => 'status', 'name' => 'status', 'visible' => false], ['data' => 'btnStatus', 'name' => 'btnStatus'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'author', 'name' => 'author', 'visible' => false], ['data' => 'subsidiary', 'name' => 'subsidiary', 'visible' => false], ['data' => 'number_series', 'name' => 'number_series'], ['data' => 'date_pt', 'name' => 'date'], ['data' => 'date_pt', 'name' => 'date_pt', 'visible' => false], ['data' => 'job', 'name' => 'job'], ['data' => 'requester', 'name' => 'requester'], ['data' => 'forecast_pt', 'name' => 'forecast'], ['data' => 'forecast_pt', 'name' => 'forecast_pt'], ['data' => 'value', 'name' => 'value'], ['data' => 'status', 'name' => 'status', 'visible' => false], ['data' => 'btnStatus', 'name' => 'btnStatus'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,
