@@ -79,7 +79,7 @@
                             $config = [
                                 'order' => [[0, 'desc']],
                                 'ajax' => url('/admin/finance-expenses'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'author', 'name' => 'author', 'visible' => false], ['data' => 'subsidiary', 'name' => 'subsidiary', 'visible' => false], ['data' => 'description', 'name' => 'description'], ['data' => 'value', 'name' => 'value'], ['data' => 'due_date', 'name' => 'due_date'], ['data' => 'status', 'name' => 'status', 'visible' => false], ['data' => 'btnStatus', 'name' => 'btnStatus'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'author', 'name' => 'author', 'visible' => false], ['data' => 'subsidiary', 'name' => 'subsidiary', 'visible' => false], ['data' => 'description', 'name' => 'description'], ['data' => 'value', 'name' => 'value'], ['data' => 'due_date_pt', 'name' => 'due_date'], ['data' => 'status', 'name' => 'status', 'visible' => false], ['data' => 'btnStatus', 'name' => 'btnStatus'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,
@@ -101,8 +101,7 @@
 
                         <div class="card-body pb-0">
                             <div class="d-flex flex-wrap justify-content-between">
-                                <div class="col-12 col-md-5">
-                                    <span class="text-muted text-sm px-2">Alterar visualização das colunas:</span>
+                                <div class="col-12 col-md-2">
                                     <div class="btn-group px-2" role="group" aria-label="Visualizar colunas">
                                         <button type="button" class="toggle-vis btn btn-info"
                                             data-column="1">Autor</button>
@@ -110,14 +109,49 @@
                                             data-column="2">Filial</button>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-7">
-                                    <span class="text-muted text-sm px-2">Alterar status dos lançamentos (clique nas linhas
-                                        para selecionar):</span>
-                                    <div class="btn-group px-2" role="group" aria-label="Visualizar colunas">
-                                        <form method="POST" action="{{ route('admin.finance-expenses.changeStatus') }}">
+
+                                <div class="col-12 col-md-10 d-flex flex-wrap justify-content-center">
+                                    <h5 class="col-12 h6 text-muted text-center">Alterações em lote</h5>
+                                    <div class="px-2 col-12 col-md-3 d-flex justify-content-center">
+                                        <form method="POST" action="{{ route('admin.finance-expenses.changeStatus') }}"
+                                            class="w-100">
                                             @csrf
-                                            <input type="hidden" name="ids" value="" id="ids">
-                                            <button type="submit" class="change-status btn btn-info">Alterar</button>
+                                            <input type="hidden" name="ids" value="" id="ids"
+                                                class="ids">
+                                            <button type="submit" id="change-status"
+                                                class="change-status btn btn-warning w-100"
+                                                data-confirm="Confirma a alteração de status?"><i
+                                                    class="fas fa-fw fa-sync"></i>
+                                                Status</button>
+                                        </form>
+                                    </div>
+                                    <div class="px-2 col-12 col-md-6 d-flex justify-content-center">
+                                        <form method="POST" action="{{ route('admin.finance-expenses.changeValue') }}"
+                                            class="d-flex flex-wrap justify-content-between w-100">
+                                            @csrf
+                                            <input type="hidden" name="ids" value="" id="ids"
+                                                class="ids">
+                                            <div class="form-group col-6 my-2 my-md-0 w-100">
+                                                <input type="text" name="value" class="money_format_2 form-control">
+                                            </div>
+                                            <div class="col-6">
+                                                <button type="submit" id="change-value"
+                                                    class="btn btn-success my-2 my-md-0 w-100"
+                                                    data-confirm="Confirma a alteração do valor?"><i
+                                                        class="fas fa-fw fa-money-bill"></i> Valor</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="px-2 col-12 col-md-3 d-flex justify-content-center">
+                                        <form method="POST" action="{{ route('admin.finance-expenses.batchDelete') }}"
+                                            class="w-100">
+                                            @csrf
+                                            <input type="hidden" name="ids" value="" id="ids"
+                                                class="ids">
+                                            <button type="submit" id="batch-delete" class="btn btn-danger w-100"
+                                                data-confirm="Confirma a exclusão desta seleção?"><i
+                                                    class="fas fa-fw fa-trash"></i>
+                                                Exclusão</button>
                                         </form>
                                     </div>
                                 </div>
@@ -152,7 +186,30 @@
                     ids.push(el.children[0].textContent);
                 }
             });
-            $("#ids").val(ids)
+            $(".ids").val(ids)
+        });
+
+        $("#batch-delete").on('click', function(e) {
+            if (!confirm($(this).data('confirm'))) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
+        });
+
+        $("#change-value").on('click', function(e) {
+            if (!confirm($(this).data('confirm'))) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
+        });
+
+        $("#change-status").on('click', function(e) {
+            if (!confirm($(this).data('confirm'))) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
         });
     </script>
+    <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/money.js') }}"></script>
 @endsection

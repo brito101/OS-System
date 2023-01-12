@@ -181,8 +181,8 @@
                                 </div>
                             </div>
                             <canvas id="service-orders-priority-chart"
-                                style="display: block; width: 489px; height: 200px;" class="chartjs-render-monitor"
-                                width="489" height="335"></canvas>
+                                style="display: block; width: 489px; height: 478px;" class="chartjs-render-monitor"
+                                width="489" height="478"></canvas>
                         </div>
                     </div>
                 </div>

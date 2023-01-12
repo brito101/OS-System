@@ -81,6 +81,8 @@ Route::group(['middleware' => ['auth']], function () {
         /** Finance */
         /** Incomes */
         Route::post('/finance-incomes/changeStatus', [IncomeController::class, 'changeStatus'])->name('finance-incomes.changeStatus');
+        Route::post('/finance-incomes/batchDelete', [IncomeController::class, 'batchDelete'])->name('finance-incomes.batchDelete');
+        Route::post('/finance-incomes/changeValue', [IncomeController::class, 'changeValue'])->name('finance-incomes.changeValue');
         Route::get('/finance-incomes/destroy/{id}', [IncomeController::class, 'destroy']);
         Route::get('/finance-incomes/pay/{id}', [IncomeController::class, 'pay']);
         Route::get('/finance-incomes/receive/{id}', [IncomeController::class, 'receive']);
@@ -89,6 +91,8 @@ Route::group(['middleware' => ['auth']], function () {
 
         /** Expenses */
         Route::post('/finance-expenses/changeStatus', [ExpenseController::class, 'changeStatus'])->name('finance-expenses.changeStatus');
+        Route::post('/finance-expenses/batchDelete', [ExpenseController::class, 'batchDelete'])->name('finance-expenses.batchDelete');
+        Route::post('/finance-expenses/changeValue', [ExpenseController::class, 'changeValue'])->name('finance-expenses.changeValue');
         Route::get('/finance-expenses/destroy/{id}', [ExpenseController::class, 'destroy']);
         Route::get('/finance-expenses/pay/{id}', [ExpenseController::class, 'pay']);
         Route::get('/finance-expenses/receive/{id}', [ExpenseController::class, 'receive']);
@@ -97,6 +101,8 @@ Route::group(['middleware' => ['auth']], function () {
 
         /** Refunds */
         Route::post('/finance-refunds/changeStatus', [RefoundController::class, 'changeStatus'])->name('finance-refunds.changeStatus');
+        Route::post('/finance-refunds/batchDelete', [RefoundController::class, 'batchDelete'])->name('finance-refunds.batchDelete');
+        Route::post('/finance-refunds/changeValue', [RefoundController::class, 'changeValue'])->name('finance-refunds.changeValue');
         Route::get('/finance-refunds/destroy/{id}', [RefoundController::class, 'destroy']);
         Route::get('/finance-refunds/pay/{id}', [RefoundController::class, 'pay']);
         Route::get('/finance-refunds/receive/{id}', [RefoundController::class, 'receive']);
@@ -104,6 +110,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('finance-refunds', RefoundController::class);
 
         /** Purchase Orders */
+        Route::post('/finance-purchase-orders/changeStatus', [PurchaseOrderController::class, 'changeStatus'])->name('finance-purchase-orders.changeStatus');
+        Route::post('/finance-purchase-orders/batchDelete', [PurchaseOrderController::class, 'batchDelete'])->name('finance-purchase-orders.batchDelete');
+        Route::post('/finance-purchase-orders/changeValue', [PurchaseOrderController::class, 'changeValue'])->name('finance-purchase-orders.changeValue');
         Route::get('/finance-purchase-orders/destroy/{id}', [PurchaseOrderController::class, 'destroy']);
         Route::get('/finance-purchase-orders/unexecuted/{id}', [PurchaseOrderController::class, 'unexecuted']);
         Route::get('/finance-purchase-orders/executed/{id}', [PurchaseOrderController::class, 'executed']);

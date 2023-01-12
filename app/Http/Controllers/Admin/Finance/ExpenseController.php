@@ -559,4 +559,98 @@ class ExpenseController extends Controller
             ->route('admin.finance-expenses.index')
             ->with('success', 'Despesas atualizadas!');
     }
+
+    public function batchDelete(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Excluir Despesas')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->ids) {
+            return redirect()
+                ->back()
+                ->with('error', 'Selecione ao menos uma linha!');
+        }
+
+        $ids = explode(",", $request->ids);
+
+        $role = Auth::user()->roles->first()->name;
+        switch ($role) {
+            case 'Financeiro':
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
+                break;
+            case 'Gerente':
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
+        }
+
+        foreach ($ids as $id) {
+            $invoice = Invoice::where('id', $id)->where('type', 'despesa')
+                ->where(function ($query) use ($subsidiaries) {
+                    $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                        ->orWhere('subsidiary_id', null);
+                })->first();
+            if (!$invoice) {
+                abort(403, 'Acesso não autorizado');
+            }
+            $invoice->delete();
+        }
+
+        return redirect()
+            ->route('admin.finance-expenses.index')
+            ->with('success', 'Despesas excluídas!');
+    }
+
+    public function changeValue(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Editar Despesas')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->ids) {
+            return redirect()
+                ->back()
+                ->with('error', 'Selecione ao menos uma linha!');
+        }
+
+        $ids = explode(",", $request->ids);
+
+        $role = Auth::user()->roles->first()->name;
+        switch ($role) {
+            case 'Financeiro':
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
+                break;
+            case 'Gerente':
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
+        }
+
+        foreach ($ids as $id) {
+            $invoice = Invoice::where('id', $id)->where('type', 'despesa')
+                ->where(function ($query) use ($subsidiaries) {
+                    $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                        ->orWhere('subsidiary_id', null);
+                })->first();
+            if (!$invoice) {
+                abort(403, 'Acesso não autorizado');
+            }
+
+            $invoice->value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $request->value)));
+            $invoice->update();
+        }
+
+        return redirect()
+            ->route('admin.finance-expenses.index')
+            ->with('success', 'Despesas atualizadas!');
+    }
 }

@@ -2,8 +2,6 @@
 
 <h5>Pending Tasks</h5>
 <ol>
-    <li>Exclusão parcelamentos em lote de lançamentos</li>
-    <li>Atualização em lote de lançamentos</li>
     <li>Módulo de comprovante de pagamento de passagens com campo para descrição de propósito</li>
     <li>Replicar módulo de clientes no módulo de medição digital</li>    
     <li>Criação de OS exclusiva para medição por condomínio com status de: Não lido, Lido, Aguardando conta/digitado, Conferido, Enviado, Problema;</li>

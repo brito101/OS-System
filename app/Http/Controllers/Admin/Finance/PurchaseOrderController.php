@@ -10,6 +10,7 @@ use App\Models\Material;
 use App\Models\Provider;
 use App\Models\PurchaseOrder;
 use App\Models\Subsidiary;
+use App\Models\Views\PurchaseOrder as ViewsPurchaseOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -34,14 +35,14 @@ class PurchaseOrderController extends Controller
         switch ($role) {
             case 'Financeiro':
                 $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->get();
+                $purchases = ViewsPurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->get();
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $purchases = PurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->get();
+                $purchases = ViewsPurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->get();
                 break;
             default:
-                $purchases = PurchaseOrder::all();
+                $purchases = ViewsPurchaseOrder::all();
                 break;
         }
 
@@ -207,7 +208,10 @@ class PurchaseOrderController extends Controller
                 break;
         }
 
-        $purchase = PurchaseOrder::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $purchase = PurchaseOrder::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                ->orWhere('subsidiary_id', null);
+        })->first();
 
         if (!$purchase) {
             abort(403, 'Acesso não autorizado');
@@ -255,7 +259,10 @@ class PurchaseOrderController extends Controller
                 break;
         }
 
-        $purchase = PurchaseOrder::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $purchase = PurchaseOrder::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                ->orWhere('subsidiary_id', null);
+        })->first();
 
         if (!$purchase) {
             abort(403, 'Acesso não autorizado');
@@ -295,7 +302,10 @@ class PurchaseOrderController extends Controller
                 break;
         }
 
-        $purchase = PurchaseOrder::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $purchase = PurchaseOrder::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                ->orWhere('subsidiary_id', null);
+        })->first();
 
         if (!$purchase) {
             abort(403, 'Acesso não autorizado');
@@ -371,7 +381,10 @@ class PurchaseOrderController extends Controller
                 break;
         }
 
-        $purchase = PurchaseOrder::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $purchase = PurchaseOrder::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                ->orWhere('subsidiary_id', null);
+        })->first();
 
         if (!$purchase) {
             abort(403, 'Acesso não autorizado');
@@ -410,7 +423,10 @@ class PurchaseOrderController extends Controller
                 break;
         }
 
-        $purchase = PurchaseOrder::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $purchase = PurchaseOrder::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                ->orWhere('subsidiary_id', null);
+        })->first();
 
         if (!$purchase) {
             abort(403, 'Acesso não autorizado');
@@ -451,7 +467,10 @@ class PurchaseOrderController extends Controller
                 break;
         }
 
-        $purchase = PurchaseOrder::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $purchase = PurchaseOrder::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                ->orWhere('subsidiary_id', null);
+        })->first();
 
         if (!$purchase) {
             abort(403, 'Acesso não autorizado');
@@ -492,7 +511,10 @@ class PurchaseOrderController extends Controller
                 break;
         }
 
-        $purchase = PurchaseOrder::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $purchase = PurchaseOrder::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                ->orWhere('subsidiary_id', null);
+        })->first();
 
         if (!$purchase) {
             abort(403, 'Acesso não autorizado');
@@ -501,5 +523,144 @@ class PurchaseOrderController extends Controller
         $materials = Material::select('description')->where('purchase_orders_id', $purchase->id)->get();
 
         return view('admin.finance.purchase_order.pdf', compact('purchase', 'materials'));
+    }
+
+    public function changeStatus(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Editar Reembolsos')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->ids) {
+            return redirect()
+                ->back()
+                ->with('error', 'Selecione ao menos uma linha!');
+        }
+
+        $ids = explode(",", $request->ids);
+
+        $role = Auth::user()->roles->first()->name;
+        switch ($role) {
+            case 'Financeiro':
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
+                break;
+            case 'Gerente':
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
+        }
+
+        foreach ($ids as $id) {
+            $purchase = PurchaseOrder::where('id', $id)->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                    ->orWhere('subsidiary_id', null);
+            })->first();
+            if (!$purchase) {
+                abort(403, 'Acesso não autorizado');
+            }
+
+            $purchase->status = $purchase->status == 'não executada' ? 'executada' : 'não executada';
+            $purchase->update();
+        }
+
+        return redirect()
+            ->route('admin.finance-purchase-orders.index')
+            ->with('success', 'Ordens de Compra atualizadas!');
+    }
+
+    public function batchDelete(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Excluir Ordens de Compra')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->ids) {
+            return redirect()
+                ->back()
+                ->with('error', 'Selecione ao menos uma linha!');
+        }
+
+        $ids = explode(",", $request->ids);
+
+        $role = Auth::user()->roles->first()->name;
+        switch ($role) {
+            case 'Financeiro':
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
+                break;
+            case 'Gerente':
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
+        }
+
+        foreach ($ids as $id) {
+            $purchase = PurchaseOrder::where('id', $id)->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                    ->orWhere('subsidiary_id', null);
+            })->first();
+            if (!$purchase) {
+                abort(403, 'Acesso não autorizado');
+            }
+            $purchase->delete();
+        }
+
+        return redirect()
+            ->route('admin.finance-purchase-orders.index')
+            ->with('success', 'Ordens de Compra excluídas!');
+    }
+
+    public function changeValue(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Editar Ordens de Compra')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->ids) {
+            return redirect()
+                ->back()
+                ->with('error', 'Selecione ao menos uma linha!');
+        }
+
+        $ids = explode(",", $request->ids);
+
+        $role = Auth::user()->roles->first()->name;
+        switch ($role) {
+            case 'Financeiro':
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
+                break;
+            case 'Gerente':
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
+        }
+
+        foreach ($ids as $id) {
+            $purchase = PurchaseOrder::where('id', $id)->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'))
+                    ->orWhere('subsidiary_id', null);
+            })->first();
+            if (!$purchase) {
+                abort(403, 'Acesso não autorizado');
+            }
+
+            $purchase->value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $request->value)));
+            $purchase->update();
+        }
+
+        return redirect()
+            ->route('admin.finance-purchase-orders.index')
+            ->with('success', 'Ordens de Compra atualizadas!');
     }
 }

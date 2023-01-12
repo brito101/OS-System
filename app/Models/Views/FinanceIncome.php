@@ -16,6 +16,7 @@ class FinanceIncome extends Model
         'author',
         'subsidiary',
         'amount',
+        'due_date_pt'
     ];
 
     /** Access */
@@ -34,9 +35,9 @@ class FinanceIncome extends Model
         return (float) str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value)));
     }
 
-    public function getDueDateAttribute($value)
+    public function getDueDatePtAttribute($value)
     {
-        return date('d/m/Y', strtotime($value));
+        return date('d/m/Y', strtotime($this->due_date));
     }
 
     /** Aux */
