@@ -67,8 +67,9 @@
                             <input type="hidden" name="id" value="{{ $serviceOrder->id }}">
                             <div class="card-body">
 
-                                @if ((isset($serviceOrder->author->id) && $serviceOrder->author->id == Auth::user()->id) ||
-                                    Auth::user()->hasRole('Programador|Administrador'))
+                                @if (
+                                    (isset($serviceOrder->author->id) && $serviceOrder->author->id == Auth::user()->id) ||
+                                        Auth::user()->hasRole('Programador|Administrador'))
 
                                     <div class="d-flex flex-wrap justify-content-between">
                                         <div class="col-12 form-group px-0 mb-0">
@@ -398,15 +399,15 @@
                                         <label for="status">Status</label>
                                         <x-adminlte-select2 name="status" required>
                                             <option
+                                                {{ old('status') == 'Não iniciado' ? 'selected' : ($serviceOrder->status == 'Não iniciado' ? 'selected' : '') }}
+                                                value="Não iniciado">
+                                                Não iniciado</option>
+                                            <option
                                                 {{ old('status') == 'Aguardando orçamento' ? 'selected' : ($serviceOrder->status == 'Aguardando orçamento' ? 'selected' : '') }}
                                                 value="Aguardando orçamento">Aguardando orçamento</option>
                                             <option
                                                 {{ old('status') == 'Aguardando laudo' ? 'selected' : ($serviceOrder->status == 'Aguardando laudo' ? 'selected' : '') }}
                                                 value="Aguardando laudo">Aguardando laudo</option>
-                                            <option
-                                                {{ old('status') == 'Não iniciado' ? 'selected' : ($serviceOrder->status == 'Não iniciado' ? 'selected' : '') }}
-                                                value="Não iniciado">
-                                                Não iniciado</option>
                                             <option
                                                 {{ old('status') == 'Atrasado' ? 'selected' : ($serviceOrder->status == 'Atrasado' ? 'selected' : '') }}
                                                 value="Atrasado">

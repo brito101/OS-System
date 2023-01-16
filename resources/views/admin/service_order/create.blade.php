@@ -162,13 +162,13 @@
                                     <div class="col-12 col-md-6 form-group px-0 pr-md-2 mb-0">
                                         <label for="status">Status</label>
                                         <x-adminlte-select2 name="status" required>
+                                            <option {{ old('status') == 'Não iniciado' ? 'selected' : '' }}
+                                                value="Não iniciado">
+                                                Não iniciado</option>
                                             <option {{ old('status') == 'Aguardando orçamento' ? 'selected' : '' }}
                                                 value="Aguardando orçamento">Aguardando orçamento</option>
                                             <option {{ old('status') == 'Aguardando laudo' ? 'selected' : '' }}
                                                 value="Aguardando laudo">Aguardando laudo</option>
-                                            <option {{ old('status') == 'Não iniciado' ? 'selected' : '' }}
-                                                value="Não iniciado">
-                                                Não iniciado</option>
                                             <option {{ old('status') == 'Atrasado' ? 'selected' : '' }} value="Atrasado">
                                                 Atrasado</option>
                                             <option {{ old('status') == 'Iniciado' ? 'selected' : '' }} value="Iniciado">

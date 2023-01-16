@@ -161,6 +161,13 @@
                         <span class="info-box-number">{{ $serviceOrders->count() }}</span>
                     </div>
                 </div>
+                <div class="info-box mb-3 bg-gradient-danger">
+                    <span class="info-box-icon"><i class="fas fa-exclamation-triangle"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Não Iniciadas</span>
+                        <span class="info-box-number">{{ $serviceOrdersNotStarted }}</span>
+                    </div>
+                </div>
                 <div class="info-box mb-3 bg-gradient-light">
                     <span class="info-box-icon"><i class="fas fa-clock"></i></span>
                     <div class="info-box-content">
@@ -173,13 +180,6 @@
                     <div class="info-box-content">
                         <span class="info-box-text">Aguardando Laudo</span>
                         <span class="info-box-number">{{ $serviceOrderAwaitingReport }}</span>
-                    </div>
-                </div>
-                <div class="info-box mb-3 bg-gradient-danger">
-                    <span class="info-box-icon"><i class="fas fa-exclamation-triangle"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Não Iniciadas</span>
-                        <span class="info-box-number">{{ $serviceOrdersNotStarted }}</span>
                     </div>
                 </div>
                 <div class="info-box mb-3 bg-gradient-warning">
