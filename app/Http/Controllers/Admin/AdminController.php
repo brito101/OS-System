@@ -41,9 +41,11 @@ class AdminController extends Controller
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
                 $subsidiariesList = ModelsSubsidiary::whereIn('id', $managers)->get();
                 $states = array_unique($subsidiariesList->pluck('state')->toArray());
-                sort($states);
-                $statesSearch = implode(',', $states);
-                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
+                $providers = Provider::where(function ($query) use ($states) {
+                    foreach ($states as $state) {
+                        $query->orWhere('coverage', 'like', '%' . $state . '%');
+                    }
+                })->orWhere('coverage', null)->count();
                 $clients = Client::select('alias_name', 'trade_status')->where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $managers)->orWhere('subsidiary_id', null)->get();
                 /** Users */
                 $users = ViewsUser::all('type');
@@ -170,9 +172,11 @@ class AdminController extends Controller
                 $financiers = Auth::user()->financiers->pluck('subsidiary_id');
                 $subsidiariesList = ModelsSubsidiary::whereIn('id', $financiers)->get();
                 $states = array_unique($subsidiariesList->pluck('state')->toArray());
-                sort($states);
-                $statesSearch = implode(',', $states);
-                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
+                $providers = Provider::where(function ($query) use ($states) {
+                    foreach ($states as $state) {
+                        $query->orWhere('coverage', 'like', '%' . $state . '%');
+                    }
+                })->orWhere('coverage', null)->count();
                 $clients = Client::select('alias_name', 'trade_status')->where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $financiers)->orWhere('subsidiary_id', null)->get();
                 /** Users */
                 $programmers = 0;
@@ -256,9 +260,11 @@ class AdminController extends Controller
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiariesList = ModelsSubsidiary::whereIn('id', $collaborators)->get();
                 $states = array_unique($subsidiariesList->pluck('state')->toArray());
-                sort($states);
-                $statesSearch = implode(',', $states);
-                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
+                $providers = Provider::where(function ($query) use ($states) {
+                    foreach ($states as $state) {
+                        $query->orWhere('coverage', 'like', '%' . $state . '%');
+                    }
+                })->orWhere('coverage', null)->count();
                 $clients = Client::select('alias_name', 'trade_status')->where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $collaborators)->orWhere('subsidiary_id', null)->get();
                 /** Users */
                 $programmers = 0;
@@ -338,9 +344,11 @@ class AdminController extends Controller
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiariesList = ModelsSubsidiary::whereIn('id', $collaborators)->get();
                 $states = array_unique($subsidiariesList->pluck('state')->toArray());
-                sort($states);
-                $statesSearch = implode(',', $states);
-                $providers = Provider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->count();
+                $providers = Provider::where(function ($query) use ($states) {
+                    foreach ($states as $state) {
+                        $query->orWhere('coverage', 'like', '%' . $state . '%');
+                    }
+                })->orWhere('coverage', null)->count();
                 $clients = Client::select('alias_name', 'trade_status')->where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $collaborators)->orWhere('subsidiary_id', null)->get();
                 /** Users */
                 $programmers = 0;

@@ -35,17 +35,21 @@ class ProviderController extends Controller
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
                 $states = array_unique($subsidiaries->pluck('state')->toArray());
-                sort($states);
-                $statesSearch = implode(',', $states);
-                $providers = ViewsProvider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->get();
+                $providers = ViewsProvider::where(function ($query) use ($states) {
+                    foreach ($states as $state) {
+                        $query->orWhere('coverage', 'like', '%' . $state . '%');
+                    }
+                })->orWhere('coverage', null)->get();
                 break;
             case 'Gerente':
                 $managers = Auth::user()->managers->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
                 $states = array_unique($subsidiaries->pluck('state')->toArray());
-                sort($states);
-                $statesSearch = implode(',', $states);
-                $providers = ViewsProvider::where('coverage', 'like', '%' . $statesSearch . '%')->orWhere('coverage', null)->get();
+                $providers = ViewsProvider::where(function ($query) use ($states) {
+                    foreach ($states as $state) {
+                        $query->orWhere('coverage', 'like', '%' . $state . '%');
+                    }
+                })->orWhere('coverage', null)->get();
                 break;
             default:
                 $subsidiaries = Subsidiary::all();
