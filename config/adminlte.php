@@ -478,6 +478,26 @@ return [
             ]
         ],
         [
+            'text'        => 'Passagens',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-file-invoice-dollar',
+            'can'         => 'Acessar Pagamento de Passagens',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Pagamentos',
+                    'url'  => 'admin/ticket-payments',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Pagamento de Passagens',
+                ],
+                [
+                    'text' => 'Cadastro de Pagamento',
+                    'url'  => 'admin/ticket-payments/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Pagamento de Passagens',
+                ],
+            ]
+        ],
+        [
             'text'        => 'Estoque',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-box',

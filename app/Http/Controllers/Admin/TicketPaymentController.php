@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CommissionRequest;
-use App\Models\Commission;
+use App\Http\Requests\Admin\TicketPaymentRequest;
 use App\Models\Financier;
 use App\Models\Manager;
-use App\Models\Seller;
 use App\Models\Subsidiary;
+use App\Models\TicketPayment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
 
-class CommissionController extends Controller
+class TicketPaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,7 +21,7 @@ class CommissionController extends Controller
      */
     public function index(Request $request)
     {
-        if (!Auth::user()->hasPermissionTo('Listar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Listar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -31,51 +30,46 @@ class CommissionController extends Controller
         switch ($role) {
             case 'Financeiro':
                 $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $commissions = Commission::whereIn('subsidiary_id', $subsidiaries)->get();
+                $tickets = TicketPayment::where(function ($query) use ($subsidiaries) {
+                    $query->whereIn('subsidiary_id', $subsidiaries);
+                    $query->orWhere('subsidiary_id', null);
+                })->get();
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $commissions = Commission::whereIn('subsidiary_id', $subsidiaries)->get();
+                $tickets = TicketPayment::where(function ($query) use ($subsidiaries) {
+                    $query->whereIn('subsidiary_id', $subsidiaries);
+                    $query->orWhere('subsidiary_id', null);
+                })->get();
                 break;
             default:
-                $commissions = Commission::all();
+                $tickets = TicketPayment::all();
                 break;
         }
 
-        $sellers = Seller::orderBy('name')->get();
-
-        $payValue = Commission::where('status', 'pago')->whereIn('id', $commissions->pluck('id'))->sum('total_value');
-        $pay = 'R$ ' . \number_format($payValue, 2, ',', '.');
-
-        $receiveValue = Commission::where('status', 'pendente')->whereIn('id', $commissions->pluck('id'))->sum('total_value');
-        $receive = 'R$ ' . \number_format($receiveValue, 2, ',', '.');
-
-        $balance = 'R$ ' . \number_format($payValue - $receiveValue, 2, ',', '.');
-
         if ($request->ajax()) {
-            return Datatables::of($commissions)
+            return Datatables::of($tickets)
                 ->addIndexColumn()
                 ->addColumn('btnStatus', function ($row) {
                     $payLink = '';
                     if ($row->status == 'pendente') {
-                        $payLink = '<a class="btn btn-xs btn-danger mx-1 shadow" title="Alterar para pago" href="commissions/pay/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-down"></i></a>';
+                        $payLink = '<a class="btn btn-xs btn-danger mx-1 shadow" title="Alterar para pago" href="ticket-payments/pay/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-down"></i></a>';
                     }
                     if ($row->status == 'pago') {
-                        $payLink = '<a class="btn btn-xs btn-success mx-1 shadow" title="Alterar para pendente" href="commissions/receive/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-up"></i></a>';
+                        $payLink = '<a class="btn btn-xs btn-success mx-1 shadow" title="Alterar para pendente" href="ticket-payments/receive/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-up"></i></a>';
                     }
                     return $payLink;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="commissions/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="commissions/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="commissions/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão desta comissão?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>' . '<a class="btn btn-xs btn-success mx-1 shadow" title="Recibo" href="' . route('admin.commissions.receipt', ['id' => $row->id]) . '" target="_blank"><i class="fa fa-lg fa-fw fa-file-invoice-dollar"></i></a>';
+                    $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="ticket-payments/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="ticket-payments/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="ticket-payments/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste pagamento de passagem?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>' . '<a class="btn btn-xs btn-success mx-1 shadow" title="Recibo" href="' . route('admin.ticketPayments.receipt', ['id' => $row->id]) . '" target="_blank"><i class="fa fa-lg fa-fw fa-file-invoice-dollar"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['btnStatus', 'action'])
                 ->make(true);
         }
 
-        return view('admin.commissions.index', compact('pay', 'receive', 'balance', 'sellers'));
+        return view('admin.ticket-payments.index');
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -83,7 +77,7 @@ class CommissionController extends Controller
      */
     public function create()
     {
-        if (!Auth::user()->hasPermissionTo('Criar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Criar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -103,9 +97,7 @@ class CommissionController extends Controller
                 break;
         }
 
-        $sellers = Seller::all();
-
-        return view('admin.commissions.create', compact('subsidiaries', 'sellers'));
+        return view('admin.ticket-payments.create', compact('subsidiaries'));
     }
 
     /**
@@ -114,9 +106,9 @@ class CommissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CommissionRequest $request)
+    public function store(TicketPaymentRequest $request)
     {
-        if (!Auth::user()->hasPermissionTo('Criar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Criar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -124,11 +116,11 @@ class CommissionController extends Controller
 
         $data['user_id'] = Auth::user()->id;
 
-        $commission = Commission::create($data);
+        $ticketPayment = TicketPayment::create($data);
 
-        if ($commission->save()) {
+        if ($ticketPayment->save()) {
             return redirect()
-                ->route('admin.commissions.index')
+                ->route('admin.ticket-payments.index')
                 ->with('success', 'Cadastro realizado!');
         } else {
             return redirect()
@@ -146,7 +138,7 @@ class CommissionController extends Controller
      */
     public function show($id)
     {
-        if (!Auth::user()->hasPermissionTo('Listar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Listar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -166,13 +158,16 @@ class CommissionController extends Controller
                 break;
         }
 
-        $commission = Commission::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $ticketPayment = TicketPayment::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'));
+            $query->orWhere('subsidiary_id', null);
+        })->first();
 
-        if (!$commission) {
+        if (!$ticketPayment) {
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.commissions.show', compact('commission'));
+        return view('admin.ticket-payments.show', compact('ticketPayment'));
     }
 
     /**
@@ -183,7 +178,7 @@ class CommissionController extends Controller
      */
     public function edit($id)
     {
-        if (!Auth::user()->hasPermissionTo('Editar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Editar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -203,15 +198,17 @@ class CommissionController extends Controller
                 break;
         }
 
-        $commission = Commission::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $ticketPayment = TicketPayment::where('id', $id)
+            ->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'));
+                $query->orWhere('subsidiary_id', null);
+            })->first();
 
-        if (!$commission) {
+        if (!$ticketPayment) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $sellers = Seller::all();
-
-        return view('admin.commissions.edit', compact('commission', 'subsidiaries', 'sellers'));
+        return view('admin.ticket-payments.edit', compact('ticketPayment', 'subsidiaries'));
     }
 
     /**
@@ -221,23 +218,23 @@ class CommissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CommissionRequest $request, $id)
+    public function update(TicketPaymentRequest $request, $id)
     {
-        if (!Auth::user()->hasPermissionTo('Editar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Editar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $commission = Commission::find($id);
+        $ticketPayment = TicketPayment::find($id);
 
-        if (!$commission) {
+        if (!$ticketPayment) {
             abort(403, 'Acesso não autorizado');
         }
 
         $data = $request->all();
 
-        if ($commission->update($data)) {
+        if ($ticketPayment->update($data)) {
             return redirect()
-                ->route('admin.commissions.index')
+                ->route('admin.ticket-payments.index')
                 ->with('success', 'Atualização realizada!');
         } else {
             return redirect()
@@ -255,18 +252,18 @@ class CommissionController extends Controller
      */
     public function destroy($id)
     {
-        if (!Auth::user()->hasPermissionTo('Excluir Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Excluir Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $commission = Commission::find($id);
+        $ticketPayment = TicketPayment::find($id);
 
-        if (!$commission) {
+        if (!$ticketPayment) {
             abort(403, 'Acesso não autorizado');
         }
-        if ($commission->delete()) {
+        if ($ticketPayment->delete()) {
             return redirect()
-                ->route('admin.commissions.index')
+                ->route('admin.ticket-payments.index')
                 ->with('success', 'Exclusão realizada!');
         } else {
             return redirect()
@@ -277,7 +274,7 @@ class CommissionController extends Controller
 
     public function pay($id)
     {
-        if (!Auth::user()->hasPermissionTo('Editar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Editar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -297,18 +294,21 @@ class CommissionController extends Controller
                 break;
         }
 
-        $commission = Commission::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $ticketPayment = TicketPayment::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'));
+            $query->orWhere('subsidiary_id', null);
+        })->first();
 
-        if (!$commission) {
+        if (!$ticketPayment) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $commission->status = 'pago';
+        $ticketPayment->status = 'pago';
 
-        if ($commission->update()) {
+        if ($ticketPayment->update()) {
             return redirect()
-                ->route('admin.commissions.index')
-                ->with('success', 'Comissão marcada como paga!');
+                ->route('admin.ticket-payments.index')
+                ->with('success', 'Passagem marcada como paga!');
         } else {
             return redirect()
                 ->back()
@@ -318,7 +318,7 @@ class CommissionController extends Controller
 
     public function receive($id)
     {
-        if (!Auth::user()->hasPermissionTo('Editar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Editar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -338,18 +338,21 @@ class CommissionController extends Controller
                 break;
         }
 
-        $commission = Commission::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $ticketPayment = TicketPayment::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'));
+            $query->orWhere('subsidiary_id', null);
+        })->first();
 
-        if (!$commission) {
+        if (!$ticketPayment) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $commission->status = 'pendente';
+        $ticketPayment->status = 'pendente';
 
-        if ($commission->update()) {
+        if ($ticketPayment->update()) {
             return redirect()
-                ->route('admin.commissions.index')
-                ->with('success', 'Comissão marcada como pendente!');
+                ->route('admin.ticket-payments.index')
+                ->with('success', 'Passagem marcada como pendente!');
         } else {
             return redirect()
                 ->back()
@@ -359,7 +362,7 @@ class CommissionController extends Controller
 
     public function pdf($id)
     {
-        if (!Auth::user()->hasPermissionTo('Listar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Listar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -379,18 +382,21 @@ class CommissionController extends Controller
                 break;
         }
 
-        $commission = Commission::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $ticketPayment = TicketPayment::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'));
+            $query->orWhere('subsidiary_id', null);
+        })->first();
 
-        if (!$commission) {
+        if (!$ticketPayment) {
             abort(403, 'Acesso não autorizado');
         }
 
-        return view('admin.commissions.pdf', compact('commission'));
+        return view('admin.ticket-payments.pdf', compact('ticketPayment'));
     }
 
     public function changeStatus(Request $request)
     {
-        if (!Auth::user()->hasPermissionTo('Editar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Editar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -418,23 +424,27 @@ class CommissionController extends Controller
         }
 
         foreach ($ids as $id) {
-            $commission = Commission::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
-            if (!$commission) {
+            $ticketPayment = TicketPayment::where('id', $id)->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'));
+                $query->orWhere('subsidiary_id', null);
+            })->first();
+
+            if (!$ticketPayment) {
                 abort(403, 'Acesso não autorizado');
             }
 
-            $commission->status = $commission->status == 'pago' ? 'pendente' : 'pago';
-            $commission->update();
+            $ticketPayment->status = $ticketPayment->status == 'pago' ? 'pendente' : 'pago';
+            $ticketPayment->update();
         }
 
         return redirect()
-            ->route('admin.commissions.index')
+            ->route('admin.ticket-payments.index')
             ->with('success', 'Comissões atualizadas!');
     }
 
     function receipt($id)
     {
-        if (!Auth::user()->hasPermissionTo('Listar Comissões')) {
+        if (!Auth::user()->hasPermissionTo('Listar Pagamento de Passagens')) {
             abort(403, 'Acesso não autorizado');
         }
 
@@ -454,14 +464,15 @@ class CommissionController extends Controller
                 break;
         }
 
-        $commission = Commission::where('id', $id)->whereIn('subsidiary_id', $subsidiaries->pluck('id'))->first();
+        $ticketPayment = TicketPayment::where('id', $id)->where(function ($query) use ($subsidiaries) {
+            $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'));
+            $query->orWhere('subsidiary_id', null);
+        })->first();
 
-        if (!$commission) {
+        if (!$ticketPayment) {
             abort(403, 'Acesso não autorizado');
         }
 
-        $seller = Seller::find($commission->seller_id);
-
-        return view('admin.commissions.receipt', compact('commission', 'seller'));
+        return view('admin.ticket-payments.receipt', compact('ticketPayment'));
     }
 }

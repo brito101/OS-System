@@ -309,6 +309,7 @@ return [
         'resignation_date' => 'data de demissão',
         'reason_dismissal' => 'motivo da demissão',
         'genre' => 'gênero',
+        'employee' => 'funcionário',
     ],
 
 ];

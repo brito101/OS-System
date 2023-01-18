@@ -1391,6 +1391,87 @@ class RolesHasPermissionTableSeeder extends Seeder
                 'permission_id' => 96,
                 'role_id' => 5
             ],
+            /** Ticket Payments 97 to 101 (programmer, administrator, managers, financiers) */
+            [
+                'permission_id' => 97,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 97,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 97,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 97,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 98,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 98,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 98,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 98,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 99,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 99,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 99,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 99,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 100,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 100,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 100,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 100,
+                'role_id' => 5
+            ],
+            [
+                'permission_id' => 101,
+                'role_id' => 1
+            ],
+            [
+                'permission_id' => 101,
+                'role_id' => 2
+            ],
+            [
+                'permission_id' => 101,
+                'role_id' => 3
+            ],
+            [
+                'permission_id' => 101,
+                'role_id' => 5
+            ],
         ]);
     }
 }

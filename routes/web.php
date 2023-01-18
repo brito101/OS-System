@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\{
     SubsidiaryController,
     UserController,
     SiteController,
+    TicketPaymentController,
 };
 use App\Http\Controllers\Admin\ACL\{
     PermissionController,
@@ -138,6 +139,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/commissions/receive/{id}', [CommissionController::class, 'receive']);
         Route::get('/commissions/destroy/{id}', [CommissionController::class, 'destroy']);
         Route::resource('commissions', CommissionController::class);
+
+        /** Ticket Payments */
+        Route::get('/ticket-payments/receipt/{id}', [TicketPaymentController::class, 'receipt'])->name('ticketPayments.receipt');
+        Route::post('/ticket-payments/changeStatus', [TicketPaymentController::class, 'changeStatus'])->name('ticket-payments.changeStatus');
+        Route::get('ticket-payments-pdf/{id}', [TicketPaymentController::class, 'pdf'])->name('ticket-payments.pdf');
+        Route::get('/ticket-payments/pay/{id}', [TicketPaymentController::class, 'pay']);
+        Route::get('/ticket-payments/receive/{id}', [TicketPaymentController::class, 'receive']);
+        Route::get('/ticket-payments/destroy/{id}', [TicketPaymentController::class, 'destroy']);
+        Route::resource('ticket-payments', TicketPaymentController::class);
 
         /** Inventory */
         /** Products */
