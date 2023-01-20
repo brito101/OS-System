@@ -47,6 +47,12 @@ class TicketPaymentController extends Controller
                 break;
         }
 
+        $payValue = TicketPayment::where('status', 'pago')->whereIn('id', $tickets->pluck('id'))->sum('total_value');
+        $pay = 'R$ ' . \number_format($payValue, 2, ',', '.');
+        $receiveValue = TicketPayment::where('status', 'pendente')->whereIn('id', $tickets->pluck('id'))->sum('total_value');
+        $receive = 'R$ ' . \number_format($receiveValue, 2, ',', '.');
+        $balance = 'R$ ' . \number_format($payValue - $receiveValue, 2, ',', '.');
+
         if ($request->ajax()) {
             return Datatables::of($tickets)
                 ->addIndexColumn()
@@ -68,7 +74,7 @@ class TicketPaymentController extends Controller
                 ->make(true);
         }
 
-        return view('admin.ticket-payments.index');
+        return view('admin.ticket-payments.index', \compact('pay', 'receive', 'balance'));
     }
     /**
      * Show the form for creating a new resource.
@@ -439,7 +445,7 @@ class TicketPaymentController extends Controller
 
         return redirect()
             ->route('admin.ticket-payments.index')
-            ->with('success', 'Comissões atualizadas!');
+            ->with('success', 'Passagens atualizadas!');
     }
 
     function receipt($id)
@@ -474,5 +480,99 @@ class TicketPaymentController extends Controller
         }
 
         return view('admin.ticket-payments.receipt', compact('ticketPayment'));
+    }
+
+    public function batchDelete(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Excluir Pagamento de Passagens')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->ids) {
+            return redirect()
+                ->back()
+                ->with('error', 'Selecione ao menos uma linha!');
+        }
+
+        $ids = explode(",", $request->ids);
+
+        $role = Auth::user()->roles->first()->name;
+        switch ($role) {
+            case 'Financeiro':
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
+                break;
+            case 'Gerente':
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
+        }
+
+        foreach ($ids as $id) {
+            $ticketPayment = TicketPayment::where('id', $id)->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'));
+                $query->orWhere('subsidiary_id', null);
+            })->first();
+
+            if (!$ticketPayment) {
+                abort(403, 'Acesso não autorizado');
+            }
+            $ticketPayment->delete();
+        }
+
+        return redirect()
+            ->route('admin.ticket-payments.index')
+            ->with('success', 'Pagamentos de Passagens excluídos!');
+    }
+
+    public function changeValue(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Editar Pagamento de Passagens')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->ids) {
+            return redirect()
+                ->back()
+                ->with('error', 'Selecione ao menos uma linha!');
+        }
+
+        $ids = explode(",", $request->ids);
+
+        $role = Auth::user()->roles->first()->name;
+        switch ($role) {
+            case 'Financeiro':
+                $financiers = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $financiers)->get();
+                break;
+            case 'Gerente':
+                $managers = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $subsidiaries = Subsidiary::whereIn('id', $managers)->get();
+                break;
+            default:
+                $subsidiaries = Subsidiary::all();
+                break;
+        }
+
+        foreach ($ids as $id) {
+            $ticketPayment = TicketPayment::where('id', $id)->where(function ($query) use ($subsidiaries) {
+                $query->whereIn('subsidiary_id', $subsidiaries->pluck('id'));
+                $query->orWhere('subsidiary_id', null);
+            })->first();
+
+            if (!$ticketPayment) {
+                abort(403, 'Acesso não autorizado');
+            }
+
+            $ticketPayment->total_value = str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $request->value)));
+            $ticketPayment->update();
+        }
+
+        return redirect()
+            ->route('admin.ticket-payments.index')
+            ->with('success', 'Pagamentos de Passagens atualizados!');
     }
 }

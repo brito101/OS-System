@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\{
     CommissionController,
     EmployeeController,
     InventoryController,
+    KanbanController,
     ProductController,
     ProviderController,
     ScheduleController,
@@ -143,6 +144,8 @@ Route::group(['middleware' => ['auth']], function () {
         /** Ticket Payments */
         Route::get('/ticket-payments/receipt/{id}', [TicketPaymentController::class, 'receipt'])->name('ticketPayments.receipt');
         Route::post('/ticket-payments/changeStatus', [TicketPaymentController::class, 'changeStatus'])->name('ticket-payments.changeStatus');
+        Route::post('/ticket-payments/batchDelete', [TicketPaymentController::class, 'batchDelete'])->name('ticket-payments.batchDelete');
+        Route::post('/ticket-payments/changeValue', [TicketPaymentController::class, 'changeValue'])->name('ticket-payments.changeValue');
         Route::get('ticket-payments-pdf/{id}', [TicketPaymentController::class, 'pdf'])->name('ticket-payments.pdf');
         Route::get('/ticket-payments/pay/{id}', [TicketPaymentController::class, 'pay']);
         Route::get('/ticket-payments/receive/{id}', [TicketPaymentController::class, 'receive']);

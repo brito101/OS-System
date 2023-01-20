@@ -27,6 +27,41 @@
             <div class="row">
                 <div class="col-12">
 
+                    <div class="d-flex flex-wrap justify-content-between px-0">
+                        <div class="col-12 col-sm-6 col-md-4 px-0 pr-md-2">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-success elevation-1">
+                                    <i class="fas fa-fw fa-thumbs-up"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Passagens Pagas</span>
+                                    <span class="info-box-number">{{ $pay }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-4 px-0 px-md-2">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-down"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Passagens Pendentes</span>
+                                    <span class="info-box-number">{{ $receive }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-4 px-0 pl-md-2">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-primary elevation-1"><i
+                                        class="fas fa-money-bill-wave"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Balanço</span>
+                                    <span class="info-box-number">{{ $balance }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     @include('components.alert')
 
                     <div class="card">
@@ -56,19 +91,18 @@
                                 'dom' => '<"d-flex flex-wrap col-12 justify-content-between"Bf>rtip',
                                 'buttons' => [
                                     ['extend' => 'pageLength', 'className' => 'btn-default'],
-                                    ['extend' => 'copy', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-copy text-secondary"></i>', 'titleAttr' => 'Copiar', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
-                                    ['extend' => 'print', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-print text-info"></i>', 'titleAttr' => 'Imprimir', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
-                                    ['extend' => 'csv', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-csv text-primary"></i>', 'titleAttr' => 'Exportar para CSV', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
-                                    ['extend' => 'excel', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-excel text-success"></i>', 'titleAttr' => 'Exportar para Excel', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
-                                    ['extend' => 'pdf', 'className' => 'btn-default', 'text' => '<i class="fas  fa-fw fa-lg fa-file-pdf text-danger"></i>', 'titleAttr' => 'Exportar para PDF', 'exportOptions' => ['columns' => ':not([dt-no-export])']],
+                                    ['extend' => 'copy', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-copy text-secondary"></i>', 'titleAttr' => 'Copiar', 'exportOptions' => ['columns' => ':not([dt-no-export])'], 'footer' => true],
+                                    ['extend' => 'print', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-print text-info"></i>', 'titleAttr' => 'Imprimir', 'exportOptions' => ['columns' => ':not([dt-no-export])'], 'footer' => true],
+                                    ['extend' => 'csv', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-csv text-primary"></i>', 'titleAttr' => 'Exportar para CSV', 'exportOptions' => ['columns' => ':not([dt-no-export])'], 'footer' => true],
+                                    ['extend' => 'excel', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-excel text-success"></i>', 'titleAttr' => 'Exportar para Excel', 'exportOptions' => ['columns' => ':not([dt-no-export])'], 'footer' => true],
+                                    ['extend' => 'pdf', 'className' => 'btn-default', 'text' => '<i class="fas fa-fw fa-lg fa-file-pdf text-danger"></i>', 'titleAttr' => 'Exportar para PDF', 'exportOptions' => ['columns' => ':not([dt-no-export])'], 'footer' => true],
                                 ],
                             ];
                         @endphp
 
                         <div class="card-body pb-0">
                             <div class="d-flex flex-wrap justify-content-between">
-                                <div class="col-12 col-md-5">
-                                    <span class="text-muted text-sm px-2">Alterar visualização das colunas:</span>
+                                <div class="col-12 col-md-2">
                                     <div class="btn-group px-2" role="group" aria-label="Visualizar colunas">
                                         <button type="button" class="toggle-vis btn btn-info"
                                             data-column="1">Autor</button>
@@ -76,14 +110,49 @@
                                             data-column="2">Filial</button>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-7">
-                                    <span class="text-muted text-sm px-2">Alterar status dos lançamentos (clique nas linhas
-                                        para selecionar):</span>
-                                    <div class="btn-group px-2" role="group" aria-label="Altera status">
-                                        <form method="POST" action="{{ route('admin.ticket-payments.changeStatus') }}">
+
+                                <div class="col-12 col-md-10 d-flex flex-wrap justify-content-center">
+                                    <h5 class="col-12 h6 text-muted text-center">Alterações em lote</h5>
+                                    <div class="px-2 col-12 col-md-3 d-flex justify-content-center">
+                                        <form method="POST" action="{{ route('admin.ticket-payments.changeStatus') }}"
+                                            class="w-100">
                                             @csrf
-                                            <input type="hidden" name="ids" value="" id="ids">
-                                            <button type="submit" class="change-status btn btn-info">Alterar</button>
+                                            <input type="hidden" name="ids" value="" id="ids"
+                                                class="ids">
+                                            <button type="submit" id="change-status"
+                                                class="change-status btn btn-warning w-100"
+                                                data-confirm="Confirma a alteração de status?"><i
+                                                    class="fas fa-fw fa-sync"></i>
+                                                Status</button>
+                                        </form>
+                                    </div>
+                                    <div class="px-2 col-12 col-md-6 d-flex justify-content-center">
+                                        <form method="POST" action="{{ route('admin.ticket-payments.changeValue') }}"
+                                            class="d-flex flex-wrap justify-content-between w-100">
+                                            @csrf
+                                            <input type="hidden" name="ids" value="" id="ids"
+                                                class="ids">
+                                            <div class="form-group col-6 my-2 my-md-0 w-100">
+                                                <input type="text" name="value" class="money_format_2 form-control">
+                                            </div>
+                                            <div class="col-6">
+                                                <button type="submit" id="change-value"
+                                                    class="btn btn-success my-2 my-md-0 w-100"
+                                                    data-confirm="Confirma a alteração do valor?"><i
+                                                        class="fas fa-fw fa-money-bill"></i> Valor</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="px-2 col-12 col-md-3 d-flex justify-content-center">
+                                        <form method="POST" action="{{ route('admin.ticket-payments.batchDelete') }}"
+                                            class="w-100">
+                                            @csrf
+                                            <input type="hidden" name="ids" value="" id="ids"
+                                                class="ids">
+                                            <button type="submit" id="batch-delete" class="btn btn-danger w-100"
+                                                data-confirm="Confirma a exclusão desta seleção?"><i
+                                                    class="fas fa-fw fa-trash"></i>
+                                                Exclusão</button>
                                         </form>
                                     </div>
                                 </div>
@@ -92,7 +161,7 @@
 
                         <div class="card-body">
                             <x-adminlte-datatable id="table1" :heads="$heads" :heads="$heads" :config="$config"
-                                striped hoverable beautify />
+                                striped hoverable beautify with-footer="ticket-payments" />
                         </div>
                     </div>
                 </div>
@@ -118,7 +187,30 @@
                     ids.push(el.children[0].textContent);
                 }
             });
-            $("#ids").val(ids)
+            $(".ids").val(ids)
+        });
+
+        $("#batch-delete").on('click', function(e) {
+            if (!confirm($(this).data('confirm'))) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
+        });
+
+        $("#change-value").on('click', function(e) {
+            if (!confirm($(this).data('confirm'))) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
+        });
+
+        $("#change-status").on('click', function(e) {
+            if (!confirm($(this).data('confirm'))) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
         });
     </script>
+    <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/money.js') }}"></script>
 @endsection
