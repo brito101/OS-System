@@ -80,7 +80,7 @@
                             $config = [
                                 'order' => [[0, 'desc']],
                                 'ajax' => url('/admin/ticket-payments'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'author', 'name' => 'author', 'visible' => false], ['data' => 'subsidiary', 'name' => 'subsidiary', 'visible' => false], ['data' => 'employee', 'name' => 'employee'], ['data' => 'total_value', 'name' => 'amount'], ['data' => 'due_date_pt', 'name' => 'due_date'], ['data' => 'due_date_pt', 'name' => 'due_date_pt', 'visible' => false], ['data' => 'status', 'name' => 'status', 'visible' => false, 'searchable' => true], ['data' => 'btnStatus', 'name' => 'btnStatus'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'author', 'name' => 'author', 'visible' => false], ['data' => 'subsidiary', 'name' => 'subsidiary', 'visible' => false], ['data' => 'employee', 'name' => 'employee'], ['data' => 'total_value', 'name' => 'amount'], ['data' => 'due_date_pt', 'name' => 'due_date'], ['data' => 'due_date_pt', 'name' => 'due_date_pt', 'visible' => false], ['data' => 'status', 'name' => 'status', 'visible' => false, 'searchable' => true], ['data' => 'btnStatus', 'name' => 'status'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,
