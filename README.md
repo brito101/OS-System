@@ -3,6 +3,8 @@
 <h5>Pending Tasks</h5>
 <ol>    
     <li>Kanban</li>
+    https://alunos.b7web.com.br/curso/javascript/d7js-projeto-7-arrasta-e-solta
+    https://adminlte.io/themes/v3/pages/kanban.html#
     <li>Módulo de compartilhamento de documentos padronizados entre gerentes;</li>   
     <li>Módulo de orçamento;</li>
     <li>DCI;</li>
@@ -45,8 +47,9 @@
     <li>Comunicação via whats e mensagem;</li>
     <li>Colocar contrato e incluir novo estado para cliente e cadastrar contrato;</li>     
     <li>Módulo de Central de atendimentos;</li>
-    <li>Colocar anexação de comprovantes no pagamento de passagens; e</li>   
-    <li>Colocar módulo de cálculo de quilometro rodado e custo médio mensal refente a quilometragem dos veículos utilizados para serviço pelos colaboradores. Fórmula de cálculo: (km<sub>final</sub> - km<sub>inicial</sub>) / 30 * valor<sub>combustível</sub> + pedágio</li>
+    <li>Colocar anexação de comprovantes no pagamento de passagens;</li>   
+    <li>Colocar módulo de cálculo de quilometro rodado e custo médio mensal refente a quilometragem dos veículos utilizados para serviço pelos colaboradores. Fórmula de cálculo: (km<sub>final</sub> - km<sub>inicial</sub>) / 30 * valor<sub>combustível</sub> + pedágio; e</li>
+    <li>Remover campos obrigatórios na ordem de compra.</li>
 </ol>
 
 <p>Useful commands</p>
