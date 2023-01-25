@@ -48,8 +48,10 @@
     <li>Colocar contrato e incluir novo estado para cliente e cadastrar contrato;</li>     
     <li>Módulo de Central de atendimentos;</li>
     <li>Colocar anexação de comprovantes no pagamento de passagens;</li>   
-    <li>Colocar módulo de cálculo de quilometro rodado e custo médio mensal refente a quilometragem dos veículos utilizados para serviço pelos colaboradores. Fórmula de cálculo: (km<sub>final</sub> - km<sub>inicial</sub>) / 30 * valor<sub>combustível</sub> + pedágio; e</li>
-    <li>Remover campos obrigatórios na ordem de compra.</li>
+    <li>Colocar módulo de cálculo de quilometro rodado e custo médio mensal refente a quilometragem dos veículos utilizados para serviço pelos colaboradores. Fórmula de cálculo: (km<sub>final</sub> - km<sub>inicial</sub>) / 30 * valor<sub>combustível</sub> + pedágio;</li>
+    <li>Remover campos obrigatórios na ordem de compra; e</li>
+    <li>Apresentar informações de log dos manipuladores da OS (visualização e edição); e</li>
+    <li>Capturar localização do dispositivo no momento da manipulação da OS ou forçar o executar a inserir uma foto do local como obrigatória para editar a OS ou inserir fotos antes e depois da execução do serviço como prova de que a OS foi manipulada no local da sua execução.</li>
 </ol>
 
 <p>Useful commands</p>
