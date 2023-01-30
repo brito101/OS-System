@@ -376,7 +376,7 @@ class ServiceOrderController extends Controller
         }
 
         if (Auth::user()->hasAnyRole('Gerente|Colaborador|Colaborador-NI')) {
-            if ($serviceOrder->author->id == Auth::user()->id) {
+            if ($serviceOrder->author == Auth::user()->id) {
                 $data = $request->all();
             } else {
                 $data = $request->only(['status', 'costumer_signature', 'readiness_date', 'start_time', 'end_time']);
