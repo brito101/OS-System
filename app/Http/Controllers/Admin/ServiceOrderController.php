@@ -375,15 +375,15 @@ class ServiceOrderController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        if (Auth::user()->hasAnyRole('Gerente|Colaborador|Colaborador-NI')) {
-            if ($serviceOrder->author == Auth::user()->id) {
-                $data = $request->all();
-            } else {
-                $data = $request->only(['status', 'costumer_signature', 'readiness_date', 'start_time', 'end_time']);
-            }
-        } else {
-            $data = $request->all();
-        }
+        // if (Auth::user()->hasAnyRole('Gerente|Colaborador|Colaborador-NI')) {
+        //     if ($serviceOrder->author == Auth::user()->id) {
+        //         $data = $request->all();
+        //     } else {
+        //         $data = $request->only(['status', 'costumer_signature', 'readiness_date', 'start_time', 'end_time']);
+        //     }
+        // } else {
+        //     $data = $request->all();
+        // }
 
         $data = $request->all();
         if ($request->observations) {
