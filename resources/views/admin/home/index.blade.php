@@ -20,6 +20,66 @@
         </div>
     </div>
 
+    <section class="content px-0">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-fw fa-piggy-bank"></i> Grupo GAB - Dados Bancários</h3>
+            </div>
+            <div class="card-body d-flex flex-wrap justify-content-center justify-content-md-start">
+                {{-- ES Account --}}
+                <div class="px-0 pr-md-2">
+                    <x-adminlte-modal id="es1-account" title="Conta ES (Cora)" theme="success" icon="fas fa-piggy-bank"
+                        size='lg'>
+                        <h3>Conta ES</h3>
+                        <p><b>Banco Cora (403)</b></p>
+                        <p><b>Agência:</b> 3001</p>
+                        <p><b>Conta Corrente:</b> 36248146</p>
+                        <p><b>Chave Pix:</b> <span class="pix-account" style="cursor: copy">contacora@grupogab.com.br</span>
+                        </p>
+                        <x-slot name="footerSlot">
+                            <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal" />
+                        </x-slot>
+                    </x-adminlte-modal>
+                    <x-adminlte-button label="Conta ES (Cora)" data-toggle="modal" data-target="#es1-account"
+                        class="bg-success" />
+                </div>
+                {{-- RJ Account --}}
+                <div class="px-0 px-md-2">
+                    <x-adminlte-modal id="rj1-account" title="Conta RJ (Cora)" theme="success" icon="fas fa-piggy-bank"
+                        size='lg'>
+                        <h3>Conta RJ</h3>
+                        <p><b>Banco Cora (403)</b></p>
+                        <p><b>Agência:</b> 0001</p>
+                        <p><b>Conta Corrente:</b> 3082669-0</p>
+                        <p><b>Chave Pix:</b> <span class="pix-account" style="cursor: copy">coraggff@grupogab.com.br</span>
+                        </p>
+                        <x-slot name="footerSlot">
+                            <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal" />
+                        </x-slot>
+                    </x-adminlte-modal>
+                    <x-adminlte-button label="Conta RJ (Cora)" data-toggle="modal" data-target="#rj1-account"
+                        class="bg-success" />
+                </div>
+                {{-- RJ Account --}}
+                <div class="px-0 pl-md-2">
+                    <x-adminlte-modal id="rj2-account" title="Conta RJ (Bradesco)" theme="success" icon="fas fa-piggy-bank"
+                        size='lg'>
+                        <h3>Conta RJ</h3>
+                        <p><b>Banco Bradesco</b></p>
+                        <p><b>Agência:</b> 6738</p>
+                        <p><b>Conta Corrente:</b> 4821-6</p>
+                        <p><b>Chave Pix:</b> <span class="pix-account" style="cursor: copy">22.341.172/0001-61 </span></p>
+                        <x-slot name="footerSlot">
+                            <x-adminlte-button theme="danger" label="Fechar" data-dismiss="modal" />
+                        </x-slot>
+                    </x-adminlte-modal>
+                    <x-adminlte-button label="Conta RJ (Bradesco)" data-toggle="modal" data-target="#rj2-account"
+                        class="bg-success" />
+                </div>
+            </div>
+        </div>
+    </section>
+
     @can('Listar Eventos na Agenda')
         <section class="content px-0">
             <div class="card">
@@ -71,6 +131,13 @@
 @endsection
 
 @section('custom_js')
+    <script>
+        $(".pix-account").on("click", function(e) {
+            navigator.clipboard.writeText(e.target.textContent);
+            alert("Pix copiado: " + e.target.textContent);
+        });
+    </script>
+
     {{-- Clients --}}
     @if (Auth::user()->hasRole('Programador|Administrador|Gerente|Colaborador|Colaborador-NI'))
         <script>
