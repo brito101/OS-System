@@ -548,6 +548,13 @@ return [
                 ],
             ],
         ],
+        /** Kanban */
+        [
+            'text'        => 'Kanban',
+            'url'         => 'admin/kanban',
+            'icon'        => 'fas fa-fw fa-square',
+            'can'         => 'Acessar Kanban',
+        ],
         [
             'text'        => 'Atividades',
             'url'         => '#',

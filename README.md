@@ -2,9 +2,6 @@
 
 <h5>Pending Tasks</h5>
 <ol>    
-    <li>Kanban</li>
-    https://alunos.b7web.com.br/curso/javascript/d7js-projeto-7-arrasta-e-solta
-    https://adminlte.io/themes/v3/pages/kanban.html#
     <li>Apresentar na OS o endereço do cliente selecionado;</li>   
     <li>Módulo de compartilhamento de documentos padronizados entre gerentes;</li>   
     <li>Módulo de orçamento;</li>
