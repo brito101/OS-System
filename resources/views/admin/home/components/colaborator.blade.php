@@ -127,11 +127,25 @@
                         <span class="info-box-number">{{ $serviceOrderHoldingBudget }}</span>
                     </div>
                 </div>
+                <div class="info-box mb-3 bg-gradient-teal">
+                    <span class="info-box-icon"><i class="fas fa-crosshairs"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Orçamento Enviado</span>
+                        <span class="info-box-number">{{ $serviceOrderBudgetSend }}</span>
+                    </div>
+                </div>
                 <div class="info-box mb-3 bg-gradient-info">
                     <span class="info-box-icon"><i class="fas fa-clock"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Aguardando Laudo</span>
                         <span class="info-box-number">{{ $serviceOrderAwaitingReport }}</span>
+                    </div>
+                </div>
+                <div class="info-box mb-3 bg-gradient-indigo">
+                    <span class="info-box-icon"><i class="fas fa-arrow-alt-circle-right"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Laudo Enviado</span>
+                        <span class="info-box-number">{{ $serviceOrderReportSend }}</span>
                     </div>
                 </div>
                 <div class="info-box mb-3 bg-gradient-warning">
@@ -142,7 +156,7 @@
                     </div>
                 </div>
                 <div class="info-box mb-3 bg-gradient-primary">
-                    <span class="info-box-icon"><i class="fas fa-clock"></i></span>
+                    <span class="info-box-icon"><i class="fas fa-walking"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Em Andamento</span>
                         <span class="info-box-number">{{ $serviceOrdersStarted }}</span>
@@ -153,6 +167,13 @@
                     <div class="info-box-content">
                         <span class="info-box-text">Concluídas</span>
                         <span class="info-box-number">{{ $serviceOrdersConcluded }}</span>
+                    </div>
+                </div>
+                <div class="info-box mb-3 bg-gradient-lime">
+                    <span class="info-box-icon"><i class="fas fa-check-double"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Concluídas com envio de Proposta</span>
+                        <span class="info-box-number">{{ $serviceOrdersConcludedProposal }}</span>
                     </div>
                 </div>
                 <div class="info-box mb-3 bg-gradient-dark">

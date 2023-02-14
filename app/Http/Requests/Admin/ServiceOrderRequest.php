@@ -87,7 +87,7 @@ class ServiceOrderRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'execution_date' => 'required|date',
             'priority' => 'required|in:Baixa,Média,Alta,Urgente',
-            'status' => 'nullable|in:Aguardando orçamento,Aguardando laudo,Não iniciado,Atrasado,Iniciado,Concluído,Cancelado',
+            'status' => 'nullable|in:Aguardando orçamento,Orçamento enviado,Aguardando laudo,Laudo enviado,Não iniciado,Atrasado,Iniciado,Concluído,Concluído com envio de proposta,Cancelado',
             'deadline' => 'nullable|date',
             'appraisal' => 'nullable|Não avaliado,Péssimo,Ruim,Regular,Bom,Ótimo',
             'observations' => 'nullable|max:4000000000',

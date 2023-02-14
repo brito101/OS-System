@@ -2,6 +2,19 @@
 
 <h5>Pending Tasks</h5>
 <ol>    
+    <li>Alterar Estágios do Kanban para: 
+        <ul>
+            <li>Visita Agendada</li>
+            <li>Vistoria Executada</li>
+            <li>Envio de Proposta</li>
+            <li>Negociação</li>
+            <li>Assembléia Marcada</li>
+            <li>Fechamento</li>
+            <li>Perdido / Motivo</li>
+        </ul>
+    </li>
+    <li>Trocar novo cartão por "Novo Lead"</li>
+    <li>Alterar os inputs para: cliente, descrição do serviço ou produto e valor da proposta</li>
     <li>Apresentar na OS o endereço do cliente selecionado;</li>   
     <li>Módulo de compartilhamento de documentos padronizados entre gerentes;</li>   
     <li>Módulo de orçamento;</li>

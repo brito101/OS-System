@@ -77,11 +77,14 @@ class AdminController extends Controller
                     ->orWhere('user_id', Auth::user()->id)
                     ->orWhere('author_id', Auth::user()->id)->get();
                 $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                $serviceOrderBudgetSend = $serviceOrders->where('status', 'Orçamento enviado')->count();
                 $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
+                $serviceOrderReportSend = $serviceOrders->where('status', 'Laudo enviado')->count();
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
                 $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
                 $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                $serviceOrdersConcludedProposal = $serviceOrders->where('status', 'Concluído com envio de proposta')->count();
                 $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
                 $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
                 $order = ['Baixa', 'Média', 'Alta', 'Urgente'];
@@ -191,11 +194,14 @@ class AdminController extends Controller
                 /** Service Orders */
                 $serviceOrders = null;
                 $serviceOrderHoldingBudget = 0;
+                $serviceOrderBudgetSend = 0;
                 $serviceOrderAwaitingReport = 0;
+                $serviceOrderReportSend = 0;
                 $serviceOrdersNotStarted = 0;
                 $serviceOrdersLate = 0;
                 $serviceOrdersStarted = 0;
                 $serviceOrdersConcluded = 0;
+                $serviceOrdersConcludedProposal = 0;
                 $serviceOrdersCanceled = 0;
                 $serviceOrdersSubsidiary = 0;
                 $serviceOrdersPriorityChart = [];
@@ -295,11 +301,14 @@ class AdminController extends Controller
                     ->orWhere('user_id', Auth::user()->id)
                     ->orWhere('author_id', Auth::user()->id)->get();
                 $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                $serviceOrderBudgetSend = $serviceOrders->where('status', 'Orçamento enviado')->count();
                 $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
+                $serviceOrderReportSend = $serviceOrders->where('status', 'Laudo enviado')->count();
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
                 $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
                 $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                $serviceOrdersConcludedProposal = $serviceOrders->where('status', 'Concluído com envio de proposta')->count();
                 $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
                 $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
                 $order = ['Baixa', 'Média', 'Alta', 'Urgente'];
@@ -380,11 +389,14 @@ class AdminController extends Controller
                             ->orWhere('author', Auth::user()->id);
                     })->get();
                 $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                $serviceOrderBudgetSend = $serviceOrders->where('status', 'Orçamento enviado')->count();
                 $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
+                $serviceOrderReportSend = $serviceOrders->where('status', 'Laudo enviado')->count();
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
                 $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
                 $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                $serviceOrdersConcludedProposal = $serviceOrders->where('status', 'Concluído com envio de proposta')->count();
                 $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
                 $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
                 $order = ['Baixa', 'Média', 'Alta', 'Urgente'];
@@ -442,11 +454,14 @@ class AdminController extends Controller
                 /** Service Orders */
                 $serviceOrders = null;
                 $serviceOrderHoldingBudget = 0;
+                $serviceOrderBudgetSend = 0;
                 $serviceOrderAwaitingReport = 0;
+                $serviceOrderReportSend = 0;
                 $serviceOrdersNotStarted = 0;
                 $serviceOrdersLate = 0;
                 $serviceOrdersStarted = 0;
                 $serviceOrdersConcluded = 0;
+                $serviceOrdersConcludedProposal = 0;
                 $serviceOrdersCanceled = 0;
                 $serviceOrdersSubsidiary = 0;
                 $serviceOrdersPriorityChart = [];
@@ -526,11 +541,14 @@ class AdminController extends Controller
                 /** Service Orders */
                 $serviceOrders = ServiceOrder::all('status', 'priority', 'subsidiary');
                 $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                $serviceOrderBudgetSend = $serviceOrders->where('status', 'Orçamento enviado')->count();
                 $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
+                $serviceOrderReportSend = $serviceOrders->where('status', 'Laudo enviado')->count();
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
                 $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
                 $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                $serviceOrdersConcludedProposal = $serviceOrders->where('status', 'Concluído com envio de proposta')->count();
                 $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
                 $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
                 $order = ['Baixa', 'Média', 'Alta', 'Urgente'];
@@ -633,11 +651,14 @@ class AdminController extends Controller
 
             'serviceOrders',
             'serviceOrderHoldingBudget',
+            'serviceOrderBudgetSend',
             'serviceOrderAwaitingReport',
+            'serviceOrderReportSend',
             'serviceOrdersNotStarted',
             'serviceOrdersLate',
             'serviceOrdersStarted',
             'serviceOrdersConcluded',
+            'serviceOrdersConcludedProposal',
             'serviceOrdersCanceled',
             'serviceOrdersPriorityChart',
 

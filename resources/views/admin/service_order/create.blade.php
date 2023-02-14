@@ -167,14 +167,22 @@
                                                 Não iniciado</option>
                                             <option {{ old('status') == 'Aguardando orçamento' ? 'selected' : '' }}
                                                 value="Aguardando orçamento">Aguardando orçamento</option>
+                                            <option {{ old('status') == 'Orçamento enviado' ? 'selected' : '' }}
+                                                value="Orçamento enviado">Orçamento enviado</option>
                                             <option {{ old('status') == 'Aguardando laudo' ? 'selected' : '' }}
                                                 value="Aguardando laudo">Aguardando laudo</option>
+                                            <option {{ old('status') == 'Laudo enviado' ? 'selected' : '' }}
+                                                value="Laudo enviado">Laudo enviado</option>
                                             <option {{ old('status') == 'Atrasado' ? 'selected' : '' }} value="Atrasado">
                                                 Atrasado</option>
                                             <option {{ old('status') == 'Iniciado' ? 'selected' : '' }} value="Iniciado">
                                                 Iniciado</option>
                                             <option {{ old('status') == 'Concluído' ? 'selected' : '' }} value="Concluído">
                                                 Concluído</option>
+                                            <option
+                                                {{ old('status') == 'Concluído com envio de proposta' ? 'selected' : '' }}
+                                                value="Concluído com envio de proposta">
+                                                Concluído com envio de proposta</option>
                                             <option {{ old('status') == 'Cancelado' ? 'selected' : '' }} value="Cancelado">
                                                 Cancelado</option>
                                         </x-adminlte-select2>
