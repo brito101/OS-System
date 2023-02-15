@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\KanbanRequest;
+use App\Models\Collaborator;
 use App\Models\Kanban;
+use App\Models\Manager;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,17 +24,40 @@ class KanbanController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $draftKanbans = Kanban::where('user_id', Auth::user()->id)->where('status', 'rascunho')->get();
-        $doKanbans = Kanban::where('user_id', Auth::user()->id)->where('status', 'fazer')->get();
-        $progressKanbans = Kanban::where('user_id', Auth::user()->id)->where('status', 'progresso')->get();
-        $finishKanbans = Kanban::where('user_id', Auth::user()->id)->where('status', 'concluido')->get();
+        $role = Auth::user()->roles->first()->name;
 
-        $draftSum = 'R$ ' . \number_format(Kanban::where('user_id', Auth::user()->id)->where('status', 'rascunho')->sum('value'), 2, ',', '.');
-        $doSum = 'R$ ' . \number_format(Kanban::where('user_id', Auth::user()->id)->where('status', 'fazer')->sum('value'), 2, ',', '.');
-        $progressSum = 'R$ ' . \number_format(Kanban::where('user_id', Auth::user()->id)->where('status', 'progresso')->sum('value'), 2, ',', '.');
-        $finishSum = 'R$ ' . \number_format(Kanban::where('user_id', Auth::user()->id)->where('status', 'concluido')->sum('value'), 2, ',', '.');
+        switch ($role) {
+            case 'Colaborador':
+            case 'Colaborador-NI':
+                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                break;
+            default:
+                $clients = Client::all();
+                break;
+        }
 
-        return view('admin.kanban.index', \compact('draftKanbans', 'doKanbans', 'progressKanbans', 'finishKanbans', 'draftSum', 'doSum', 'progressSum', 'finishSum'));
+        $scheduledVisit = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Visita Agendada')->get();
+        $performedInspection = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Vistoria Executada')->get();
+        $submissionProposal = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Envio de Proposta')->get();
+        $negotiation = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Negociação')->get();
+        $scheduledMeeting = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Assembléia Marcada')->get();
+        $closure = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Fechamento')->get();
+        $lost = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Perdido')->get();
+
+        $scheduledVisitSum = 'R$ ' . \number_format(Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Visita Agendada')->sum('proposal'), 2, ',', '.');
+        $performedInspectionSum = 'R$ ' . \number_format(Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Vistoria Executada')->sum('proposal'), 2, ',', '.');
+        $submissionProposalSum = 'R$ ' . \number_format(Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Envio de Proposta')->sum('proposal'), 2, ',', '.');
+        $negotiationSum = 'R$ ' . \number_format(Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Negociação')->sum('proposal'), 2, ',', '.');
+        $scheduledMeetingSum = 'R$ ' . \number_format(Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Assembléia Marcada')->sum('proposal'), 2, ',', '.');
+        $closureSum = 'R$ ' . \number_format(Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Fechamento')->sum('proposal'), 2, ',', '.');
+        $lostSum = 'R$ ' . \number_format(Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Perdido')->sum('proposal'), 2, ',', '.');
+
+        return view('admin.kanban.index', \compact('scheduledVisit', 'performedInspection', 'submissionProposal', 'negotiation', 'scheduledMeeting', 'closure', 'lost', 'scheduledVisitSum', 'performedInspectionSum', 'submissionProposalSum', 'negotiationSum', 'scheduledMeetingSum', 'closureSum', 'lostSum', 'clients'));
     }
 
     /**
@@ -54,6 +80,23 @@ class KanbanController extends Controller
     {
         $data = $request->all();
 
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+            case 'Colaborador-NI':
+                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                break;
+            default:
+                $clients = Client::all();
+                break;
+        }
+
         if ($request->id == null) {
             if (!Auth::user()->hasPermissionTo('Criar Kanban')) {
                 abort(403, 'Acesso não autorizado');
@@ -71,7 +114,8 @@ class KanbanController extends Controller
                 abort(403, 'Acesso não autorizado');
             }
 
-            $kanban = Kanban::where('id', $request->item)->where('user_id', Auth::user()->id)->first();
+            $kanban = Kanban::where('id', $request->id)->whereIn('client_id', $clients->pluck('id'))->first();
+
             if ($kanban->update($data)) {
                 return redirect()
                     ->route('admin.kanban.index')
@@ -121,37 +165,71 @@ class KanbanController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $kanban = Kanban::where('id', $request->item)->where('user_id', Auth::user()->id)->first();
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+            case 'Colaborador-NI':
+                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                break;
+            default:
+                $clients = Client::all();
+                break;
+        }
+
+        $kanban = Kanban::where('id', $request->item)->whereIn('client_id', $clients->pluck('id'))->first();
+
         if ($kanban) {
             switch ($request->area) {
-                case 'draft':
-                    $kanban->status = 'rascunho';
+                case 'scheduledVisit':
+                    $kanban->status = 'Visita Agendada';
                     break;
-                case 'do':
-                    $kanban->status = 'fazer';
+                case 'performedInspection':
+                    $kanban->status = 'Vistoria Executada';
                     break;
-                case 'progress':
-                    $kanban->status = 'progresso';
+                case 'submissionProposal':
+                    $kanban->status = 'Envio de Proposta';
                     break;
-                case 'finish':
-                    $kanban->status = 'concluido';
+                case 'negotiation':
+                    $kanban->status = 'Negociação';
+                    break;
+                case 'scheduledMeeting':
+                    $kanban->status = 'Assembléia Marcada';
+                    break;
+                case 'closure':
+                    $kanban->status = 'Fechamento';
+                    break;
+                case 'lost':
+                    $kanban->status = 'Perdido';
                     break;
                 default:
                     $kanban->status = $kanban->status;
                     break;
             }
+
             if ($kanban->update()) {
 
-                $draftSum = Kanban::where('user_id', Auth::user()->id)->where('status', 'rascunho')->sum('value');
-                $doSum = Kanban::where('user_id', Auth::user()->id)->where('status', 'fazer')->sum('value');
-                $progressSum = Kanban::where('user_id', Auth::user()->id)->where('status', 'progresso')->sum('value');
-                $finishSum = Kanban::where('user_id', Auth::user()->id)->where('status', 'concluido')->sum('value');
+                $scheduledVisitSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Visita Agendada')->sum('proposal');
+                $performedInspectionSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Vistoria Executada')->sum('proposal');
+                $submissionProposalSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Envio de Proposta')->sum('proposal');
+                $negotiationSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Negociação')->sum('proposal');
+                $scheduledMeetingSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Assembléia Marcada')->sum('proposal');
+                $closureSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Fechamento')->sum('proposal');
+                $lostSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Perdido')->sum('proposal');
 
                 return response()->json([
-                    'draftSum' => (float)$draftSum,
-                    'doSum' => (float)$doSum,
-                    'progressSum' => (float)$progressSum,
-                    'finishSum' => (float)$finishSum
+                    'scheduledVisitSum' => (float)$scheduledVisitSum,
+                    'performedInspectionSum' => (float)$performedInspectionSum,
+                    'submissionProposalSum' => (float)$submissionProposalSum,
+                    'negotiationSum' => (float)$negotiationSum,
+                    'scheduledMeetingSum' => (float)$scheduledMeetingSum,
+                    'closureSum' => (float)$closureSum,
+                    'lostSum' => (float)$lostSum,
                 ]);
             }
         }
@@ -169,19 +247,43 @@ class KanbanController extends Controller
             abort(403, 'Acesso não autorizado');
         }
 
-        $kanban = Kanban::where('id', $request->itemDestroy)->where('user_id', Auth::user()->id)->first();
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Colaborador':
+            case 'Colaborador-NI':
+                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                break;
+            default:
+                $clients = Client::all();
+                break;
+        }
+
+        $kanban = Kanban::where('id', $request->itemDestroy)->whereIn('client_id', $clients->pluck('id'))->first();
         if ($kanban) {
             if ($kanban->delete()) {
-                $draftSum = Kanban::where('user_id', Auth::user()->id)->where('status', 'rascunho')->sum('value');
-                $doSum = Kanban::where('user_id', Auth::user()->id)->where('status', 'fazer')->sum('value');
-                $progressSum = Kanban::where('user_id', Auth::user()->id)->where('status', 'progresso')->sum('value');
-                $finishSum = Kanban::where('user_id', Auth::user()->id)->where('status', 'concluido')->sum('value');
+
+                $scheduledVisitSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Visita Agendada')->sum('proposal');
+                $performedInspectionSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Vistoria Executada')->sum('proposal');
+                $submissionProposalSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Envio de Proposta')->sum('proposal');
+                $negotiationSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Negociação')->sum('proposal');
+                $scheduledMeetingSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Assembléia Marcada')->sum('proposal');
+                $closureSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Fechamento')->sum('proposal');
+                $lostSum = Kanban::whereIn('client_id', $clients->pluck('id'))->where('status', 'Perdido')->sum('proposal');
 
                 return response()->json([
-                    'draftSum' => (float)$draftSum,
-                    'doSum' => (float)$doSum,
-                    'progressSum' => (float)$progressSum,
-                    'finishSum' => (float)$finishSum
+                    'scheduledVisitSum' => (float)$scheduledVisitSum,
+                    'performedInspectionSum' => (float)$performedInspectionSum,
+                    'submissionProposalSum' => (float)$submissionProposalSum,
+                    'negotiationSum' => (float)$negotiationSum,
+                    'scheduledMeetingSum' => (float)$scheduledMeetingSum,
+                    'closureSum' => (float)$closureSum,
+                    'lostSum' => (float)$lostSum,
                 ]);
             }
         }

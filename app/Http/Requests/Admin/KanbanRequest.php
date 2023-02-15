@@ -19,7 +19,7 @@ class KanbanRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'value'  => str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value))),
+            'proposal'  => str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->proposal))),
         ]);
     }
 
@@ -31,16 +31,16 @@ class KanbanRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:191',
+            'client_id' => 'required|exists:clients,id',
             'description' => 'max:191',
-            'value' => 'required|numeric|between:0,999999999.999',
+            'proposal' => 'required|numeric|between:0,999999999.999',
         ];
     }
 
     public function messages()
     {
         return [
-            'value.between' => 'O valor deve ser entre 0 e 999.999.999,999.',
+            'proposal.between' => 'O valor deve ser entre 0 e 999.999.999,999.',
         ];
     }
 }

@@ -310,6 +310,7 @@ return [
         'reason_dismissal' => 'motivo da demissão',
         'genre' => 'gênero',
         'employee' => 'funcionário',
+        'proposal' => 'propósta',
     ],
 
 ];

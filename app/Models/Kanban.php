@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Kanban extends Model
@@ -13,15 +14,21 @@ class Kanban extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'title',
+        'client_id',
         'description',
-        'value',
+        'proposal',
         'status',
         'user_id'
     ];
 
+    /** Relationships */
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
     /** Accessor */
-    public function getValueAttribute($value)
+    public function getProposalAttribute($value)
     {
         return 'R$ ' . \number_format($value, 2, ',', '.');
     }

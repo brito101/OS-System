@@ -15,10 +15,13 @@ class CreateKanbansTable extends Migration
     {
         Schema::create('kanbans', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->foreignId('client_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->text('description')->nullable();
-            $table->string('status')->default('rascunho');
-            $table->decimal('value', 11, 2)->default(0);
+            $table->string('status')->default('Visita Agendada');
+            $table->decimal('proposal', 11, 2)->default(0);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();

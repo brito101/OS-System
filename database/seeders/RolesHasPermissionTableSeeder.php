@@ -1491,14 +1491,6 @@ class RolesHasPermissionTableSeeder extends Seeder
             ],
             [
                 'permission_id' => 102,
-                'role_id' => 5
-            ],
-            [
-                'permission_id' => 102,
-                'role_id' => 6
-            ],
-            [
-                'permission_id' => 102,
                 'role_id' => 7
             ],
             [
@@ -1516,14 +1508,6 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 103,
                 'role_id' => 4
-            ],
-            [
-                'permission_id' => 103,
-                'role_id' => 5
-            ],
-            [
-                'permission_id' => 103,
-                'role_id' => 6
             ],
             [
                 'permission_id' => 103,
@@ -1547,14 +1531,6 @@ class RolesHasPermissionTableSeeder extends Seeder
             ],
             [
                 'permission_id' => 104,
-                'role_id' => 5
-            ],
-            [
-                'permission_id' => 104,
-                'role_id' => 6
-            ],
-            [
-                'permission_id' => 104,
                 'role_id' => 7
             ],
             [
@@ -1575,14 +1551,6 @@ class RolesHasPermissionTableSeeder extends Seeder
             ],
             [
                 'permission_id' => 105,
-                'role_id' => 5
-            ],
-            [
-                'permission_id' => 105,
-                'role_id' => 6
-            ],
-            [
-                'permission_id' => 105,
                 'role_id' => 7
             ],
             [
@@ -1600,14 +1568,6 @@ class RolesHasPermissionTableSeeder extends Seeder
             [
                 'permission_id' => 106,
                 'role_id' => 4
-            ],
-            [
-                'permission_id' => 106,
-                'role_id' => 5
-            ],
-            [
-                'permission_id' => 106,
-                'role_id' => 6
             ],
             [
                 'permission_id' => 106,
