@@ -548,12 +548,12 @@ return [
                 ],
             ],
         ],
-        /** Kanban */
+        /** Sales Funnel */
         [
-            'text'        => 'Kanban',
-            'url'         => 'admin/kanban',
-            'icon'        => 'fas fa-fw fa-square',
-            'can'         => 'Acessar Kanban',
+            'text'        => 'Funil de Vendas',
+            'url'         => 'admin/sales-funnel',
+            'icon'        => 'fas fa-fw fa-filter',
+            'can'         => 'Acessar Funil de Vendas',
         ],
         [
             'text'        => 'Atividades',

@@ -8,9 +8,9 @@ use App\Http\Controllers\Admin\{
     CommissionController,
     EmployeeController,
     InventoryController,
-    KanbanController,
     ProductController,
     ProviderController,
+    SalesFunnelController,
     ScheduleController,
     SellerController,
     ServiceOrderController,
@@ -167,10 +167,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('schedule-day/{day?}', [ScheduleController::class, 'day']);
         Route::resource('schedule', ScheduleController::class);
 
-        /** Kanban */
-        Route::post('kanban-ajax-update', [KanbanController::class, 'update'])->name('kanban-ajax.update');
-        Route::delete('kanban-ajax-destroy', [KanbanController::class, 'destroy'])->name('kanban-ajax.destroy');
-        Route::resource('kanban', KanbanController::class);
+        /** Sales  Funnel */
+        Route::post('sales-funnel-ajax-update', [SalesFunnelController::class, 'update'])->name('sales-funnel-ajax.update');
+        Route::delete('sales-funnel-ajax-destroy', [SalesFunnelController::class, 'destroy'])->name('sales-funnel-ajax.destroy');
+        Route::resource('sales-funnel', SalesFunnelController::class);
 
         /**
          * ACL

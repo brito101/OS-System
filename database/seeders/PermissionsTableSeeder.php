@@ -544,29 +544,29 @@ class PermissionsTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
-            /** Kanban 102 to 106 */
+            /** Sales Funnel 102 to 106 */
             [
-                'name' => 'Acessar Kanban',
+                'name' => 'Acessar Funil de Vendas',
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
             [
-                'name' => 'Listar Kanban',
+                'name' => 'Listar Funil de Vendas',
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
             [
-                'name' => 'Criar Kanban',
+                'name' => 'Criar Funil de Vendas',
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
             [
-                'name' => 'Editar Kanban',
+                'name' => 'Editar Funil de Vendas',
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
             [
-                'name' => 'Excluir Kanban',
+                'name' => 'Excluir Funil de Vendas',
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],

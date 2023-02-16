@@ -2,7 +2,6 @@
 
 <h5>Pending Tasks</h5>
 <ol>
-    <li>Mudar o título "Kanban" para "Funil de Vendas";</li>
     <li>Apresentar o vendedor do cliente no "Funil de Vendas";</li>
     <li>Implementar filtro de Vendedores no "Funil de Vendas";</li>
     <li>Implementar importação por planilha no "Funil de Vendas";</li>
