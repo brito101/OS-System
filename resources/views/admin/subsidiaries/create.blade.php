@@ -172,6 +172,7 @@
                                                 <option value="{{ $collaborator->id }}">
                                                     {{ $collaborator->name }}
                                                     ({{ $collaborator->email }})
+                                                    : {{ $collaborator->type }}
                                                 </option>
                                             @endforeach
                                         </x-adminlte-select-bs>

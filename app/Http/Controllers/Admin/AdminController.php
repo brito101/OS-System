@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Dash\CommercialCollaborator;
 use App\Http\Controllers\Controller;
 use App\Models\Collaborator;
 use App\Models\Commission;
@@ -349,6 +350,7 @@ class AdminController extends Controller
                     ->get();
                 break;
             case 'Colaborador':
+            case 'Colaborador Comercial':
                 /** Company */
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiariesList = ModelsSubsidiary::whereIn('id', $collaborators)->get();
@@ -382,6 +384,76 @@ class AdminController extends Controller
                     $clientsStatusChart['label'][] = $key;
                     $clientsStatusChart['data'][] = count($value);
                 }
+                /** Service Orders */
+                $serviceOrders = ServiceOrder::select('status', 'priority', 'subsidiary')
+                    ->where(function ($query) {
+                        $query->where('user_id', Auth::user()->id)
+                            ->orWhere('author', Auth::user()->id);
+                    })->get();
+                $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                $serviceOrderBudgetSend = $serviceOrders->where('status', 'Orçamento enviado')->count();
+                $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
+                $serviceOrderReportSend = $serviceOrders->where('status', 'Laudo enviado')->count();
+                $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
+                $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
+                $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
+                $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                $serviceOrdersConcludedProposal = $serviceOrders->where('status', 'Concluído com envio de proposta')->count();
+                $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
+                $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
+                $order = ['Baixa', 'Média', 'Alta', 'Urgente'];
+                $serviceOrdersPriority = $serviceOrders->where('status', 'Não iniciado')
+                    ->sortBy(function ($item) use ($order) {
+                        return array_search($item["priority"], $order);
+                    })->groupBy('priority')->toArray();
+                $serviceOrdersPriorityChart = ['label' => [], 'data' => []];
+                foreach ($serviceOrdersPriority as $key => $value) {
+                    $serviceOrdersPriorityChart['label'][] = $key;
+                    $serviceOrdersPriorityChart['data'][] = count($value);
+                }
+                /** Finance */
+                $invoices = null;
+                $financeIncomesChart = [];
+                $financeExpensesChart = [];
+                $financeRefundsChart = [];
+                $paid_incomes = 0;
+                $unpaid_incomes = 0;
+                $paid_expenses = 0;
+                $unpaid_expenses = 0;
+                $paid_refunds = 0;
+                $unpaid_refunds = 0;
+                $purchases = 0;
+                $exec_purchases = 0;
+                $unexec_purchases = 0;
+                //Commissions
+                $sellers = [];
+                $commissions = [];
+                //Inventory
+                $stocks = [];
+                // Schedule
+                $guests = Guest::where('user_id', Auth::user()->id)->pluck('schedule_id');
+                $schedules = Schedule::whereDate('start', '<=', date('Y-m-d'))
+                    ->whereDate('end', '>=', date('Y-m-d'))
+                    ->where('user_id', Auth::user()->id)
+                    ->orWhereIn('id', $guests)
+                    ->get();
+                break;
+            case 'Leiturista':
+            case 'Manutenção de Bomba':
+                /** Company */
+                $subsidiariesList = null;
+                $providers = 0;
+                $clients = null;
+                /** Users */
+                $programmers = 0;
+                $administrators = 0;
+                $managers = 0;
+                $financiers = 0;
+                $collaborators = 0;
+                $stockists = 0;
+                /** Clients */
+                $clientsSubsidiaryChart = [];
+                $clientsStatusChart = [];
                 /** Service Orders */
                 $serviceOrders = ServiceOrder::select('status', 'priority', 'subsidiary')
                     ->where(function ($query) {

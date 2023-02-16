@@ -52,6 +52,21 @@ class RolesTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
+            [
+                'name' => 'Colaborador Comercial',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Leiturista',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Manutenção de Bomba',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ]
         ]);
     }
 }

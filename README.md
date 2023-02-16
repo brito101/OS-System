@@ -2,30 +2,6 @@
 
 <h5>Pending Tasks</h5>
 <ol>
-    <li>Adicionar os perfis:
-        <ol>
-            <li>Colaborador Comercial
-                <ul>
-                    <li>Clientes</li>
-                    <li>Ordem de Serviço (em que esteja como executor)</li>
-                    <li>Kanban</li>
-                    <li>Agenda (com seus eventos)</li>
-                </ul>
-            </li>
-             <li>Leiturista
-                <ul>
-                    <li>Ordem de Serviço (em que esteja como executor)</li>
-                    <li>Agenda (com seus eventos)</li>
-                </ul>
-            </li>
-            <li>Manutenção de Bomba
-                <ul>
-                    <li>Ordem de Serviço (em que esteja como executor)</li>
-                    <li>Agenda (com seus eventos)</li>
-                </ul>
-            </li>
-        </ol>
-    </li>
     <li>Mudar o título "Kanban" para "Funil de Vendas";</li>
     <li>Apresentar o vendedor do cliente no "Funil de Vendas";</li>
     <li>Implementar filtro de Vendedores no "Funil de Vendas";</li>

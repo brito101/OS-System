@@ -180,6 +180,7 @@
                                                     {{ in_array($collaborator->id, $subsidiary->collaborators->pluck('user_id')->toArray()) ? 'selected' : '' }}>
                                                     {{ $collaborator->name }}
                                                     ({{ $collaborator->email }})
+                                                    : {{ $collaborator->type }}
                                                 </option>
                                             @endforeach
                                         </x-adminlte-select-bs>

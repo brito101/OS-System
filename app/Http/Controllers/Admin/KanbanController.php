@@ -29,6 +29,7 @@ class KanbanController extends Controller
         switch ($role) {
             case 'Colaborador':
             case 'Colaborador-NI':
+            case 'Colaborador Comercial':
                 $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
                 break;
@@ -85,6 +86,7 @@ class KanbanController extends Controller
         switch ($role) {
             case 'Colaborador':
             case 'Colaborador-NI':
+            case 'Colaborador Comercial':
                 $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
                 break;
@@ -170,6 +172,7 @@ class KanbanController extends Controller
         switch ($role) {
             case 'Colaborador':
             case 'Colaborador-NI':
+            case 'Colaborador Comercial':
                 $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
                 break;
@@ -252,6 +255,7 @@ class KanbanController extends Controller
         switch ($role) {
             case 'Colaborador':
             case 'Colaborador-NI':
+            case 'Colaborador Comercial':
                 $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
                 $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
                 break;

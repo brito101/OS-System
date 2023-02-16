@@ -41,6 +41,9 @@ class ServiceOrderController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador Comercial':
+            case 'Leiturista':
+            case 'Manutenção de Bomba':
                 $serviceOrders = ViewsServiceOrder::where('user_id', Auth::user()->id)
                     ->orWhere('author_id', Auth::user()->id)->get();
                 break;
@@ -90,7 +93,7 @@ class ServiceOrderController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="service-orders/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="service-orders/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' .
-                        (($row->author_id == Auth::user()->id && Auth::user()->hasAnyRole('Gerente|Colaborador') || Auth::user()->hasAnyRole('Programador|Administrador')) ? '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="service-orders/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão desta ordem de serviço?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>' : '');
+                        (($row->author_id == Auth::user()->id && Auth::user()->hasAnyRole('Gerente|Colaborador|Colaborador-NI|Colaborador Comercial|Leiturista|Manutenção de Bomba') || Auth::user()->hasAnyRole('Programador|Administrador')) ? '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="service-orders/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão desta ordem de serviço?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>' : '');
                     return $btn;
                 })
                 ->rawColumns(['priority', 'action'])
@@ -116,6 +119,9 @@ class ServiceOrderController extends Controller
         switch ($role) {
             case 'Colaborador':
             case 'Colaborador-NI':
+            case 'Colaborador Comercial':
+            case 'Leiturista':
+            case 'Manutenção de Bomba':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
                 $clients = Client::where('trade_status', '!=', 'Restrito')->orderBy('name')->get();
@@ -219,6 +225,9 @@ class ServiceOrderController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador Comercial':
+            case 'Leiturista':
+            case 'Manutenção de Bomba':
                 $serviceOrder = ServiceOrder::where('id', $id)
                     ->where(function ($query) {
                         $query->where('user_id', Auth::user()->id)
@@ -272,6 +281,9 @@ class ServiceOrderController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador Comercial':
+            case 'Leiturista':
+            case 'Manutenção de Bomba':
                 $collaborators = Auth::user()->collaborators->pluck('subsidiary_id');
                 $subsidiaries = Subsidiary::whereIn('id', $collaborators)->get();
                 $serviceOrder = ServiceOrder::where('id', $id)
@@ -343,6 +355,9 @@ class ServiceOrderController extends Controller
 
         switch ($role) {
             case 'Colaborador':
+            case 'Colaborador Comercial':
+            case 'Leiturista':
+            case 'Manutenção de Bomba':
                 $serviceOrder = ServiceOrder::where('id', $id)
                     ->where(function ($query) {
                         $query->where('user_id', Auth::user()->id)

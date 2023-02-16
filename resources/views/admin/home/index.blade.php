@@ -126,6 +126,18 @@
                 @include('admin.home.components.stock')
             @endif
 
+            @if (Auth::user()->hasRole('Colaborador Comercial'))
+                @include('admin.home.components.commercial-colaborator')
+            @endif
+
+            @if (Auth::user()->hasRole('Leiturista'))
+                @include('admin.home.components.reader')
+            @endif
+
+            @if (Auth::user()->hasRole('Manutenção de Bomba'))
+                @include('admin.home.components.maintenance')
+            @endif
+
         </div>
     </section>
 @endsection
@@ -139,7 +151,7 @@
     </script>
 
     {{-- Clients --}}
-    @if (Auth::user()->hasRole('Programador|Administrador|Gerente|Colaborador|Colaborador-NI'))
+    @if (Auth::user()->hasRole('Programador|Administrador|Gerente|Colaborador|Colaborador-NI|Colaborador Comercial'))
         <script>
             const clientsSubsidiary = document.getElementById('clients-subsidiary-chart');
             if (clientsSubsidiary) {
@@ -227,7 +239,8 @@
         </script>
     @endif
     {{-- Service Orders --}}
-    @if (Auth::user()->hasRole('Programador|Administrador|Gerente|Colaborador|Colaborador-NI'))
+    @if (Auth::user()->hasRole(
+            'Programador|Administrador|Gerente|Colaborador|Colaborador-NI|Colaborador Comercial|Leiturista|Manutenção de Bomba'))
         <script>
             const serviceOrdersPriority = document.getElementById('service-orders-priority-chart');
             if (serviceOrdersPriority) {
