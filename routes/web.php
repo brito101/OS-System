@@ -168,9 +168,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('schedule', ScheduleController::class);
 
         /** Sales  Funnel */
+        Route::post('sales-funnel-search-seller', [SalesFunnelController::class, 'index'])->name('sales-funnel.search-seller');
         Route::post('sales-funnel-ajax-update', [SalesFunnelController::class, 'update'])->name('sales-funnel-ajax.update');
         Route::delete('sales-funnel-ajax-destroy', [SalesFunnelController::class, 'destroy'])->name('sales-funnel-ajax.destroy');
         Route::resource('sales-funnel', SalesFunnelController::class);
+        Route::post('sales-funnel-import', [SalesFunnelController::class, 'fileImport'])->name('sales-funnel.import');
 
         /**
          * ACL

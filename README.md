@@ -2,10 +2,6 @@
 
 <h5>Pending Tasks</h5>
 <ol>
-    <li>Apresentar o vendedor do cliente no "Funil de Vendas";</li>
-    <li>Implementar filtro de Vendedores no "Funil de Vendas";</li>
-    <li>Implementar importação por planilha no "Funil de Vendas";</li>
-    <li>Apresentar o número de cartões em cada coluna no "Funil de Vendas";</li>
     <li>Apresentar na OS o endereço do cliente selecionado;</li>
     <li>Criar página específica para as OS do dia ou não concluídas para facilitar a elaboração do roteiro;</li>
     <li>Módulo de compartilhamento de documentos padronizados entre gerentes;</li>   
@@ -54,8 +50,10 @@
     <li>Colocar módulo de cálculo de quilometro rodado e custo médio mensal refente a quilometragem dos veículos utilizados para serviço pelos colaboradores. Fórmula de cálculo: (km<sub>final</sub> - km<sub>inicial</sub>) / 30 * valor<sub>combustível</sub> + pedágio;</li>
     <li>Remover campos obrigatórios na ordem de compra;</li>
     <li>Apresentar informações de log dos manipuladores da OS (visualização e edição); e</li>
-    <li>Capturar localização do dispositivo no momento da manipulação da OS ou forçar o executar a inserir uma foto do local como obrigatória para editar a OS ou inserir fotos antes e depois da execução do serviço como prova de que a OS foi manipulada no local da sua execução; e</li>
-    <li>Colocar campo de vendedor nas receitas.</li>
+    <li>Capturar localização do dispositivo no momento da manipulação da OS ou forçar o executar a inserir uma foto do local como obrigatória para editar a OS ou inserir fotos antes e depois da execução do serviço como prova de que a OS foi manipulada no local da sua execução;</li>
+    <li>Colocar campo de vendedor nas receitas;</li>
+    <li>Colocar documentação de substituição de medidor no sistema; e</li>
+    <li>Colocar documentação de finalização de obra no sistema.</li>
 </ol>
 
 <p>Useful commands</p>

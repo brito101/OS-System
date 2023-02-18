@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SalesFunnelRequest;
+use App\Imports\SalesFunnelImport;
 use App\Models\Client;
 use App\Models\Collaborator;
 use App\Models\Manager;
 use App\Models\SalesFunnel;
+use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalesFunnelController extends Controller
 {
@@ -18,7 +21,7 @@ class SalesFunnelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (!Auth::user()->hasPermissionTo('Listar Funil de Vendas')) {
             abort(403, 'Acesso não autorizado');
@@ -31,34 +34,57 @@ class SalesFunnelController extends Controller
             case 'Colaborador-NI':
             case 'Colaborador Comercial':
                 $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->orderBy('name')->get();
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                $clients = Client::where('trade_status', '!=', 'Restrito')->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->orderBy('name')->get();
                 break;
             default:
-                $clients = Client::all();
+                $clients = Client::orderBy('name')->get();
                 break;
         }
 
-        $scheduledVisit = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Visita Agendada')->get();
-        $performedInspection = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Vistoria Executada')->get();
-        $submissionProposal = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Envio de Proposta')->get();
-        $negotiation = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Negociação')->get();
-        $scheduledMeeting = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Assembléia Marcada')->get();
-        $closure = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Fechamento')->get();
-        $lost = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Perdido')->get();
+        $seller_id = null;
+        if ($request->seller_id) {
+            $seller = Seller::find($request->seller_id);
+        }
 
-        $scheduledVisitSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Visita Agendada')->sum('proposal'), 2, ',', '.');
-        $performedInspectionSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Vistoria Executada')->sum('proposal'), 2, ',', '.');
-        $submissionProposalSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Envio de Proposta')->sum('proposal'), 2, ',', '.');
-        $negotiationSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Negociação')->sum('proposal'), 2, ',', '.');
-        $scheduledMeetingSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Assembléia Marcada')->sum('proposal'), 2, ',', '.');
-        $closureSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Fechamento')->sum('proposal'), 2, ',', '.');
-        $lostSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Perdido')->sum('proposal'), 2, ',', '.');
+        if (isset($seller) && $seller->id) {
+            $seller_id = $seller->id;
+            $clientsSearch = Client::whereIn('id', $clients->pluck('id'))->where('seller_id', $seller->id)->get();
+        } else {
+            $clientsSearch = $clients;
+        }
 
-        return view('admin.sales-funnel.index', \compact('scheduledVisit', 'performedInspection', 'submissionProposal', 'negotiation', 'scheduledMeeting', 'closure', 'lost', 'scheduledVisitSum', 'performedInspectionSum', 'submissionProposalSum', 'negotiationSum', 'scheduledMeetingSum', 'closureSum', 'lostSum', 'clients'));
+        $scheduledVisit = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Visita Agendada')->get();
+        $performedInspection = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Vistoria Executada')->get();
+        $submissionProposal = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Envio de Proposta')->get();
+        $negotiation = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Negociação')->get();
+        $scheduledMeeting = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Assembléia Marcada')->get();
+        $closure = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Fechamento')->get();
+        $lost = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Perdido')->get();
+
+        $scheduledVisitSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Visita Agendada')->sum('proposal'), 2, ',', '.');
+        $performedInspectionSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Vistoria Executada')->sum('proposal'), 2, ',', '.');
+        $submissionProposalSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Envio de Proposta')->sum('proposal'), 2, ',', '.');
+        $negotiationSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Negociação')->sum('proposal'), 2, ',', '.');
+        $scheduledMeetingSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Assembléia Marcada')->sum('proposal'), 2, ',', '.');
+        $closureSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Fechamento')->sum('proposal'), 2, ',', '.');
+        $lostSum = 'R$ ' . \number_format(SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Perdido')->sum('proposal'), 2, ',', '.');
+
+        $scheduledVisitCount = $scheduledVisit->count();
+        $performedInspectionCount = $performedInspection->count();
+        $submissionProposalCount = $submissionProposal->count();
+        $negotiationCount = $negotiation->count();
+        $scheduledMeetingCount = $scheduledMeeting->count();
+        $closureCount = $closure->count();
+        $lostCount = $lost->count();
+
+        $sellers = Seller::whereIn('id', $clients->pluck('seller_id'))
+            ->distinct()->orderBy('name')->get(['id', 'name']);
+
+        return view('admin.sales-funnel.index', \compact('scheduledVisit', 'performedInspection', 'submissionProposal', 'negotiation', 'scheduledMeeting', 'closure', 'lost', 'scheduledVisitSum', 'performedInspectionSum', 'submissionProposalSum', 'negotiationSum', 'scheduledMeetingSum', 'closureSum', 'lostSum', 'clients', 'scheduledVisitCount', 'performedInspectionCount', 'submissionProposalCount', 'negotiationCount', 'scheduledMeetingCount', 'closureCount', 'lostCount', 'sellers', 'seller_id'));
     }
 
     /**
@@ -217,13 +243,33 @@ class SalesFunnelController extends Controller
 
             if ($salesFunnel->update()) {
 
-                $scheduledVisitSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Visita Agendada')->sum('proposal');
-                $performedInspectionSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Vistoria Executada')->sum('proposal');
-                $submissionProposalSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Envio de Proposta')->sum('proposal');
-                $negotiationSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Negociação')->sum('proposal');
-                $scheduledMeetingSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Assembléia Marcada')->sum('proposal');
-                $closureSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Fechamento')->sum('proposal');
-                $lostSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Perdido')->sum('proposal');
+                $seller_id = null;
+                if ($request->seller_id) {
+                    $seller = Seller::find($request->seller_id);
+                }
+
+                if (isset($seller) && $seller->id) {
+                    $seller_id = $seller->id;
+                    $clientsSearch = Client::whereIn('id', $clients->pluck('id'))->where('seller_id', $seller->id)->get();
+                } else {
+                    $clientsSearch = $clients;
+                }
+
+                $scheduledVisitSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Visita Agendada')->sum('proposal');
+                $performedInspectionSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Vistoria Executada')->sum('proposal');
+                $submissionProposalSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Envio de Proposta')->sum('proposal');
+                $negotiationSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Negociação')->sum('proposal');
+                $scheduledMeetingSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Assembléia Marcada')->sum('proposal');
+                $closureSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Fechamento')->sum('proposal');
+                $lostSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Perdido')->sum('proposal');
+
+                $scheduledVisitCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Visita Agendada')->count();
+                $performedInspectionCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Vistoria Executada')->count();
+                $submissionProposalCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Envio de Proposta')->count();
+                $negotiationCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Negociação')->count();
+                $scheduledMeetingCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Assembléia Marcada')->count();
+                $closureCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Fechamento')->count();
+                $lostCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Perdido')->count();
 
                 return response()->json([
                     'scheduledVisitSum' => (float)$scheduledVisitSum,
@@ -233,6 +279,13 @@ class SalesFunnelController extends Controller
                     'scheduledMeetingSum' => (float)$scheduledMeetingSum,
                     'closureSum' => (float)$closureSum,
                     'lostSum' => (float)$lostSum,
+                    'scheduledVisitCount' => (int) $scheduledVisitCount,
+                    'performedInspectionCount' => (int) $performedInspectionCount,
+                    'submissionProposalCount' => (int) $submissionProposalCount,
+                    'negotiationCount' => (int) $negotiationCount,
+                    'scheduledMeetingCount' => (int) $scheduledMeetingCount,
+                    'closureCount' => (int) $closureCount,
+                    'lostCount' => (int) $lostCount,
                 ]);
             }
         }
@@ -273,13 +326,33 @@ class SalesFunnelController extends Controller
         if ($kanban) {
             if ($kanban->delete()) {
 
-                $scheduledVisitSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Visita Agendada')->sum('proposal');
-                $performedInspectionSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Vistoria Executada')->sum('proposal');
-                $submissionProposalSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Envio de Proposta')->sum('proposal');
-                $negotiationSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Negociação')->sum('proposal');
-                $scheduledMeetingSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Assembléia Marcada')->sum('proposal');
-                $closureSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Fechamento')->sum('proposal');
-                $lostSum = SalesFunnel::whereIn('client_id', $clients->pluck('id'))->where('status', 'Perdido')->sum('proposal');
+                $seller_id = null;
+                if ($request->seller_id) {
+                    $seller = Seller::find($request->seller_id);
+                }
+
+                if (isset($seller) && $seller->id) {
+                    $seller_id = $seller->id;
+                    $clientsSearch = Client::whereIn('id', $clients->pluck('id'))->where('seller_id', $seller->id)->get();
+                } else {
+                    $clientsSearch = $clients;
+                }
+
+                $scheduledVisitSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Visita Agendada')->sum('proposal');
+                $performedInspectionSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Vistoria Executada')->sum('proposal');
+                $submissionProposalSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Envio de Proposta')->sum('proposal');
+                $negotiationSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Negociação')->sum('proposal');
+                $scheduledMeetingSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Assembléia Marcada')->sum('proposal');
+                $closureSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Fechamento')->sum('proposal');
+                $lostSum = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Perdido')->sum('proposal');
+
+                $scheduledVisitCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Visita Agendada')->count();
+                $performedInspectionCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Vistoria Executada')->count();
+                $submissionProposalCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Envio de Proposta')->count();
+                $negotiationCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Negociação')->count();
+                $scheduledMeetingCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Assembléia Marcada')->count();
+                $closureCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Fechamento')->count();
+                $lostCount = SalesFunnel::whereIn('client_id', $clientsSearch->pluck('id'))->where('status', 'Perdido')->count();
 
                 return response()->json([
                     'scheduledVisitSum' => (float)$scheduledVisitSum,
@@ -289,8 +362,31 @@ class SalesFunnelController extends Controller
                     'scheduledMeetingSum' => (float)$scheduledMeetingSum,
                     'closureSum' => (float)$closureSum,
                     'lostSum' => (float)$lostSum,
+                    'scheduledVisitCount' => (int) $scheduledVisitCount,
+                    'performedInspectionCount' => (int) $performedInspectionCount,
+                    'submissionProposalCount' => (int) $submissionProposalCount,
+                    'negotiationCount' => (int) $negotiationCount,
+                    'scheduledMeetingCount' => (int) $scheduledMeetingCount,
+                    'closureCount' => (int) $closureCount,
+                    'lostCount' => (int) $lostCount,
                 ]);
             }
         }
+    }
+
+    public function fileImport(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Criar Funil de Vendas')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        if (!$request->file()) {
+            return redirect()
+                ->back()
+                ->with('error', 'Nenhum arquivo selecionado!');
+        }
+
+        Excel::import(new SalesFunnelImport, $request->file('file')->store('temp'));
+        return back()->with('success', 'Importação realizada!');
     }
 }

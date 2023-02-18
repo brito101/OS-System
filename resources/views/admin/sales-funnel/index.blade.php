@@ -1,5 +1,6 @@
 @extends('adminlte::page')
 @section('plugins.select2', true)
+@section('plugins.BsCustomFileInput', true)
 
 @section('title', '- Funil de Vendas')
 
@@ -78,55 +79,83 @@
                         </x-adminlte-modal>
 
                         {{-- Example button to open modal --}}
-                        <x-adminlte-button label="Novo Lead" data-toggle="modal" data-target="#modalKanban" class="bg-teal"
-                            id="modalButton" icon="fas fa fa-plus" />
+                        <div class="d-flex flex-wrap justify-content-between">
+                            <x-adminlte-button label="Novo Lead" data-toggle="modal" data-target="#modalKanban" class="bg-teal"
+                                id="modalButton" icon="fas fa fa-plus" />
+
+                            <a class="btn btn-secondary" href="{{ Storage::url('worksheets/sales_funnel.xlsx') }}"
+                                download>Download
+                                Planilha</a>
+                        </div>
 
                     </div>
                 @endcan
 
+                <div class="col-12 col-md-6 mt-3">
+                    <div class="card card-solid">
+                        <div class="card-header">
+                            <i class="fas fa-fw fa-search"></i> Pesquisa por Vendedor
+                        </div>
+                        <form method="POST" action="{{ route('admin.sales-funnel.search-seller') }}">
+                            @csrf
+                            <div class="card-body pb-0">
+                                <div class="d-flex flex-wrap justify-content-start">
+                                    <div class="col-12 col-md-7 form-group px-0 pr-2">
+                                        <x-adminlte-select2 name="seller_id" required>
+                                            <option disabled selected value="">Selecione</option>
+                                            @foreach ($sellers as $seller)
+                                                <option {{ old('seller_id') == $seller->id ? 'selected' : '' }}
+                                                    value="{{ $seller->id }}">{{ $seller->name }}
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select2>
+                                    </div>
+                                    <div class="col-12 col-md-5 form-group px-0 pl-2">
+                                        <button type="submit" class="btn btn-primary">Pequisar</button>
+                                        @if (Route::current()->getName() == 'admin.sales-funnel.search-seller')
+                                            <a href="{{ route('admin.sales-funnel.index') }}"
+                                                class="btn btn-secondary mx-0 ml-md-2"><i
+                                                    class="fas fa-arrow-circle-left"></i> Voltar</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                @can('Criar Funil de Vendas')
+                    <div class="col-12 col-md-6 mt-3">
+                        <div class="card card-solid">
+                            <div class="card-header">
+                                <i class="fas fa-fw fa-upload"></i> Importação de planilha para cadastro
+                            </div>
+                            <form action="{{ route('admin.sales-funnel.import') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="card-body d-flex flex-wrap justify-content-between">
+                                    <x-adminlte-input-file name="file" class="col-12 col-md-9"
+                                        placeholder="Selecione o arquivo..." legend="Selecionar" />
+                                    <button class="btn btn-primary col-12 col-md-3 h-25">Importar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                @endcan
+
                 <div class="row d-flex flex-nowrap px-2 h-100 pt-2" style="overflow-x: auto">
+
                     <div class="col-12 col-md-3 p-2">
                         <div class="card card-row card-light">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Visita Agendada
+                                    Visita Agendada <span class="badge badge-pill badge-dark"
+                                        id="scheduledVisitCount">{{ $scheduledVisitCount }}</span>
                                 </h3>
                             </div>
                             <div class="card-body draggable-area" data-area="scheduledVisit">
                                 @foreach ($scheduledVisit as $kanban)
-                                    <div draggable="true" class="draggable-item" data-item="{{ $kanban->id }}">
-                                        <div class="card card-secondary card-outline">
-                                            <div class="card-header" data-toggle="collapse"
-                                                href="#collapse{{ $kanban->id }}" role="button" aria-expanded="false"
-                                                aria-controls="collapse{{ $kanban->id }}">
-                                                <h5 class="card-title" data-client_id="{{ $kanban->client_id }}">
-                                                    <span
-                                                        class="btn btn-tool btn-link">#{{ $kanban->id }}</span>{{ $kanban->client->name }}
-                                                </h5>
-                                                <div class="card-tools">
-                                                    <a href="#" class="btn btn-tool kanban-edit"
-                                                        data-edit="{{ $kanban->id }}">
-                                                        <i class="fas fa-pen"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-tool kanban-trash"
-                                                        data-trash="{{ $kanban->id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="collapse" id="collapse{{ $kanban->id }}">
-                                                <div class="card-body">
-                                                    <p>
-                                                        {{ $kanban->description }}
-                                                    </p>
-                                                    <p>
-                                                        {{ $kanban->proposal }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('admin.sales-funnel.components.kanban-card')
                                 @endforeach
                             </div>
                             <div class="px-4">
@@ -139,44 +168,13 @@
                         <div class="card card-row card-secondary">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Vistoria Executada
+                                    Vistoria Executada <span class="badge badge-pill badge-dark"
+                                        id="performedInspectionCount">{{ $performedInspectionCount }}</span>
                                 </h3>
                             </div>
                             <div class="card-body draggable-area" data-area="performedInspection">
                                 @foreach ($performedInspection as $kanban)
-                                    <div draggable="true" class="draggable-item" data-item="{{ $kanban->id }}">
-                                        <div class="card card-secondary card-outline">
-                                            <div class="card-header" data-toggle="collapse"
-                                                href="#collapse{{ $kanban->id }}" role="button" aria-expanded="false"
-                                                aria-controls="collapse{{ $kanban->id }}">
-                                                <h5 class="card-title" data-client_id="{{ $kanban->client_id }}">
-                                                    <span
-                                                        class="btn btn-tool btn-link">#{{ $kanban->id }}</span>{{ $kanban->client->name }}
-                                                </h5>
-                                                <div class="card-tools">
-                                                    <a href="#" class="btn btn-tool kanban-edit"
-                                                        data-edit="{{ $kanban->id }}">
-                                                        <i class="fas fa-pen"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-tool kanban-trash"
-                                                        data-trash="{{ $kanban->id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="collapse" id="collapse{{ $kanban->id }}">
-                                                <div class="card-body">
-                                                    <p>
-                                                        {{ $kanban->description }}
-                                                    </p>
-                                                    <p>
-                                                        {{ $kanban->proposal }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('admin.sales-funnel.components.kanban-card')
                                 @endforeach
                             </div>
                             <div class="px-4">
@@ -189,44 +187,13 @@
                         <div class="card card-row card-primary">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Envio de Proposta
+                                    Envio de Proposta <span class="badge badge-pill badge-dark"
+                                        id="submissionProposalCount">{{ $submissionProposalCount }}</span>
                                 </h3>
                             </div>
                             <div class="card-body draggable-area" data-area="submissionProposal">
                                 @foreach ($submissionProposal as $kanban)
-                                    <div draggable="true" class="draggable-item" data-item="{{ $kanban->id }}">
-                                        <div class="card card-secondary card-outline">
-                                            <div class="card-header" data-toggle="collapse"
-                                                href="#collapse{{ $kanban->id }}" role="button" aria-expanded="false"
-                                                aria-controls="collapse{{ $kanban->id }}">
-                                                <h5 class="card-title" data-client_id="{{ $kanban->client_id }}">
-                                                    <span
-                                                        class="btn btn-tool btn-link">#{{ $kanban->id }}</span>{{ $kanban->client->name }}
-                                                </h5>
-                                                <div class="card-tools">
-                                                    <a href="#" class="btn btn-tool kanban-edit"
-                                                        data-edit="{{ $kanban->id }}">
-                                                        <i class="fas fa-pen"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-tool kanban-trash"
-                                                        data-trash="{{ $kanban->id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="collapse" id="collapse{{ $kanban->id }}">
-                                                <div class="card-body">
-                                                    <p>
-                                                        {{ $kanban->description }}
-                                                    </p>
-                                                    <p>
-                                                        {{ $kanban->proposal }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('admin.sales-funnel.components.kanban-card')
                                 @endforeach
                             </div>
                             <div class="px-4">
@@ -239,44 +206,13 @@
                         <div class="card card-row card-orange">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Negociação
+                                    Negociação <span class="badge badge-pill badge-dark"
+                                        id="negotiationCount">{{ $negotiationCount }}</span>
                                 </h3>
                             </div>
                             <div class="card-body draggable-area" data-area="negotiation">
                                 @foreach ($negotiation as $kanban)
-                                    <div draggable="true" class="draggable-item" data-item="{{ $kanban->id }}">
-                                        <div class="card card-secondary card-outline">
-                                            <div class="card-header" data-toggle="collapse"
-                                                href="#collapse{{ $kanban->id }}" role="button" aria-expanded="false"
-                                                aria-controls="collapse{{ $kanban->id }}">
-                                                <h5 class="card-title" data-client_id="{{ $kanban->client_id }}">
-                                                    <span
-                                                        class="btn btn-tool btn-link">#{{ $kanban->id }}</span>{{ $kanban->client->name }}
-                                                </h5>
-                                                <div class="card-tools">
-                                                    <a href="#" class="btn btn-tool kanban-edit"
-                                                        data-edit="{{ $kanban->id }}">
-                                                        <i class="fas fa-pen"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-tool kanban-trash"
-                                                        data-trash="{{ $kanban->id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="collapse" id="collapse{{ $kanban->id }}">
-                                                <div class="card-body">
-                                                    <p>
-                                                        {{ $kanban->description }}
-                                                    </p>
-                                                    <p>
-                                                        {{ $kanban->proposal }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('admin.sales-funnel.components.kanban-card')
                                 @endforeach
                             </div>
                             <div class="px-4">
@@ -289,44 +225,13 @@
                         <div class="card card-row card-warning">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Assembléia Marcada
+                                    Assembléia Marcada <span class="badge badge-pill badge-dark"
+                                        id="scheduledMeetingCount">{{ $scheduledMeetingCount }}</span>
                                 </h3>
                             </div>
                             <div class="card-body draggable-area" data-area="scheduledMeeting">
                                 @foreach ($scheduledMeeting as $kanban)
-                                    <div draggable="true" class="draggable-item" data-item="{{ $kanban->id }}">
-                                        <div class="card card-secondary card-outline">
-                                            <div class="card-header" data-toggle="collapse"
-                                                href="#collapse{{ $kanban->id }}" role="button" aria-expanded="false"
-                                                aria-controls="collapse{{ $kanban->id }}">
-                                                <h5 class="card-title" data-client_id="{{ $kanban->client_id }}">
-                                                    <span
-                                                        class="btn btn-tool btn-link">#{{ $kanban->id }}</span>{{ $kanban->client->name }}
-                                                </h5>
-                                                <div class="card-tools">
-                                                    <a href="#" class="btn btn-tool kanban-edit"
-                                                        data-edit="{{ $kanban->id }}">
-                                                        <i class="fas fa-pen"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-tool kanban-trash"
-                                                        data-trash="{{ $kanban->id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="collapse" id="collapse{{ $kanban->id }}">
-                                                <div class="card-body">
-                                                    <p>
-                                                        {{ $kanban->description }}
-                                                    </p>
-                                                    <p>
-                                                        {{ $kanban->proposal }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('admin.sales-funnel.components.kanban-card')
                                 @endforeach
                             </div>
                             <div class="px-4">
@@ -339,44 +244,13 @@
                         <div class="card card-row card-success">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Fechamento
+                                    Fechamento <span class="badge badge-pill badge-dark"
+                                        id="closureCount">{{ $closureCount }}</span>
                                 </h3>
                             </div>
                             <div class="card-body draggable-area" data-area="closure">
                                 @foreach ($closure as $kanban)
-                                    <div draggable="true" class="draggable-item" data-item="{{ $kanban->id }}">
-                                        <div class="card card-secondary card-outline">
-                                            <div class="card-header" data-toggle="collapse"
-                                                href="#collapse{{ $kanban->id }}" role="button" aria-expanded="false"
-                                                aria-controls="collapse{{ $kanban->id }}">
-                                                <h5 class="card-title" data-client_id="{{ $kanban->client_id }}">
-                                                    <span
-                                                        class="btn btn-tool btn-link">#{{ $kanban->id }}</span>{{ $kanban->client->name }}
-                                                </h5>
-                                                <div class="card-tools">
-                                                    <a href="#" class="btn btn-tool kanban-edit"
-                                                        data-edit="{{ $kanban->id }}">
-                                                        <i class="fas fa-pen"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-tool kanban-trash"
-                                                        data-trash="{{ $kanban->id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="collapse" id="collapse{{ $kanban->id }}">
-                                                <div class="card-body">
-                                                    <p>
-                                                        {{ $kanban->description }}
-                                                    </p>
-                                                    <p>
-                                                        {{ $kanban->proposal }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('admin.sales-funnel.components.kanban-card')
                                 @endforeach
                             </div>
                             <div class="px-4">
@@ -389,44 +263,13 @@
                         <div class="card card-row card-danger">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Perdido / Motivo
+                                    Perdido / Motivo <span class="badge badge-pill badge-dark"
+                                        id="lostCount">{{ $lostCount }}</span>
                                 </h3>
                             </div>
                             <div class="card-body draggable-area" data-area="lost">
                                 @foreach ($lost as $kanban)
-                                    <div draggable="true" class="draggable-item" data-item="{{ $kanban->id }}">
-                                        <div class="card card-secondary card-outline">
-                                            <div class="card-header" data-toggle="collapse"
-                                                href="#collapse{{ $kanban->id }}" role="button" aria-expanded="false"
-                                                aria-controls="collapse{{ $kanban->id }}">
-                                                <h5 class="card-title" data-client_id="{{ $kanban->client_id }}">
-                                                    <span
-                                                        class="btn btn-tool btn-link">#{{ $kanban->id }}</span>{{ $kanban->client->name }}
-                                                </h5>
-                                                <div class="card-tools">
-                                                    <a href="#" class="btn btn-tool kanban-edit"
-                                                        data-edit="{{ $kanban->id }}">
-                                                        <i class="fas fa-pen"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-tool kanban-trash"
-                                                        data-trash="{{ $kanban->id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="collapse" id="collapse{{ $kanban->id }}">
-                                                <div class="card-body">
-                                                    <p>
-                                                        {{ $kanban->description }}
-                                                    </p>
-                                                    <p>
-                                                        {{ $kanban->proposal }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('admin.sales-funnel.components.kanban-card')
                                 @endforeach
                             </div>
                             <div class="px-4">
@@ -445,6 +288,7 @@
     <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('js/money.js') }}"></script>
     <script>
+        const seller_id = {{ $seller_id ?? 'null' }};
         let item = null;
         let area = null;
         let itemDestroy = null;
@@ -459,7 +303,8 @@
                 url: '{{ route('admin.sales-funnel-ajax.update') }}',
                 data: {
                     item,
-                    area
+                    area,
+                    seller_id
                 },
                 success: function(res) {
                     item = null;
@@ -493,6 +338,14 @@
                         style: 'currency',
                         currency: 'BRL'
                     }));
+
+                    $('#scheduledVisitCount').text(res.scheduledVisitCount);
+                    $('#performedInspectionCount').text(res.performedInspectionCount);
+                    $('#submissionProposalCount').text(res.submissionProposalCount);
+                    $('#negotiationCount').text(res.negotiationCount);
+                    $('#scheduledMeetingCount').text(res.scheduledMeetingCount);
+                    $('#closureCount').text(res.closureCount);
+                    $('#lostCount').text(res.lostCount);
                 },
             });
         }
@@ -539,7 +392,8 @@
                     type: 'DELETE',
                     url: '{{ route('admin.sales-funnel-ajax.destroy') }}',
                     data: {
-                        itemDestroy
+                        itemDestroy,
+                        seller_id
                     },
                     success: function(res) {
                         itemDestroy = null;
@@ -574,6 +428,15 @@
                             style: 'currency',
                             currency: 'BRL'
                         }));
+
+                        $('#scheduledVisitCount').text(res.scheduledVisitCount);
+                        $('#performedInspectionCount').text(res.performedInspectionCount);
+                        $('#submissionProposalCount').text(res.submissionProposalCount);
+                        $('#negotiationCount').text(res.negotiationCount);
+                        $('#scheduledMeetingCount').text(res.scheduledMeetingCount);
+                        $('#closureCount').text(res.closureCount);
+                        $('#lostCount').text(res.lostCount);
+
                         $(e.currentTarget).parent().parent().parent().remove();
                         alert('Exclusão Realizada');
                     },
@@ -587,10 +450,10 @@
             formModal[1].value = (itemEditId);
             let client_id = $(e.currentTarget).parent().parent().children()[0].dataset.client_id;
             $("#client_id").select2("val", `${client_id}`);
-            formModal[3].value = ($(e.currentTarget).parent().parent().parent().children()[1].firstElementChild
-                .children[0].innerText).trim();
-            formModal[4].value = ($(e.currentTarget).parent().parent().parent().children()[1].firstElementChild
-                .children[1].innerText).trim();
+            formModal[3].value = $(e.currentTarget).parent().parent().parent().find(".kanban_description")
+                .text();
+            formModal[4].value = $(e.currentTarget).parent().parent().parent().find(".kanban_proposal")
+                .text();
         });
 
         $("#modalButton").on("click", function() {

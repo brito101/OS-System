@@ -20,10 +20,6 @@ class EmployeeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEm
      */
     public function model(array $row)
     {
-        if (!$row['nome']) {
-            dd($row);
-        }
-
         return new Employee([
             'name' => $row['nome'],
             'alias_name' => $row['nome_social'],
