@@ -52,8 +52,9 @@
     <li>Apresentar informações de log dos manipuladores da OS (visualização e edição); e</li>
     <li>Capturar localização do dispositivo no momento da manipulação da OS ou forçar o executar a inserir uma foto do local como obrigatória para editar a OS ou inserir fotos antes e depois da execução do serviço como prova de que a OS foi manipulada no local da sua execução;</li>
     <li>Colocar campo de vendedor nas receitas;</li>
-    <li>Colocar documentação de substituição de medidor no sistema; e</li>
-    <li>Colocar documentação de finalização de obra no sistema.</li>
+    <li>Colocar documentação de substituição de medidor no sistema;</li>
+    <li>Colocar documentação de finalização de obra no sistema; e</li>
+    <li>Sistematizar planilha de orçamento.</li>
 </ol>
 
 <p>Useful commands</p>
