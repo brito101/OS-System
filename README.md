@@ -6,6 +6,7 @@
     <li>Criar página específica para as OS do dia ou não concluídas para facilitar a elaboração do roteiro;</li>
     <li>Módulo de compartilhamento de documentos padronizados entre gerentes;</li>   
     <li>Módulo de orçamento;</li>
+    <li>Adicionar campo "data de assinatura de contrato" no cadastro de clientes e no cadastro de leads;</li>
     <li>DCI;</li>
     <li>Módulo de medição digital;</li>
     <li>Replicar módulo de clientes no módulo de medição digital;</li>    
