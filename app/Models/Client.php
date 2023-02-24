@@ -48,4 +48,10 @@ class Client extends Model
     {
         return 'R$ ' . \number_format($value, 2, ',', '.');
     }
+
+    /** Aux */
+    public function getAddress()
+    {
+        return ($this->street ? $this->street . ', ' : '') . ($this->number ? 'nº ' . $this->number . '. ' : '') . ($this->neighborhood ? 'Bairro: ' . $this->neighborhood : '') . '. ' . $this->city . '-' . $this->state . '. CEP: ' . $this->zipcode . '. ' . ($this->complement ?? $this->complement);
+    }
 }

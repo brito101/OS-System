@@ -40,11 +40,11 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 5], 'NS', 'Atividade', 'Filial', 'Autor', 'Cliente', 'Participante', 'Prioridade', 'Prazo', 'Status', 'Prontificação', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'NS', 'Atividade', 'Filial', 'Autor', 'Cliente', 'Endereço', 'Participante', 'Prioridade', 'Prazo', 'Status', 'Prontificação', ['label' => 'Ações', 'no-export' => true, 'width' => 15]];
                             $config = [
                                 'order' => [[0, 'desc']],
                                 'ajax' => url('/admin/service-orders'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'number_series', 'name' => 'number_series'], ['data' => 'activity', 'name' => 'activity'], ['data' => 'subsidiary', 'name' => 'subsidiary'], ['data' => 'author', 'name' => 'author'], ['data' => 'client', 'name' => 'client'], ['data' => 'collaborator', 'name' => 'collaborator'], ['data' => 'priority', 'name' => 'priority'], ['data' => 'deadline', 'name' => 'deadline'], ['data' => 'status', 'name' => 'status'], ['data' => 'readiness_date', 'name' => 'readiness_date'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'number_series', 'name' => 'number_series'], ['data' => 'activity', 'name' => 'activity'], ['data' => 'subsidiary', 'name' => 'subsidiary'], ['data' => 'author', 'name' => 'author'], ['data' => 'client', 'name' => 'client'], ['data' => 'address', 'name' => 'address'], ['data' => 'collaborator', 'name' => 'collaborator'], ['data' => 'priority', 'name' => 'priority'], ['data' => 'deadline', 'name' => 'deadline'], ['data' => 'status', 'name' => 'status'], ['data' => 'readiness_date', 'name' => 'readiness_date'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,

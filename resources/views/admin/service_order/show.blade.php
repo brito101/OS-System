@@ -316,17 +316,57 @@
                                     @endif
                                 </div>
 
+                                <div id="map" style="width: 100%; min-height: 400px;"></div>
+
                             </div>
 
                             <div class="card-footer">
                                 <a href="{{ route('admin.service-orders.pdf', ['id' => $serviceOrder->id]) }}"
                                     target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> Imprimir</a>
                             </div>
+
+
                         </form>
 
                     </div>
                 </div>
             </div>
         </div>
+
+
     </section>
+@endsection
+
+@section('custom_js')
+    <script>
+        function markMap() {
+
+            var locationJson = $.getJSON(
+                'https://maps.googleapis.com/maps/api/geocode/json?address={{ $serviceOrder->street }},+{{ $serviceOrder->number }}+{{ $serviceOrder->city }}+{{ $serviceOrder->neighborhood }}&key={{ env('GOOGLE_API_KEY') }}',
+                function(response) {
+
+                    lat = response.results[0].geometry.location.lat;
+                    lng = response.results[0].geometry.location.lng;
+
+                    const map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 14,
+                        center: {
+                            lat: lat,
+                            lng: lng
+                        },
+                        mapTypeId: 'terrain'
+                    });
+
+                    const beachMarker = new google.maps.Marker({
+                        position: {
+                            lat: lat,
+                            lng: lng
+                        },
+                        map,
+                    });
+                });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&callback=markMap">
+    </script>
 @endsection
