@@ -11,13 +11,19 @@ class ServiceOrder extends Model
 
     protected $table = 'service_orders_view';
 
+    protected $appends = [
+        'deadline_pt',
+        'readiness_date_pt'
+    ];
+
+
     /** Accessor */
-    public function getDeadlineAttribute($value)
+    public function getDeadlinePtAttribute($value)
     {
-        return date("d/m/Y", strtotime($value));
+        return date("d/m/Y", strtotime($this->deadline));
     }
 
-    public function getReadinessDateAttribute($value)
+    public function getReadinessDatePtAttribute($value)
     {
         return $value ? date("d/m/Y", strtotime($value)) : '';
     }

@@ -1,8 +1,7 @@
 # Service Order Generator
 
 <h5>Pending Tasks</h5>
-<ol>
-    <li>Criar página específica para as OS do dia ou não concluídas para facilitar a elaboração do roteiro;</li>
+<ol>    
     <li>Módulo de compartilhamento de documentos padronizados entre gerentes;</li>   
     <li>Módulo de orçamento;</li>
     <li>Adicionar campo "data de assinatura de contrato" no cadastro de clientes e no cadastro de leads;</li>

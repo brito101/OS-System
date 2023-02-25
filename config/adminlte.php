@@ -388,6 +388,12 @@ return [
             'can'         => 'Acessar Ordens de Serviço',
             'submenu' => [
                 [
+                    'text' => ' O. S. Pendentes',
+                    'url'  => 'admin/service-orders-pending',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Ordens de Serviço',
+                ],
+                [
                     'text' => 'Listagem de O. S.',
                     'url'  => 'admin/service-orders',
                     'icon' => 'fas fa-fw fa-chevron-right',

@@ -103,6 +103,80 @@ class ServiceOrderController extends Controller
         return view('admin.service_order.index');
     }
 
+    public function pending(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Listar Ordens de Serviço')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $role = Auth::user()->roles->first()->name;
+
+        $status = ['Concluído', 'Concluído com envio de proposta', 'Cancelado'];
+
+        switch ($role) {
+            case 'Colaborador':
+            case 'Colaborador Comercial':
+            case 'Leiturista':
+            case 'Manutenção de Bomba':
+                $serviceOrders = ViewsServiceOrder::where('user_id', Auth::user()->id)
+                    ->orWhere('author_id', Auth::user()->id)->whereNotIn('status', $status)->get();
+                break;
+            case 'Colaborador-NI':
+                $subsidiaries = Collaborator::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $serviceOrders = ViewsServiceOrder::where('user_id', Auth::user()->id)
+                    ->orWhere('author_id', Auth::user()->id)
+                    ->orWhereIn('subsidiary_id', $subsidiaries)
+                    ->whereNotIn('status', $status)->get();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $serviceOrders = ViewsServiceOrder::where('user_id', Auth::user()->id)
+                    ->orWhere('author_id', Auth::user()->id)
+                    ->orWhereIn('subsidiary_id', $subsidiaries)
+                    ->whereNotIn('status', $status)->get();
+                break;
+            default:
+                $serviceOrders = ViewsServiceOrder::whereNotIn('status', $status)->get();
+                break;
+        }
+
+        if ($request->ajax()) {
+            return Datatables::of($serviceOrders)
+                ->addIndexColumn()
+                ->addColumn('priority', function ($row) {
+                    // Baixa,Média,Alta,Urgente
+                    switch ($row->priority) {
+                        case 'Baixa':
+                            $priority = '<span class="text-success fa fa-circle"></span> ' . $row->priority;
+                            break;
+                        case 'Média':
+                            $priority = '<span class="text-warning fa fa-circle"></span> ' . $row->priority;
+                            break;
+                        case 'Alta':
+                            $priority = '<span class="text-danger fa fa-circle"></span> ' . $row->priority;
+                            break;
+                        case 'Urgente':
+                            $priority = '<span class="btn btn-danger font-weight-bold">' . $row->priority . '</span>';
+                            break;
+                        default:
+                            $priority = $row->priority;
+                            break;
+                    }
+
+                    return $priority;
+                })
+                ->addColumn('action', function ($row) {
+                    $btn = '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="service-orders/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="service-orders/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' .
+                        (($row->author_id == Auth::user()->id && Auth::user()->hasAnyRole('Gerente|Colaborador|Colaborador-NI|Colaborador Comercial|Leiturista|Manutenção de Bomba') || Auth::user()->hasAnyRole('Programador|Administrador')) ? '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="service-orders/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão desta ordem de serviço?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>' : '');
+                    return $btn;
+                })
+                ->rawColumns(['priority', 'action'])
+                ->make(true);
+        }
+
+        return view('admin.service_order.pending');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
