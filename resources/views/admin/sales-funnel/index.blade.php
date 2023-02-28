@@ -184,6 +184,25 @@
                     </div>
 
                     <div class="col-12 col-md-3 p-2">
+                        <div class="card card-row card-purple">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Aguardando Proposta <span class="badge badge-pill badge-dark"
+                                        id="waitingProposalCount">{{ $waitingProposalCount }}</span>
+                                </h3>
+                            </div>
+                            <div class="card-body draggable-area" data-area="waitingProposal">
+                                @foreach ($waitingProposal as $kanban)
+                                    @include('admin.sales-funnel.components.kanban-card')
+                                @endforeach
+                            </div>
+                            <div class="px-4">
+                                <p>Total: <span id="waitingProposalSum">{{ $waitingProposalSum }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-3 p-2">
                         <div class="card card-row card-primary">
                             <div class="card-header">
                                 <h3 class="card-title">
@@ -318,6 +337,10 @@
                         style: 'currency',
                         currency: 'BRL'
                     }));
+                    $('#waitingProposalSum').text((res.waitingProposalSum).toLocaleString('pt-br', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    }));
                     $('#submissionProposalSum').text((res.submissionProposalSum).toLocaleString('pt-br', {
                         style: 'currency',
                         currency: 'BRL'
@@ -341,6 +364,7 @@
 
                     $('#scheduledVisitCount').text(res.scheduledVisitCount);
                     $('#performedInspectionCount').text(res.performedInspectionCount);
+                    $('#waitingProposalCount').text(res.waitingProposalCount);
                     $('#submissionProposalCount').text(res.submissionProposalCount);
                     $('#negotiationCount').text(res.negotiationCount);
                     $('#scheduledMeetingCount').text(res.scheduledMeetingCount);
@@ -406,6 +430,11 @@
                                 style: 'currency',
                                 currency: 'BRL'
                             }));
+                        $('#waitingProposalSum').text((res.waitingProposalSum).toLocaleString(
+                            'pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            }));
                         $('#submissionProposalSum').text((res.submissionProposalSum).toLocaleString(
                             'pt-br', {
                                 style: 'currency',
@@ -431,6 +460,7 @@
 
                         $('#scheduledVisitCount').text(res.scheduledVisitCount);
                         $('#performedInspectionCount').text(res.performedInspectionCount);
+                        $('#waitingProposalCount').text(res.waitingProposalCount);
                         $('#submissionProposalCount').text(res.submissionProposalCount);
                         $('#negotiationCount').text(res.negotiationCount);
                         $('#scheduledMeetingCount').text(res.scheduledMeetingCount);
