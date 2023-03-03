@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/finance-incomes/pay/{id}', [IncomeController::class, 'pay']);
         Route::get('/finance-incomes/receive/{id}', [IncomeController::class, 'receive']);
         Route::get('finance-incomes-pdf/{id}', [IncomeController::class, 'pdf'])->name('finance-incomes.pdf');
+        Route::get('finance-incomes-pending', [IncomeController::class, 'pending'])->name('finance-incomes.pending');
         Route::resource('finance-incomes', IncomeController::class);
 
         /** Expenses */
@@ -100,6 +101,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/finance-expenses/pay/{id}', [ExpenseController::class, 'pay']);
         Route::get('/finance-expenses/receive/{id}', [ExpenseController::class, 'receive']);
         Route::get('finance-expenses-pdf/{id}', [ExpenseController::class, 'pdf'])->name('finance-expenses.pdf');
+        Route::get('finance-expenses-pending', [ExpenseController::class, 'pending'])->name('finance-expenses.pending');
         Route::resource('finance-expenses', ExpenseController::class);
 
         /** Refunds */
@@ -110,6 +112,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/finance-refunds/pay/{id}', [RefoundController::class, 'pay']);
         Route::get('/finance-refunds/receive/{id}', [RefoundController::class, 'receive']);
         Route::get('finance-refunds-pdf/{id}', [RefoundController::class, 'pdf'])->name('finance-refunds.pdf');
+        Route::get('finance-refunds-pending', [RefoundController::class, 'pending'])->name('finance-refunds.pending');
         Route::resource('finance-refunds', RefoundController::class);
 
         /** Purchase Orders */
@@ -120,6 +123,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/finance-purchase-orders/unexecuted/{id}', [PurchaseOrderController::class, 'unexecuted']);
         Route::get('/finance-purchase-orders/executed/{id}', [PurchaseOrderController::class, 'executed']);
         Route::get('finance-purchase-orders-pdf/{id}', [PurchaseOrderController::class, 'pdf'])->name('finance-purchase-orders.pdf');
+        Route::get('finance-purchase-orders-pending', [PurchaseOrderController::class, 'pending'])->name('finance-purchase-orders.pending');
         Route::resource('finance-purchase-orders', PurchaseOrderController::class);
 
         /** Sellers */

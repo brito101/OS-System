@@ -77,6 +77,53 @@ class RefoundController extends Controller
         return view('admin.finance.refound.index', compact('pay', 'receive', 'balance'));
     }
 
+    public function pending(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Listar Reembolsos')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Financeiro':
+                $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $incomes = FinanceRefund::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->get();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $incomes = FinanceRefund::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->get();
+                break;
+            default:
+                $incomes = FinanceRefund::where('status', 'pendente')->get();
+                break;
+        }
+
+        $receiveValue = Invoice::where('status', 'pendente')->whereIn('id', $incomes->pluck('id'))->sum('value');
+        $pending = 'R$ ' . \number_format($receiveValue, 2, ',', '.');
+
+        if ($request->ajax()) {
+            return Datatables::of($incomes)
+                ->addIndexColumn()
+                ->addColumn('btnStatus', function ($row) {
+                    $payLink = '<a class="btn btn-xs btn-danger mx-1 shadow" title="Alterar para pago" href="finance-refunds/pay/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-down"></i></a>';
+                    return $payLink;
+                })
+                ->addColumn('action', function ($row) {
+                    $fileLink = '';
+                    if ($row->file) {
+                        $fileLink = '<a class="btn btn-xs btn-secondary mx-1 shadow" title="Anexo" download="anexo" href="' .  Storage::url($row->file)  . '"><i class="fa fa-lg fa-fw fa-download"></i></a>';
+                    }
+                    $btn = $fileLink . '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="finance-refunds/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="finance-refunds/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="finance-refunds/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste lançamento?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(['btnStatus', 'action'])
+                ->make(true);
+        }
+
+        return view('admin.finance.refound.pending', compact('pending'));
+    }
+
     public function create()
     {
         if (!Auth::user()->hasPermissionTo('Criar Reembolsos')) {
@@ -340,8 +387,8 @@ class RefoundController extends Controller
 
         if ($invoice->update()) {
             return redirect()
-                ->route('admin.finance-refunds.index')
-                ->with('success', 'Reembolso marcada como paga!');
+                ->back()
+                ->with('success', 'Reembolso marcada como pago!');
         } else {
             return redirect()
                 ->back()
@@ -384,7 +431,7 @@ class RefoundController extends Controller
 
         if ($invoice->update()) {
             return redirect()
-                ->route('admin.finance-incomes.index')
+                ->back()
                 ->with('success', 'Reembolso marcado como pendente!');
         } else {
             return redirect()
@@ -470,7 +517,7 @@ class RefoundController extends Controller
         }
 
         return redirect()
-            ->route('admin.finance-refunds.index')
+            ->back()
             ->with('success', 'Reembolsos atualizados!');
     }
 
@@ -515,7 +562,7 @@ class RefoundController extends Controller
         }
 
         return redirect()
-            ->route('admin.finance-refunds.index')
+            ->back()
             ->with('success', 'Reembolsos excluídos!');
     }
 
@@ -562,7 +609,7 @@ class RefoundController extends Controller
         }
 
         return redirect()
-            ->route('admin.finance-refunds.index')
+            ->back()
             ->with('success', 'Reembolsos atualizados!');
     }
 }

@@ -420,6 +420,12 @@ return [
                     'can'  => 'Listar Rendas',
                 ],
                 [
+                    'text' => 'Receitas Pendentes',
+                    'url'  => 'admin/finance-incomes-pending',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Rendas',
+                ],
+                [
                     'text' => 'Cadastro de Receita',
                     'url'  => 'admin/finance-incomes/create',
                     'icon' => 'fas fa-fw fa-chevron-right',
@@ -428,6 +434,12 @@ return [
                 [
                     'text' => 'Listagem de Despesas',
                     'url'  => 'admin/finance-expenses',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Despesas',
+                ],
+                [
+                    'text' => 'Despesas Pendentes',
+                    'url'  => 'admin/finance-expenses-pending',
                     'icon' => 'fas fa-fw fa-chevron-right',
                     'can'  => 'Listar Despesas',
                 ],
@@ -444,6 +456,12 @@ return [
                     'can'  => 'Listar Reembolsos',
                 ],
                 [
+                    'text' => 'Reembolsos Pendentes',
+                    'url'  => 'admin/finance-refunds-pending',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Reembolsos',
+                ],
+                [
                     'text' => 'Cadastro de Reembolso',
                     'url'  => 'admin/finance-refunds/create',
                     'icon' => 'fas fa-fw fa-chevron-right',
@@ -452,6 +470,12 @@ return [
                 [
                     'text' => 'Listagem de O. de Compra',
                     'url'  => 'admin/finance-purchase-orders',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Ordens de Compra',
+                ],
+                [
+                    'text' => 'O. de Compra Pendentes',
+                    'url'  => 'admin/finance-purchase-orders-pending',
                     'icon' => 'fas fa-fw fa-chevron-right',
                     'can'  => 'Listar Ordens de Compra',
                 ],

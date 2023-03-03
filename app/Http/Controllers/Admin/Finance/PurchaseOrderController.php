@@ -82,6 +82,53 @@ class PurchaseOrderController extends Controller
         return view('admin.finance.purchase_order.index', compact('exec', 'unexec', 'balance'));
     }
 
+    public function pending(Request $request)
+    {
+        if (!Auth::user()->hasPermissionTo('Listar Ordens de Compra')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $role = Auth::user()->roles->first()->name;
+
+        switch ($role) {
+            case 'Financeiro':
+                $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $purchases = ViewsPurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->where('status', 'não executada')->get();
+                break;
+            case 'Gerente':
+                $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
+                $purchases = ViewsPurchaseOrder::whereIn('subsidiary_id', $subsidiaries)->where('status', 'não executada')->get();
+                break;
+            default:
+                $purchases = ViewsPurchaseOrder::where('status', 'não executada')->get();
+                break;
+        }
+
+        $unexecValue = PurchaseOrder::where('status', 'não executada')->whereIn('id', $purchases->pluck('id'))->sum('value');
+        $pending = 'R$ ' . \number_format($unexecValue, 2, ',', '.');
+
+        if ($request->ajax()) {
+            return Datatables::of($purchases)
+                ->addIndexColumn()
+                ->addColumn('btnStatus', function ($row) {
+                    $executedLink = '<a class="btn btn-xs btn-danger mx-1 shadow" title="Alterar para executada" href="finance-purchase-orders/executed/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-down"></i></a>';
+                    return $executedLink;
+                })
+                ->addColumn('action', function ($row) {
+                    $fileLink = '';
+                    if ($row->file) {
+                        $fileLink = '<a class="btn btn-xs btn-secondary mx-1 shadow" title="Anexo" download="anexo" href="' .  Storage::url($row->file)  . '"><i class="fa fa-lg fa-fw fa-download"></i></a>';
+                    }
+                    $btn = $fileLink . '<a class="btn btn-xs btn-success mx-1 shadow" title="Visualizar" href="finance-purchase-orders/' . $row->id . '"><i class="fa fa-lg fa-fw fa-eye"></i></a>' . '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="finance-purchase-orders/' . $row->id . '/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="finance-purchase-orders/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste lançamento?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(['btnStatus', 'action'])
+                ->make(true);
+        }
+
+        return view('admin.finance.purchase_order.pending', compact('pending'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -436,7 +483,7 @@ class PurchaseOrderController extends Controller
 
         if ($purchase->update()) {
             return redirect()
-                ->route('admin.finance-purchase-orders.index')
+                ->back()
                 ->with('success', 'Ordem de compra marcada como executada!');
         } else {
             return redirect()
@@ -480,7 +527,7 @@ class PurchaseOrderController extends Controller
 
         if ($purchase->update()) {
             return redirect()
-                ->route('admin.finance-purchase-orders.index')
+                ->back()
                 ->with('success', 'Ordem de compra marcada como não executada!');
         } else {
             return redirect()
@@ -568,7 +615,7 @@ class PurchaseOrderController extends Controller
         }
 
         return redirect()
-            ->route('admin.finance-purchase-orders.index')
+            ->back()
             ->with('success', 'Ordens de Compra atualizadas!');
     }
 
@@ -613,7 +660,7 @@ class PurchaseOrderController extends Controller
         }
 
         return redirect()
-            ->route('admin.finance-purchase-orders.index')
+            ->back()
             ->with('success', 'Ordens de Compra excluídas!');
     }
 
@@ -660,7 +707,7 @@ class PurchaseOrderController extends Controller
         }
 
         return redirect()
-            ->route('admin.finance-purchase-orders.index')
+            ->back()
             ->with('success', 'Ordens de Compra atualizadas!');
     }
 }
