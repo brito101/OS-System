@@ -32,8 +32,8 @@
                         size='lg'>
                         <h3>Conta ES</h3>
                         <p><b>Banco Cora (403)</b></p>
-                        <p><b>Agência:</b> 3001</p>
-                        <p><b>Conta Corrente:</b> 36248146</p>
+                        <p><b>Agência:</b> 0001</p>
+                        <p><b>Conta Corrente:</b> 3624814-6</p>
                         <p><b>Chave Pix:</b> <span class="pix-account" style="cursor: copy">contacora@grupogab.com.br</span>
                         </p>
                         <x-slot name="footerSlot">

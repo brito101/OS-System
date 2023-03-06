@@ -3,6 +3,7 @@
 <h5>Pending Tasks</h5>
 <ol>   
     <li>Módulo de orçamento;</li>
+    <li>Colocar impressão de recibo no lançamento de despesas;</li>
     <li>Módulo de compartilhamento de documentos padronizados entre gerentes;</li>       
     <li>Adicionar campo "data de assinatura de contrato" no cadastro de clientes e no cadastro de leads;</li>
     <li>DCI;</li>
