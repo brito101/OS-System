@@ -311,6 +311,10 @@ return [
         'genre' => 'gênero',
         'employee' => 'funcionário',
         'proposal' => 'propósta',
+        'code' => 'código',
+        'tax' => 'imposto',
+        'fee' => 'ADM',
+        'commercial' => 'comercial',
     ],
 
 ];

@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\{
     UserController,
     SiteController,
     TicketPaymentController,
+    WorkItemController,
 };
 use App\Http\Controllers\Admin\ACL\{
     PermissionController,
@@ -172,12 +173,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('schedule-day/{day?}', [ScheduleController::class, 'day']);
         Route::resource('schedule', ScheduleController::class);
 
-        /** Sales  Funnel */
+        /** Sales Funnel */
         Route::post('sales-funnel-search-seller', [SalesFunnelController::class, 'index'])->name('sales-funnel.search-seller');
         Route::post('sales-funnel-ajax-update', [SalesFunnelController::class, 'update'])->name('sales-funnel-ajax.update');
         Route::delete('sales-funnel-ajax-destroy', [SalesFunnelController::class, 'destroy'])->name('sales-funnel-ajax.destroy');
         Route::resource('sales-funnel', SalesFunnelController::class);
         Route::post('sales-funnel-import', [SalesFunnelController::class, 'fileImport'])->name('sales-funnel.import');
+
+        /** Budgets  */
+        /** Work Items */
+        Route::get('/budgets/work-items/destroy/{id}', [WorkItemController::class, 'destroy']);
+        Route::resource('budgets/work-items', WorkItemController::class);
 
         /**
          * ACL

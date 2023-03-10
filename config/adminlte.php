@@ -586,6 +586,26 @@ return [
             'can'         => 'Acessar Funil de Vendas',
         ],
         [
+            'text'        => 'Orçamentos',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-comments-dollar',
+            'can'         => 'Acessar Orçamentos',
+            'submenu' => [
+                [
+                    'text' => 'Listagem de Itens de Obra',
+                    'url'  => 'admin/budgets/work-items',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Itens de Obra',
+                ],
+                [
+                    'text' => 'Cadastro de Itens de Obra',
+                    'url'  => 'admin/budgets/work-items/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Itens de Obra',
+                ],
+            ]
+        ],
+        [
             'text'        => 'Atividades',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-clipboard-list',

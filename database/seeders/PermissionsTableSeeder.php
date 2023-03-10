@@ -570,6 +570,33 @@ class PermissionsTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => new DateTime('now')
             ],
+            /** bBudgets 107 to ...*/
+            [
+                'name' => 'Acessar Orçamentos',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Listar Itens de Obra',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Criar Itens de Obra',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Editar Itens de Obra',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+            [
+                'name' => 'Excluir Itens de Obra',
+                'guard_name' => 'web',
+                'created_at' => new DateTime('now')
+            ],
+
         ]);
     }
 }
