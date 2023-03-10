@@ -49,7 +49,7 @@
                                         <label for="date">Data</label>
                                         <input type="text" class="form-control date" id="date"
                                             placeholder="dd/mm/yyyy" name="date"
-                                            value="{{ old('date') ?? $purchase->date }}" required>
+                                            value="{{ old('date') ?? $purchase->date }}">
                                     </div>
 
                                     <div class="col-12 col-md-3 form-group px-0 px-md-2">
@@ -93,7 +93,7 @@
                                         <label for="invoice">Nota Fiscal</label>
                                         <input type="text" class="form-control" id="invoice"
                                             placeholder="Dados da nota fiscal" name="invoice"
-                                            value="{{ old('invoice') ?? $purchase->invoice }}" required>
+                                            value="{{ old('invoice') ?? $purchase->invoice }}">
                                     </div>
 
                                 </div>
@@ -144,14 +144,14 @@
                                         <label for="requester">Solicitante</label>
                                         <input type="text" class="form-control" id="requester"
                                             placeholder="Solicitante" name="requester"
-                                            value="{{ old('requester') ?? $purchase->requester }}" required>
+                                            value="{{ old('requester') ?? $purchase->requester }}">
                                     </div>
 
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="authorized">Autorizado por:</label>
                                         <input type="text" class="form-control" id="authorized"
                                             placeholder="Quem autorizou a ordem de compra" name="authorized"
-                                            value="{{ old('authorized') ?? $purchase->authorized }}" required>
+                                            value="{{ old('authorized') ?? $purchase->authorized }}">
                                     </div>
                                 </div>
 
@@ -160,14 +160,14 @@
                                         <label for="authorized_date">Data de Autorização</label>
                                         <input type="text" class="form-control date" id="authorized_date"
                                             placeholder="dd/mm/yyyy" name="authorized_date"
-                                            value="{{ old('authorized_date') ?? $purchase->authorized_date }}" required>
+                                            value="{{ old('authorized_date') ?? $purchase->authorized_date }}">
                                     </div>
 
                                     <div class="col-12 col-md-3 form-group px-0 px-md-2">
                                         <label for="forecast">Previsão de Entrega</label>
                                         <input type="text" class="form-control date" id="forecast"
                                             placeholder="dd/mm/yyyy" name="forecast"
-                                            value="{{ old('forecast') ?? $purchase->forecast }}" required>
+                                            value="{{ old('forecast') ?? $purchase->forecast }}">
                                     </div>
 
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
@@ -228,7 +228,7 @@
                                         <label for="purchase_mode">Forma de Pagamento</label>
                                         <input type="text" class="form-control" id="purchase_mode"
                                             placeholder="Modalidade de Pagamento" name="purchase_mode"
-                                            value="{{ old('purchase_mode') ?? $purchase->purchase_mode }}" required>
+                                            value="{{ old('purchase_mode') ?? $purchase->purchase_mode }}">
                                     </div>
 
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2 mb-0">

@@ -20,14 +20,22 @@ class PurchaseOrder extends Model
     ];
 
     /** Accessor */
-    public function getDatePtAttribute($value)
+    public function getDatePtAttribute()
     {
-        return date("d/m/Y", strtotime($this->date));
+        if ($this->date) {
+            return date("d/m/Y", strtotime($this->date));
+        } else {
+            return null;
+        }
     }
 
-    public function getForecastPtAttribute($value)
+    public function getForecastPtAttribute()
     {
+        if($this->forecast) {
         return date("d/m/Y", strtotime($this->forecast));
+        } else {
+            return null;
+        }
     }
 
     public function getAuthorizedDateAttribute($value)

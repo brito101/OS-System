@@ -24,17 +24,29 @@ class PurchaseOrder extends Model
     /** Accessor */
     public function getDateAttribute($value)
     {
-        return date("d/m/Y", strtotime($value));
+        if ($value) {
+            return date("d/m/Y", strtotime($value));
+        } else {
+            return null;
+        }
     }
 
     public function getForecastAttribute($value)
     {
-        return date("d/m/Y", strtotime($value));
+        if ($value) {
+            return date("d/m/Y", strtotime($value));
+        } else {
+            return null;
+        }
     }
 
     public function getAuthorizedDateAttribute($value)
     {
-        return date("d/m/Y", strtotime($value));
+        if ($value) {
+            return date("d/m/Y", strtotime($value));
+        } else {
+            return null;
+        }
     }
 
     public function getValueAttribute($value)
@@ -45,11 +57,6 @@ class PurchaseOrder extends Model
     public function getCreatedAtAttribute($value)
     {
         return date("d/m/Y H:i", strtotime($value));
-    }
-
-    public function getAmountAttribute($value)
-    {
-        return (float) str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $this->value)));
     }
 
     /** relationships */
