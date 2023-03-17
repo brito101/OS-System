@@ -14,7 +14,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Orçamentos</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.construction-budget.index')}}">Orçamentos de Obra</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.work-items.index') }}">Itens de Obra</a></li>
                         <li class="breadcrumb-item active">Novo Item de Obra</li>
                     </ol>

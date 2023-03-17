@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\{
     AdminController,
     ClientController,
     CommissionController,
+    ConstructionBudgetController,
     EmployeeController,
     InventoryController,
     ProductController,
@@ -181,6 +182,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('sales-funnel-import', [SalesFunnelController::class, 'fileImport'])->name('sales-funnel.import');
 
         /** Budgets  */
+        Route::get('/construction-budget/destroy/{id}', [ConstructionBudgetController::class, 'destroy']);
+        Route::resource('construction-budget', ConstructionBudgetController::class);
         /** Work Items */
         Route::get('/budgets/work-items/destroy/{id}', [WorkItemController::class, 'destroy']);
         Route::resource('budgets/work-items', WorkItemController::class);

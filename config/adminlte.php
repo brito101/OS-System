@@ -592,6 +592,18 @@ return [
             'can'         => 'Acessar Orçamentos',
             'submenu' => [
                 [
+                    'text' => 'Orçamentos de Obra',
+                    'url'  => 'admin/construction-budget',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Listar Orçamentos',
+                ],
+                [
+                    'text' => 'Novo Orçamento de Obra',
+                    'url'  => 'admin/construction-budget/create',
+                    'icon' => 'fas fa-fw fa-chevron-right',
+                    'can'  => 'Criar Orçamentos',
+                ],
+                [
                     'text' => 'Listagem de Itens de Obra',
                     'url'  => 'admin/budgets/work-items',
                     'icon' => 'fas fa-fw fa-chevron-right',

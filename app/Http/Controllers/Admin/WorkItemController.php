@@ -24,17 +24,35 @@ class WorkItemController extends Controller
 
         $workItems = WorkItem::all();
 
-        if ($request->ajax()) {
-            return Datatables::of($workItems)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $btn = '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="work-items/' . $row->id . '/edit">
-                    <i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="work-items/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste item?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+
+        if (Auth::user()->hasPermissionTo('Excluir Itens de Obra')) {
+            if ($request->ajax()) {
+                return Datatables::of($workItems)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        $btn = '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="work-items/' . $row->id . '/edit">
+                        <i class="fa fa-lg fa-fw fa-pen"></i></a>' . '<a class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" href="work-items/destroy/' . $row->id . '" onclick="return confirm(\'Confirma a exclusão deste item?\')"><i class="fa fa-lg fa-fw fa-trash"></i></a>';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            }
+        } else {
+            if ($request->ajax()) {
+                return Datatables::of($workItems)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        $btn = '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="work-items/' . $row->id . '/edit">
+                        <i class="fa fa-lg fa-fw fa-pen"></i></a>';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            }
         }
+
+
+
 
         return view('admin.budgets.work-items.index');
     }
