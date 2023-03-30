@@ -2,7 +2,6 @@
 
 <h5>Pending Tasks</h5>
 <ol>   
-    <li>Adicionar campo "PIX" na listagem de funcionários;</li>
     <li>Módulo de orçamento;</li>
     <li>Colocar impressão de recibo no lançamento de despesas;</li>
     <li>Módulo de compartilhamento de documentos padronizados entre gerentes;</li>       
