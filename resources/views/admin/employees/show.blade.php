@@ -205,6 +205,12 @@
                                     <input type="text" class="form-control bg-white" id="account" name="account"
                                         value="{{ $employee->account }}" disabled>
                                 </div>
+
+                                <div class="col-12 col-md-4 form-group px-0 pr-md-2">
+                                    <label for="pix">Chave PIX</label>
+                                    <input type="text" class="form-control bg-white" id="pix" name="pix"
+                                        value="{{ old('pix') ?? $employee->pix }}" disabled>
+                                </div>
                             </div>
 
                             <h5 class="text-muted">Dados Empregatícios</h5>

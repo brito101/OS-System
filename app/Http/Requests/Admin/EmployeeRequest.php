@@ -62,6 +62,7 @@ class EmployeeRequest extends FormRequest
             'resignation_date' => 'nullable|date_format:Y-m-d',
             'reason_dismissal' => 'nullable|max:4000000000',
             'subsidiary_id' => 'nullable|exists:subsidiaries,id',
+            'pix' => 'nullable|max:191'
         ];
     }
 

@@ -51,7 +51,8 @@ class EmployeeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEm
             'resignation_date' => $row['data_demissao'],
             'reason_dismissal' => $row['motivo_demissao'],
             'subsidiary_id' => $row['filial'],
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'pix'  => $row['pix'],
         ]);
     }
 
@@ -88,6 +89,7 @@ class EmployeeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEm
             'data_demissao' => 'nullable|date_format:Y-m-d',
             'motivo_demissao' => 'nullable|max:4000000000',
             'filial' => 'nullable|exists:subsidiaries,id',
+            'pix' => 'nullable|max:191',
         ];
     }
 

@@ -73,11 +73,16 @@
                         </div>
 
                         @php
-                            $heads = [['label' => 'ID', 'width' => 5], 'Nome', 'Filial', 'Função', 'Celular', 'E-mail', 'Salário', ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
+                            $heads = [['label' => 'ID', 'width' => 5], 'Nome', 'Filial', 'Função', 'Celular', 'E-mail', 'Salário', 'PIX', ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
                             $config = [
                                 'order' => [[1, 'asc']],
                                 'ajax' => url('/admin/employees'),
-                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'], ['data' => 'subsidiary_name', 'name' => 'subsidiary_name'], ['data' => 'role', 'name' => 'role'], ['data' => 'cell', 'name' => 'cell'], ['data' => 'email', 'name' => 'email'], ['data' => 'salary', 'name' => 'salary'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
+                                'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'name', 'name' => 'name'],
+                                ['data' => 'subsidiary_name', 'name' => 'subsidiary_name'], ['data' => 'role', 'name' => 'role'],
+                                ['data' => 'cell', 'name' => 'cell'], ['data' => 'email', 'name' => 'email'],
+                                ['data' => 'salary', 'name' => 'salary'],
+                                ['data' => 'pix', 'name' => 'pix'],
+                                ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                                 'autoFill' => true,
                                 'processing' => true,

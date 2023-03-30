@@ -233,6 +233,12 @@
                                         <input type="text" class="form-control" id="account"
                                             placeholder="Nº da Conta" name="account" value="{{ old('account') }}">
                                     </div>
+
+                                    <div class="col-12 col-md-4 form-group px-0 pr-md-2">
+                                        <label for="pix">Chave PIX</label>
+                                        <input type="text" class="form-control" id="pix"
+                                            placeholder="Chave PIX" name="pix" value="{{ old('pix') }}">
+                                    </div>
                                 </div>
 
                                 <h5 class="text-muted">Dados Empregatícios</h5>
