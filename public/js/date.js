@@ -1,1 +1,3 @@
-$(document).ready((function(){$(".date").inputmask("dd/mm/yyyy")}));
+$(document).ready(function () {
+    $(".date").inputmask("dd/mm/yyyy");
+});

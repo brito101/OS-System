@@ -58,7 +58,7 @@ class AdminController extends Controller
                 $stockists = $users->where('type', 'Estoquista')->count();
                 /** Clients */
                 $clientsSubsidiary = $clients->groupBy('alias_name')->toArray();
-                $clientsSubsidiaryChart = [];
+                $clientsSubsidiaryChart = ['label' => [], 'data' => []];
                 foreach ($clientsSubsidiary as $key => $value) {
                     if ($key == '') {
                         $key = 'Sem filial';
@@ -67,7 +67,7 @@ class AdminController extends Controller
                     $clientsSubsidiaryChart['data'][] = count($value);
                 }
                 $clientsStatus = $clients->groupBy('trade_status')->toArray();
-                $clientsStatusChart = [];
+                $clientsStatusChart = ['label' => [], 'data' => []];
                 foreach ($clientsStatus as $key => $value) {
                     $clientsStatusChart['label'][] = $key;
                     $clientsStatusChart['data'][] = count($value);
@@ -282,7 +282,7 @@ class AdminController extends Controller
                 $stockists = 0;
                 /** Clients */
                 $clientsSubsidiary = $clients->groupBy('alias_name')->toArray();
-                $clientsSubsidiaryChart = [];
+                $clientsSubsidiaryChart = ['label' => [], 'data' => []];
                 foreach ($clientsSubsidiary as $key => $value) {
                     if ($key == '') {
                         $key = 'Sem filial';
@@ -291,7 +291,7 @@ class AdminController extends Controller
                     $clientsSubsidiaryChart['data'][] = count($value);
                 }
                 $clientsStatus = $clients->groupBy('trade_status')->toArray();
-                $clientsStatusChart = [];
+                $clientsStatusChart = ['label' => [], 'data' => []];
                 foreach ($clientsStatus as $key => $value) {
                     $clientsStatusChart['label'][] = $key;
                     $clientsStatusChart['data'][] = count($value);
@@ -370,7 +370,7 @@ class AdminController extends Controller
                 $stockists = 0;
                 /** Clients */
                 $clientsSubsidiary = $clients->groupBy('alias_name')->toArray();
-                $clientsSubsidiaryChart = [];
+                $clientsSubsidiaryChart = ['label' => [], 'data' => []];
                 foreach ($clientsSubsidiary as $key => $value) {
                     if ($key == '') {
                         $key = 'Sem filial';
@@ -379,7 +379,7 @@ class AdminController extends Controller
                     $clientsSubsidiaryChart['data'][] = count($value);
                 }
                 $clientsStatus = $clients->groupBy('trade_status')->toArray();
-                $clientsStatusChart = [];
+                $clientsStatusChart = ['label' => [], 'data' => []];
                 foreach ($clientsStatus as $key => $value) {
                     $clientsStatusChart['label'][] = $key;
                     $clientsStatusChart['data'][] = count($value);
@@ -596,7 +596,7 @@ class AdminController extends Controller
                 $stockists = $users->where('type', 'Estoquista')->count();
                 /** Clients */
                 $clientsSubsidiary = $clients->groupBy('alias_name')->toArray();
-                $clientsSubsidiaryChart = [];
+                $clientsSubsidiaryChart = ['label' => [], 'data' => []];
                 foreach ($clientsSubsidiary as $key => $value) {
                     if ($key == '') {
                         $key = 'Sem filial';
@@ -605,7 +605,7 @@ class AdminController extends Controller
                     $clientsSubsidiaryChart['data'][] = count($value);
                 }
                 $clientsStatus = $clients->groupBy('trade_status')->toArray();
-                $clientsStatusChart = [];
+                $clientsStatusChart = ['label' => [], 'data' => []];
                 foreach ($clientsStatus as $key => $value) {
                     $clientsStatusChart['label'][] = $key;
                     $clientsStatusChart['data'][] = count($value);
