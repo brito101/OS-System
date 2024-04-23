@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ServiceOrderModelRequest;
 use App\Http\Requests\Admin\ServiceOrderRequest;
 use App\Models\Activity;
 use App\Models\Client;
@@ -177,13 +178,19 @@ class ServiceOrderController extends Controller
         return view('admin.service_order.pending');
     }
 
+    public function models()
+    {
+        return view('admin.service_order.models');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(ServiceOrderModelRequest $request)
     {
+
         if (!Auth::user()->hasPermissionTo('Criar Ordens de Serviço')) {
             abort(403, 'Acesso não autorizado');
         }
@@ -216,7 +223,17 @@ class ServiceOrderController extends Controller
             ->where('id', '!=', Auth::user()->id)
             ->orderBy('name')
             ->get();
-        return view('admin.service_order.create', compact('activities', 'clients', 'participants', 'subsidiaries'));
+
+        $type = $request->type;
+
+        switch ($request->model) {
+            case 'air-block':
+                return view('admin.service_order.air-block.create', compact('activities', 'clients', 'participants', 'subsidiaries', 'type'));
+                break;
+            default:
+                return view('admin.service_order.create', compact('activities', 'clients', 'participants', 'subsidiaries', 'type'));
+                break;
+        }
     }
 
     /**

@@ -33,7 +33,7 @@
                             <div class="d-flex flex-wrap justify-content-between col-12 align-content-center">
                                 <h3 class="card-title align-self-center">Ordens de Serviço Cadastradas</h3>
                                 @can('Criar Ordens de Serviço')
-                                    <a href="{{ route('admin.service-orders.create') }}" title="Nova Ordem de Serviço"
+                                    <a href="{{ route('admin.service-orders.models') }}" title="Nova Ordem de Serviço"
                                         class="btn btn-success"><i class="fas fa-fw fa-plus"></i>Nova Ordem de Serviço</a>
                                 @endcan
                             </div>

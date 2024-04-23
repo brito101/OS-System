@@ -76,6 +76,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('providers-import', [ProviderController::class, 'fileImport'])->name('providers.import');
 
         /** Service Orders */
+        Route::get('/service-orders/models', [ServiceOrderController::class, 'models'])->name('service-orders.models');
+        Route::get('/service-orders/create/{model}', [ServiceOrderController::class, 'create'])->name('service-orders.create');
         Route::get('/service-orders/destroy/{id}', [ServiceOrderController::class, 'destroy']);
         Route::get('service-orders-pending', [ServiceOrderController::class, 'pending'])->name('service-orders-pending');
         Route::resource('service-orders', ServiceOrderController::class);

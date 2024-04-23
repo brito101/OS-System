@@ -401,7 +401,7 @@ return [
                 ],
                 [
                     'text' => 'Cadastro de de O. S.',
-                    'url'  => 'admin/service-orders/create',
+                    'url'  => 'admin/service-orders/models',
                     'icon' => 'fas fa-fw fa-chevron-right',
                     'can'  => 'Criar Ordens de Serviço',
                 ],

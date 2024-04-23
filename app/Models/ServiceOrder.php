@@ -43,6 +43,7 @@ class ServiceOrder extends Model
         'costumer_name',
         'costumer_document',
         'subsidiary_id',
+        'type',
     ];
 
 
