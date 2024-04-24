@@ -64,6 +64,10 @@ class ClientRequest extends FormRequest
             'meeting' => 'nullable|date_format:Y-m-d',
             'status_sale' => 'required_if:trade_status,Venda Realizada|in:,Contrato em Confecção,Contrato Assinado,Aguardando PG,Entrada PG,Aguardando Vistoria para Obra,Início de Obra,Obra em andamento,Obra Finalizada,Obra Entregue,Início de Leitura',
             'reason_refusal' => 'required_if:trade_status,Recusado|max:191',
+            'blocks' => 'nullable|integer|min:0|max:99999',
+            'type_piping' => 'nullable|max:191',
+            'pipe_diameter' => 'nullable|max:191',
+            'pipe_space' => 'nullable|boolean',
         ];
     }
 

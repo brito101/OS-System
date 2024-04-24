@@ -315,6 +315,10 @@ return [
         'tax' => 'imposto',
         'fee' => 'ADM',
         'commercial' => 'comercial',
+        'blocks' => 'blocos', 
+        'type_piping' => 'tipo de tubulação', 
+        'pipe_diameter' => 'diâmetro da tubulação', 
+        'pipe_space' => 'espaço de tubulação',
     ],
 
 ];

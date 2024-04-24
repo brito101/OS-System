@@ -320,21 +320,54 @@
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-start">
-                                    <div class="col-12 col-md-4 form-group px-0 pr-md-2">
+                                    <div class="col-12 col-md-3 form-group px-0 pr-md-2">
                                         <label for="value_per_apartment">Valor por Apartamento</label>
                                         <input type="text" class="form-control money_format_2"
                                             id="value_per_apartment" name="value_per_apartment"
                                             value="{{ old('value_per_apartment') }}" onchange="calc()">
                                     </div>
-                                    <div class="col-12 col-md-4 form-group px-0 px-md-2">
+                                    <div class="col-12 col-md-3 form-group px-0 px-md-2">
+                                        <label for="blocks">Qtd de Blocos</label>
+                                        <input type="number" class="form-control" id="blocks" name="blocks"
+                                            min="0" value="{{ old('blocks') }}">
+                                    </div>
+                                    <div class="col-12 col-md-3 form-group px-0 px-md-2">
                                         <label for="apartments">Qtd de Apartamentos</label>
                                         <input type="number" class="form-control" id="apartments" name="apartments"
                                             min="0" value="{{ old('apartments') }}" onchange="calc()">
                                     </div>
-                                    <div class="col-12 col-md-4 form-group px-0 pl-md-2">
+                                    <div class="col-12 col-md-3 form-group px-0 pl-md-2">
                                         <label for="total_value">Valor Total</label>
                                         <input type="text" class="form-control money_format_2" id="total_value"
                                             name="total_value" value="{{ old('total_value') }}">
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-wrap justify-content-start">
+                                    <div class="col-12 col-md-5 form-group px-0 pr-md-2">
+                                        <label for="type_piping">Tipo de tubulação</label>
+                                        <input type="text" class="form-control" id="type_piping"
+                                            placeholder="Tipo de tubulação" name="type_piping"
+                                            value="{{ old('type_piping') }}">
+                                    </div>
+                                    <div class="col-12 col-md-5 form-group px-0 px-md-2">
+                                        <label for="pipe_diameter">Diâmetro de tubulação</label>
+                                        <input type="text" class="form-control" id="pipe_diameter"
+                                            placeholder="Diâmetro de tubulação" name="pipe_diameter"
+                                            value="{{ old('pipe_diameter') }}">
+                                    </div>
+                                    <div class="col-12 col-md-2 form-group px-0 pl-md-2">
+                                        <label for="pipe_diameter">Espaço na tubulação</label>
+                                        <x-adminlte-select2 name="pipe_space" id="pipe_space">
+                                            <option value="1"
+                                                {{ old('pipe_space') == '1' || old('pipe_space') == 'true' ? 'selected' : '' }}>
+                                                Sim
+                                            </option>
+                                            <option value="0"
+                                                {{ old('pipe_space') == '0' || old('pipe_space') == 'false' ? 'selected' : '' }}>
+                                                Não
+                                            </option>
+                                        </x-adminlte-select2>
                                     </div>
                                 </div>
 
