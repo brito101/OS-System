@@ -422,19 +422,27 @@
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-start">
-                                    <div class="col-12 col-md-5 form-group px-0 pr-md-2">
+
+                                    <div class="col-12 col-md-3 form-group px-0 pr-md-2">
+                                        <label for="age">Idade do Condomínio</label>
+                                        <input type="number" class="form-control" id="age"
+                                            placeholder="Idade do Condomínio" name="age" min="0"
+                                            max="9999" value="{{ old('age') ?? $client->age }}">
+                                    </div>
+
+                                    <div class="col-12 col-md-3 form-group px-0 px-md-2">
                                         <label for="type_piping">Tipo de tubulação</label>
                                         <input type="text" class="form-control" id="type_piping"
                                             placeholder="Tipo de tubulação" name="type_piping"
                                             value="{{ old('type_piping') ?? $client->type_piping }}">
                                     </div>
-                                    <div class="col-12 col-md-5 form-group px-0 px-md-2">
+                                    <div class="col-12 col-md-3 form-group px-0 px-md-2">
                                         <label for="pipe_diameter">Diâmetro de tubulação</label>
                                         <input type="text" class="form-control" id="pipe_diameter"
                                             placeholder="Diâmetro de tubulação" name="pipe_diameter"
                                             value="{{ old('pipe_diameter') ?? $client->pipe_diameter }}">
                                     </div>
-                                    <div class="col-12 col-md-2 form-group px-0 pl-md-2">
+                                    <div class="col-12 col-md-3 form-group px-0 pl-md-2">
                                         <label for="pipe_space">Espaço na tubulação</label>
                                         <x-adminlte-select2 name="pipe_space" id="pipe_space">
                                             <option value="1"

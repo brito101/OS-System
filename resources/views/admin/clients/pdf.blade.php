@@ -213,17 +213,22 @@
                 </div>
 
                 <div class="d-flex flex-wrap justify-content-start">
-                    <div class="col-4 form-group pr-2">
+                    <div class="col-3 form-group pr-2">
+                        <label for="age">Idade do Condomínio</label>
+                        <input type="text" class="form-control bg-white" id="age" name="age"
+                            value="{{ $client->age }}" disabled>
+                    </div>
+                    <div class="col-3 form-group px-2">
                         <label for="type_piping">Tipo de tubulação</label>
                         <input type="text" class="form-control bg-white" id="type_piping" name="type_piping"
                             value="{{ $client->type_piping }}" disabled>
                     </div>
-                    <div class="col-4 form-group px-2">
+                    <div class="col-3 form-group px-2">
                         <label for="pipe_diameter">Diâmetro de tubulação</label>
                         <input type="text" class="form-control bg-white" id="pipe_diameter" name="pipe_diameter"
                             value="{{ old('pipe_diameter') ?? $client->pipe_diameter }}" disabled>
                     </div>
-                    <div class="col-4 form-group pl-2">
+                    <div class="col-3 form-group pl-2">
                         <label for="pipe_space">Espaço na tubulação</label>
                         <input type="text" class="form-control bg-white" id="pipe_space" name="pipe_space"
                             value="{{ $client->pipe_space == '1' || $client->pipe_space == 'true' ? 'Sim' : 'Não' }}"

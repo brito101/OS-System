@@ -738,7 +738,7 @@ class ServiceOrderController extends Controller
         $dom_pdf = $pdf->getDomPDF();
 
         $canvas = $dom_pdf->getCanvas();
-        $canvas->page_text(0, 0, "  pag {PAGE_NUM} de {PAGE_COUNT}", null, 10);
+        $canvas->page_text(0, 0, null, null, 10);
 
         return $pdf->download(Str::slug($serviceOrder->id) . '.pdf');
     }

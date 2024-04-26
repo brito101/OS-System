@@ -68,6 +68,7 @@ class ClientRequest extends FormRequest
             'type_piping' => 'nullable|max:191',
             'pipe_diameter' => 'nullable|max:191',
             'pipe_space' => 'nullable|boolean',
+            'age' => 'nullable|integer|min:0|max:9999',
         ];
     }
 
