@@ -1,6 +1,6 @@
 @extends('admin.components.pdf')
 
-@section('title', 'FICHA TECNICA ORÇAMENTÁRIA DE BLOQUEADOR DE AR')
+@section('title', 'FICHA TÉCNICA ORÇAMENTÁRIA DE BLOQUEADOR DE AR')
 
 @section('content')
     Nº orçamento/ID: _______________________ Data______________
