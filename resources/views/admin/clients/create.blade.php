@@ -357,7 +357,7 @@
                                             value="{{ old('pipe_diameter') }}">
                                     </div>
                                     <div class="col-12 col-md-2 form-group px-0 pl-md-2">
-                                        <label for="pipe_diameter">Espaço na tubulação</label>
+                                        <label for="pipe_space">Espaço na tubulação</label>
                                         <x-adminlte-select2 name="pipe_space" id="pipe_space">
                                             <option value="1"
                                                 {{ old('pipe_space') == '1' || old('pipe_space') == 'true' ? 'selected' : '' }}>

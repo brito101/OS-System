@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Twilio\Rest\Client as Twilio;
 use Image;
+use PDF;
 
 class ServiceOrderController extends Controller
 {
@@ -717,5 +718,28 @@ class ServiceOrderController extends Controller
         } else {
             return response()->json(['message' => 'fail']);
         }
+    }
+
+    public function print(int $id)
+    {
+        if (!Auth::user()->hasPermissionTo('Listar Ordens de Serviço')) {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        $serviceOrder = ServiceOrder::find($id);
+
+        $data = [
+            'serviceOrder' => $serviceOrder,
+        ];
+
+        $pdf = PDF::loadView('admin.service_order.air-block.pdf', $data);
+
+        $pdf->output();
+        $dom_pdf = $pdf->getDomPDF();
+
+        $canvas = $dom_pdf->getCanvas();
+        $canvas->page_text(0, 0, "  pag {PAGE_NUM} de {PAGE_COUNT}", null, 10);
+
+        return $pdf->download(Str::slug($serviceOrder->id) . '.pdf');
     }
 }
