@@ -3,31 +3,45 @@
 @section('title', 'FICHA TÉCNICA ORÇAMENTÁRIA DE BLOQUEADOR DE AR')
 
 @section('content')
-    Nº orçamento/ID: _______________________ Data______________
-    Rep. Comercial: _____________________________________________________________________________
-    Contato Cel.: (____) ____________________ Contato Tel.: (____) _____________________
-    E-mail: _____________________________________________________ Data de Assembleia:____________
-    Tirar fotos do hidrômetro e anexar!
-    Bloqueador de Ar
-    Informações sobre o Condomínio
-    Nome: ______________________________________________________________ Idade: _____________
-    Endereço: __________________________________________________________ nº ____________________
-    Nº Unidades: ______ Nº Blocos: ______
-    Bairro: _________________________ CEP: _________________ Cidade: _________________ Estado: ____
-    Nome do cliente: ___________________________________ Função/Cargo: _________________________
-    Dados para Instalação do Bloqueador de Ar
-    Qual o tipo de tubulação: ______________ Qual o diâmetro da tubulação? ___________________
-    Tem espaço na tubulação para instalação próximo ao hidrômetro: __________ se não, verificar a
-    tubulação até saída na boia do reservatório inferior para saber onde instalaria.
-    ___________________________________________________________________________________________
-    Nº orçamento/ID: _______________________ Data______________
-    Rep. Comercial: _____________________________________________________________________________
-    Contato Cel.: (____) ____________________ Contato Tel.: (____) _____________________
-    E-mail: _____________________________________________________ Data de Assembleia:____________
-    Tirar fotos do hidrômetro e anexar!
-    Bloqueador de Ar
-    Observações: ______________________________________________________________________
-    ___________________________________________________________________________________
-    ___________________________________________________________________________________
-    ___________________________________________________________________________________
+    <div>
+        <table style="width: 100%; margin: 0; padding: 0;">
+            <tr>
+                <td colspan="10">Nº orçamento/ID:<span style="letter-spacing: .1rem;"> _______________________</span></td>
+                <td colspan="2" style="text-align: right;">Data<span style="letter-spacing: .1rem;"> ______________</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12">Rep. Comercial:<span style="letter-spacing: .1rem;">
+                        ___________________________________________________________________</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12"><span class="dot"></span>Bloqueador de Ar</td>
+            </tr>
+            <tr>
+                <td colspan="12" class="td-title">
+                    Informações sobre o Condomínio</td>
+            </tr>
+            <tr>
+                <td colspan="10">Nome:<span style="letter-spacing: .1rem;">
+                        ____________________________________________________</span></td>
+                <td colspan="2" style="text-align: right;">Idade<span style="letter-spacing: .1rem;">
+                        _______________</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="10">Endereço:<span style="letter-spacing: .1rem;">
+                        _________________________________________________</span></td>
+                <td colspan="2" style="text-align: right;">nº<span style="letter-spacing: .1rem;">
+                        __________________</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">Bairro: <span style="letter-spacing: .1rem;">______________________</span></td>
+                <td colspan="3">CEP: <span style="letter-spacing: .1rem;">____________</span></td>
+                <td colspan="3">Cidade: <span style="letter-spacing: .1rem;"> _______________</span></td>
+                <td colspan="2" style="text-align: right;">Estado: <span style="letter-spacing: .1rem;">___</span></td>
+            </tr>
+        </table>
+    </div>
 @endsection

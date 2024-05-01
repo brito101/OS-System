@@ -3,12 +3,13 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
     <title>@yield('title')</title>
     <style>
         * {
             font-family: "Arial", sans-serif;
-            font-size: 14px;
+            font-size: 12px;
+            letter-spacing: .075rem;
+            color: #252323;
         }
 
         @page {
@@ -26,13 +27,49 @@
         h1 {
             margin-top: -20px;
             font-size: 22px;
-            color: #252323;
             margin: 20px auto;
-            width: 375px;
+            width: 400px;
+            letter-spacing: .085rem;
         }
 
         main {
             margin-top: 50px;
+        }
+
+        td {
+            font-size: 14px;
+            font-weight: normal;
+            text-align: left;
+            height: 25px;
+        }
+
+        .dot {
+            height: 17.5px;
+            width: 20px;
+            margin-right: 10px;
+            margin-bottom: -3px;
+            border: 1px solid #252323;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .td-title {
+            font-weight: bold;
+            font-size: 18px;
+            height: 35px;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .td-title::before {
+            content: "";
+            width: 15px;
+            height: 3px;
+            position: absolute;
+            left: 0;
+            top: 30px;
+            background: #252323;
+            border-radius: 10%;
         }
     </style>
 </head>
