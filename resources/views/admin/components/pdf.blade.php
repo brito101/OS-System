@@ -43,6 +43,14 @@
             height: 25px;
         }
 
+        td span {
+            font-size: 14px;            
+        }
+
+        td span.system {
+            border-bottom: 1px dashed #252323;
+        }
+
         .dot {
             height: 17.5px;
             width: 20px;
