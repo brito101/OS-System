@@ -100,7 +100,8 @@ class ServiceOrderRequest extends FormRequest
             'photo' => 'nullable',
             'costumer_name' => 'nullable|max:191',
             'costumer_document' => 'nullable|max:191',
-            'subsidiary_id' => 'required|exists:subsidiaries,id'
+            'subsidiary_id' => 'required|exists:subsidiaries,id',
+            'type' => 'nullable|in:comercial - bloqueador de ar',
         ];
     }
 

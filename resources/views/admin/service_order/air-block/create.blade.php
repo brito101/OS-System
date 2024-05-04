@@ -41,6 +41,8 @@
                             @csrf
                             <div class="card-body">
 
+                                <input type="hidden" name="type" value="comercial - bloqueador de ar">
+
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="col-12 form-group px-0 mb-0">
                                         <label for="activity_id">Atividade</label>

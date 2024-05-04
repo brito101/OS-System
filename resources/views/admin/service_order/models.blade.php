@@ -36,6 +36,11 @@
                                     <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="custom-tabs-comercial-tab" data-toggle="pill"
+                                                href="#default" role="tab" aria-controls="custom-tabs-comercial"
+                                                aria-selected="true">Padrão</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="custom-tabs-comercial-tab" data-toggle="pill"
                                                 href="#comercial" role="tab" aria-controls="custom-tabs-comercial"
                                                 aria-selected="true">Comercial</a>
                                         </li>
@@ -53,7 +58,15 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="tab-content">
-                                        <div class="tab-pane fade show active" id="comercial" role="tabpanel"
+                                        <div class="tab-pane fade show active" id="default" role="tabpanel"
+                                            aria-labelledby="custom-tabs-comercial-tab">
+                                            <div class="list-group">
+                                                <a href="{{ route('admin.service-orders.create', ['model' => 'default']) }}"
+                                                    class="list-group-item list-group-item-action">Ordem de Serviço sem
+                                                    modelo específico</a>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade show" id="comercial" role="tabpanel"
                                             aria-labelledby="custom-tabs-comercial-tab">
                                             <div class="list-group">
                                                 <a href="{{ route('admin.service-orders.create', ['model' => 'air-block']) }}"

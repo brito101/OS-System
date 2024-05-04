@@ -231,6 +231,7 @@ class ServiceOrderController extends Controller
             case 'air-block':
                 return view('admin.service_order.air-block.create', compact('activities', 'clients', 'participants', 'subsidiaries', 'type'));
                 break;
+            case 'default':
             default:
                 return view('admin.service_order.create', compact('activities', 'clients', 'participants', 'subsidiaries', 'type'));
                 break;

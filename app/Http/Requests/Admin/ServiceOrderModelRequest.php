@@ -22,7 +22,7 @@ class ServiceOrderModelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'model' => 'nullable|in:air-block',
+            'model' => 'nullable|in:default,air-block',
         ];
     }
 }
