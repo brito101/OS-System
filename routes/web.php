@@ -81,8 +81,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/service-orders/destroy/{id}', [ServiceOrderController::class, 'destroy']);
         Route::get('service-orders-pending', [ServiceOrderController::class, 'pending'])->name('service-orders-pending');
         Route::resource('service-orders', ServiceOrderController::class);
-        // Route::get('service-orders-pdf/{id}', [ServiceOrderController::class, 'pdf'])->name('service-orders.pdf');
-        Route::get('service-orders-pdf/{id}', [ServiceOrderController::class, 'print'])->name('service-orders.pdf');
+        Route::get('service-orders-pdf/{id}', [ServiceOrderController::class, 'pdf'])->name('service-orders.pdf');
+        Route::get('service-orders-pdf-print/{id}', [ServiceOrderController::class, 'print'])->name('service-orders.pdf-print');
 
         Route::post('/service-orders/photo-delete', [ServiceOrderController::class, 'photoDelete'])->name('service-orders-photo-delete');
         Route::post('/service-orders/file-delete', [ServiceOrderController::class, 'fileDelete'])->name('service-orders-file-delete');

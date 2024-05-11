@@ -321,8 +321,13 @@
                             </div>
 
                             <div class="card-footer">
-                                <a href="{{ route('admin.service-orders.pdf', ['id' => $serviceOrder->id]) }}"
-                                    target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> Imprimir</a>
+                                @if ($serviceOrder->type)
+                                    <a href="{{ route('admin.service-orders.pdf-print', ['id' => $serviceOrder->id]) }}"
+                                        target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> Imprimir</a>
+                                @else
+                                    <a href="{{ route('admin.service-orders.pdf', ['id' => $serviceOrder->id]) }}"
+                                        target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> Imprimir</a>
+                                @endif
                             </div>
 
 

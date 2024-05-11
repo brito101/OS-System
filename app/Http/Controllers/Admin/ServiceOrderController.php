@@ -733,7 +733,14 @@ class ServiceOrderController extends Controller
             'serviceOrder' => $serviceOrder,
         ];
 
-        $pdf = PDF::loadView('admin.service_order.air-block.pdf', $data);
+        switch ($serviceOrder->type) {
+            case 'air-block':
+                $pdf = PDF::loadView('admin.service_order.air-block.pdf', $data);
+                break;
+            default:
+                $pdf = PDF::loadView('admin.service_order.air-block.pdf', $data);
+                break;
+        }
 
         $pdf->output();
         $dom_pdf = $pdf->getDomPDF();
