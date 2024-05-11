@@ -61,7 +61,7 @@
                                         <div class="tab-pane fade show active" id="default" role="tabpanel"
                                             aria-labelledby="custom-tabs-comercial-tab">
                                             <div class="list-group">
-                                                <a href="{{ route('admin.service-orders.create', ['model' => 'default']) }}"
+                                                <a href="{{ route('admin.service-orders.create-model', ['model' => 'default']) }}"
                                                     class="list-group-item list-group-item-action">Ordem de Serviço sem
                                                     modelo específico</a>
                                             </div>
