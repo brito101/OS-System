@@ -29,7 +29,6 @@ use App\Models\Views\Visit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Cache;
 
 class AdminController extends Controller
 {
@@ -613,36 +612,14 @@ class AdminController extends Controller
                 }
                 /** Service Orders */
                 $serviceOrders = ServiceOrder::all('status', 'priority', 'subsidiary');
-
-                $serviceOrderHoldingBudget = Cache::get('serviceOrderHoldingBudget_default_');
-                if ($serviceOrderHoldingBudget == null) {
-                    $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
-                    Cache::put('serviceOrderHoldingBudget_default_', $serviceOrderHoldingBudget, 60 * 60);
-                }
-
-                $serviceOrderBudgetSend = Cache::get('serviceOrderBudgetSend_default_');
-                if ($serviceOrderBudgetSend == null) {
-                    $serviceOrderBudgetSend = $serviceOrders->where('status', 'Orçamento enviado')->count();
-                    Cache::put('serviceOrderBudgetSend_default_', $serviceOrderHoldingBudget, 60 * 60);
-                }
-
-                $serviceOrderAwaitingReport = Cache::get('serviceOrderAwaitingReport_default_');
-                if ($serviceOrderAwaitingReport == null) {
-                    $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
-                    Cache::put('serviceOrderAwaitingReport_default_', $serviceOrderAwaitingReport, 60 * 60);
-                }
-
+                $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                $serviceOrderBudgetSend = $serviceOrders->where('status', 'Orçamento enviado')->count();
+                $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
                 $serviceOrderReportSend = $serviceOrders->where('status', 'Laudo enviado')->count();
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
                 $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
-                
-                $serviceOrdersConcluded = Cache::get('serviceOrdersConcluded_default_');
-                if ($serviceOrdersConcluded == null) {
-                    $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
-                    Cache::put('serviceOrdersConcluded_default_', $serviceOrdersConcluded, 60 * 60);
-                }
-
+                $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
                 $serviceOrdersConcludedProposal = $serviceOrders->where('status', 'Concluído com envio de proposta')->count();
                 $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
                 $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
