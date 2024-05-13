@@ -636,7 +636,13 @@ class AdminController extends Controller
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
                 $serviceOrdersStarted = $serviceOrders->where('status', 'Iniciado')->count();
-                $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                
+                $serviceOrdersConcluded = Cache::get('serviceOrdersConcluded_default_');
+                if ($serviceOrdersConcluded == null) {
+                    $serviceOrdersConcluded = $serviceOrders->where('status', 'Concluído')->count();
+                    Cache::put('serviceOrdersConcluded_default_', $serviceOrdersConcluded, 60 * 60);
+                }
+
                 $serviceOrdersConcludedProposal = $serviceOrders->where('status', 'Concluído com envio de proposta')->count();
                 $serviceOrdersCanceled = $serviceOrders->where('status', 'Cancelado')->count();
                 $serviceOrdersSubsidiary = $serviceOrders->groupBy('subsidiary')->toArray();
