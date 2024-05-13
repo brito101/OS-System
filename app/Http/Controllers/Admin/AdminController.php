@@ -592,12 +592,7 @@ class AdminController extends Controller
                     Cache::put('default_providers_', $providers, 60 * 60);
                 }
 
-                $clients = Cache::get('default_clients_');
-                if ($providers === null) {
-                    $clients = Client::all('alias_name', 'trade_status');
-                    Cache::put('default_clients_', $clients, 60 * 60);
-                }
-
+                $clients = Client::all('alias_name', 'trade_status');
                 /** Users */
                 $users = ViewsUser::all('type');
                 $programmers = $users->where('type', 'Programador')->count();
