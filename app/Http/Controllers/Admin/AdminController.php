@@ -29,6 +29,7 @@ use App\Models\Views\Visit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Cache;
 
 class AdminController extends Controller
 {
@@ -584,7 +585,13 @@ class AdminController extends Controller
             default:
                 /** Company */
                 $subsidiariesList = Subsidiary::all('alias_name');
-                $providers = Provider::count();
+
+                $providers = Cache::get('default_providers_');
+                if ($providers === null) {
+                    $providers = Provider::count();
+                    Cache::put('default_providers_', $providers, 60 * 60);
+                }
+
                 $clients = Client::all('alias_name', 'trade_status');
                 /** Users */
                 $users = ViewsUser::all('type');
