@@ -61,3 +61,5 @@
     <li>php artisan queue:work --stop-when-empty</li>
     <li>php artisan cache:clear</li>
 </ul>
+
+git pull origin main

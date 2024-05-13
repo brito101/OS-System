@@ -77,7 +77,7 @@
                         @php
                             $heads = [['label' => 'ID', 'width' => 5], 'Autor', 'Filial', 'Descrição', 'Valor', 'Vencimento', ['label' => 'Data', 'no-export' => true], 'Status', ['label' => 'Status', 'no-export' => true, 'width' => 5], ['label' => 'Ações', 'no-export' => true, 'width' => 20]];
                             $config = [
-                                'order' => [[0, 'desc']],
+                                'order' => [[5, 'asc']],
                                 'ajax' => url('/admin/finance-expenses'),
                                 'columns' => [['data' => 'id', 'name' => 'id'], ['data' => 'author', 'name' => 'author', 'visible' => false], ['data' => 'subsidiary', 'name' => 'subsidiary', 'visible' => false], ['data' => 'description', 'name' => 'description'], ['data' => 'value', 'name' => 'value'], ['data' => 'due_date_pt', 'name' => 'due_date'], ['data' => 'due_date_pt', 'name' => 'due_date_pt', 'visible' => false], ['data' => 'status', 'name' => 'status', 'visible' => false], ['data' => 'btnStatus', 'name' => 'status'], ['data' => 'action', 'name' => 'action', 'orderable' => false, 'searchable' => false]],
                                 'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
@@ -85,7 +85,7 @@
                                 'processing' => true,
                                 'serverSide' => true,
                                 'responsive' => true,
-                                'pageLength' => 50,
+                                'pageLength' => 200,
                                 'lengthMenu' => [[10, 50, 100, 500, 1000, -1], [10, 50, 100, 500, 1000, 'Tudo']],
                                 'dom' => '<"d-flex flex-wrap col-12 justify-content-between"Bf>rtip',
                                 'buttons' => [
@@ -209,6 +209,60 @@
                 e.preventDefault();
             }
         });
+
+        function pagarDespesas(tipo,id) {
+            //pago ou nao pago
+            tipoGet='';
+            tipoMsg='';
+            if(tipo=='pago'){
+                tipoGet='pay';
+                tipoMsg='[Paga]';
+            }
+            else if(tipo=='naopago')
+            {
+                tipoGet='receive';
+                tipoMsg='[Não Paga]';
+            }
+            $.ajax({
+                dataType: "json",
+                url: `/admin/finance-expenses/${tipoGet}/${id}`,
+               /*  data: {
+                    "anotacao": anotacao,
+                    "anotacao_id": id
+                }, */
+                type: "get",
+
+                success: function(response) {
+                    console.log(response);
+
+                    toastr.success(`Despesa marcada como ${tipoMsg}!`);
+                    if(tipo=='pago')
+                    {
+                        $(`#status_${id}`).attr('onclick',"pagarDespesas('naopago',"+id+")")
+                        $(`#status_${id}`).html('<i class="fa fa-lg fa-fw fa-thumbs-up"></i>')
+                        $(`#status_${id}`).removeClass('btn-danger')
+                        $(`#status_${id}`).addClass('btn-success')
+                    }
+                    if(tipo=='naopago')
+                    {
+                        $(`#status_${id}`).attr('onclick',"pagarDespesas('pago',"+id+")")
+                        $(`#status_${id}`).html('<i class="fa fa-lg fa-fw fa-thumbs-down"></i>')
+                        $(`#status_${id}`).removeClass('btn-success')
+                        $(`#status_${id}`).addClass('btn-danger')
+                    }
+                    //$('#modalAnotacoes').modal('hide');
+                },
+                error: function(response) {
+                    if (response.status == 404) {
+                        toastr.error("Erro ao modificar edespesa " + id);
+                    } else {
+                        console.log(response.responseText);
+                        toastr.error("Erro ao modificar edespesa " + id);
+                    }
+                }
+            });
+
+        }
     </script>
     <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('js/money.js') }}"></script>
