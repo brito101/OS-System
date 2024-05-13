@@ -21,44 +21,65 @@ class IncomeController extends Controller
 {
     public function index(Request $request)
     {
+
         if (!Auth::user()->hasPermissionTo('Listar Rendas')) {
             abort(403, 'Acesso não autorizado');
         }
 
         $role = Auth::user()->roles->first()->name;
+        $search = @$request->search['value'];
+        if ($search != '') {
+            $search = '';
+        } else {
+            $search = date('Y-m');
+        }
 
         switch ($role) {
             case 'Financeiro':
                 $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->get();
+                if ($search == '') {
+                    $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->get();
+                } else {
+                    $incomes = FinanceIncome::where('due_date', 'like', "$search%")->whereIn('subsidiary_id', $subsidiaries)->get();
+                }
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->get();
+                if ($search == '') {
+                    $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->get();
+                } else {
+                    $incomes = FinanceIncome::where('due_date', 'like', "$search%")->whereIn('subsidiary_id', $subsidiaries)->get();
+                }
                 break;
             default:
-                $incomes = FinanceIncome::all();
+                if ($search == '') {
+                    $incomes = FinanceIncome::get();
+                } else {
+                    $incomes = FinanceIncome::where('due_date', 'like', "$search%")->get();
+                }
+
+
+
+                //orderBy('id', 'desc')->limit(10)->get(); #all();
                 break;
         }
-
-        $payValue = Invoice::where('status', 'pago')->whereIn('id', $incomes->pluck('id'))->sum('value');
-        $pay = 'R$ ' . \number_format($payValue, 2, ',', '.');
-
-        $receiveValue = Invoice::where('status', 'pendente')->whereIn('id', $incomes->pluck('id'))->sum('value');
-        $receive = 'R$ ' . \number_format($receiveValue, 2, ',', '.');
-
-        $balance = 'R$ ' . \number_format($payValue - $receiveValue, 2, ',', '.');
 
         if ($request->ajax()) {
             return Datatables::of($incomes)
                 ->addIndexColumn()
                 ->addColumn('btnStatus', function ($row) {
                     $payLink = '';
-                    if ($row->status == 'pendente') {
+                    /* if ($row->status == 'pendente') {
                         $payLink = '<a class="btn btn-xs btn-danger mx-1 shadow" title="Alterar para pago" href="finance-incomes/pay/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-down"></i></a>';
                     }
                     if ($row->status == 'pago') {
                         $payLink = '<a class="btn btn-xs btn-success mx-1 shadow" title="Alterar para pendente" href="finance-incomes/receive/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-up"></i></a>';
+                    } */
+                    if ($row->status == 'pendente') {
+                        $payLink = "<a id='status_$row->id' class=\"btn btn-xs btn-danger mx-1 shadow\" title=\"Alterar para pago\" onClick=\"pagarReceitas('pago',$row->id)\"><i class=\"fa fa-lg fa-fw fa-thumbs-down\"></i></a>";
+                    }
+                    if ($row->status == 'pago') {
+                        $payLink = "<a id='status_$row->id' class=\"btn btn-xs btn-success mx-1 shadow\" title=\"Alterar para pendente\" onClick=\"pagarReceitas('naopago',$row->id)\"><i class=\"fa fa-lg fa-fw fa-thumbs-up\"></i></a>";
                     }
                     return $payLink;
                 })
@@ -73,6 +94,16 @@ class IncomeController extends Controller
                 ->rawColumns(['btnStatus', 'action'])
                 ->make(true);
         }
+
+        $payValue = Invoice::where('status', 'pago')->whereIn('id', $incomes->pluck('id'))->sum('value');
+        $pay = 'R$ ' . \number_format($payValue, 2, ',', '.');
+
+        $receiveValue = Invoice::where('status', 'pendente')->whereIn('id', $incomes->pluck('id'))->sum('value');
+        $receive = 'R$ ' . \number_format($receiveValue, 2, ',', '.');
+
+        $balance = 'R$ ' . \number_format($payValue - $receiveValue, 2, ',', '.');
+
+
 
         return view('admin.finance.income.index', compact('pay', 'receive', 'balance'));
     }
@@ -84,29 +115,55 @@ class IncomeController extends Controller
         }
 
         $role = Auth::user()->roles->first()->name;
+        $search = @$request->search['value'];
+        if ($search != '') {
+            $search = '';
+        } else {
+            $search = date('Y-m');
+        }
 
         switch ($role) {
             case 'Financeiro':
                 $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->get();
+                if ($search == '') {
+                    $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->get();
+                } else {
+                    $incomes = FinanceIncome::where('due_date', 'like', "$search%")->whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->get();
+                }
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->get();
+                if ($search == '') {
+                    $incomes = FinanceIncome::whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->get();
+                } else {
+                    $incomes = FinanceIncome::where('due_date', 'like', "$search%")->whereIn('subsidiary_id', $subsidiaries)->where('status', 'pendente')->get();
+                }
                 break;
             default:
-                $incomes = FinanceIncome::where('status', 'pendente')->get();
+                if ($search == '') {
+                    $incomes = FinanceIncome::where('status', 'pendente')->get();
+                } else {
+                    $incomes = FinanceIncome::where('due_date', 'like', "$search%")->where('status', 'pendente')->get();
+                }
                 break;
         }
 
-        $receiveValue = Invoice::where('status', 'pendente')->whereIn('id', $incomes->pluck('id'))->sum('value');
-        $pending = 'R$ ' . \number_format($receiveValue, 2, ',', '.');
+
 
         if ($request->ajax()) {
             return Datatables::of($incomes)
                 ->addIndexColumn()
                 ->addColumn('btnStatus', function ($row) {
-                    $payLink = '<a class="btn btn-xs btn-danger mx-1 shadow" title="Alterar para pago" href="finance-incomes/pay/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-down"></i></a>';
+                    #$payLink = '<a class="btn btn-xs btn-danger mx-1 shadow" title="Alterar para pago" href="finance-incomes/pay/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-down"></i></a>';
+
+                    if ($row->status == 'pendente') {
+                        $payLink = "<a id='status_$row->id' class=\"btn btn-xs btn-danger mx-1 shadow\" title=\"Alterar para pago\" onClick=\"pagarReceitas('pago',$row->id)\"><i class=\"fa fa-lg fa-fw fa-thumbs-down\"></i></a>";
+                    }
+                    if ($row->status == 'pago') {
+                        $payLink = "<a id='status_$row->id' class=\"btn btn-xs btn-success mx-1 shadow\" title=\"Alterar para pendente\" onClick=\"pagarReceitas('naopago',$row->id)\"><i class=\"fa fa-lg fa-fw fa-thumbs-up\"></i></a>";
+                    }
+
+
                     return $payLink;
                 })
                 ->addColumn('action', function ($row) {
@@ -120,6 +177,9 @@ class IncomeController extends Controller
                 ->rawColumns(['btnStatus', 'action'])
                 ->make(true);
         }
+
+        $receiveValue = Invoice::where('status', 'pendente')->whereIn('id', $incomes->pluck('id'))->sum('value');
+        $pending = 'R$ ' . \number_format($receiveValue, 2, ',', '.');
 
         return view('admin.finance.income.pending', compact('pending'));
     }
@@ -406,15 +466,26 @@ class IncomeController extends Controller
         }
 
         $invoice->status = 'pago';
-
         if ($invoice->update()) {
-            return redirect()
+            $mensagem[] = [
+                "mensagem" => 'Receita marcada como paga!',
+                "status" => '200'
+
+            ];
+            return response()->json($mensagem, 200);
+            /*  return redirect()
                 ->back()
-                ->with('success', 'Receita marcada como paga!');
+                ->with('success', 'Receita marcada como paga!'); */
         } else {
-            return redirect()
+            $mensagem[] = [
+                "mensagem" => 'Erro ao atualizar!!',
+                "status" => '404'
+
+            ];
+            return response()->json($mensagem, 200);
+            /*  return redirect()
                 ->back()
-                ->with('error', 'Erro ao atualizar!');
+                ->with('error', 'Erro ao atualizar!'); */
         }
     }
 
@@ -452,13 +523,25 @@ class IncomeController extends Controller
         $invoice->status = 'pendente';
 
         if ($invoice->update()) {
-            return redirect()
+            $mensagem[] = [
+                "mensagem" => 'Receita marcada como pendente!',
+                "status" => '200'
+
+            ];
+            return response()->json($mensagem, 200);
+            /*  return redirect()
                 ->back()
-                ->with('success', 'Receita marcada como pendente!');
+                ->with('success', 'Despesa marcada como pendente!'); */
         } else {
-            return redirect()
+            $mensagem[] = [
+                "mensagem" => 'Erro ao atualizar!!',
+                "status" => '404'
+
+            ];
+            return response()->json($mensagem, 200);
+            /*  return redirect()
                 ->back()
-                ->with('error', 'Erro ao atualizar!');
+                ->with('error', 'Erro ao atualizar!'); */
         }
     }
 

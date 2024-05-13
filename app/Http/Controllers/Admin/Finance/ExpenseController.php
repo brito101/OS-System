@@ -27,18 +27,36 @@ class ExpenseController extends Controller
         }
 
         $role = Auth::user()->roles->first()->name;
+        $search = @$request->search['value'];
+        if ($search != '') {
+            $search = '';
+        } else {
+            $search = date('Y-m');
+        }
 
         switch ($role) {
             case 'Financeiro':
                 $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                if ($search == '') {
+                    $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                } else {
+                    $incomes = FinanceExpense::where('due_date', 'like', "$search%")->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                }
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                if ($search == '') {
+                    $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                } else {
+                    $incomes = FinanceExpense::where('due_date', 'like', "$search%")->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->get();
+                }
                 break;
             default:
-                $incomes = FinanceExpense::all();
+                if ($search == '') {
+                    $incomes = FinanceExpense::all(); #orderBy('id', 'desc')->limit(10)->get(); #all
+                } else {
+                    $incomes = FinanceExpense::where('due_date', 'like', "$search%")->get();
+                } #orderBy('id', 'desc')->limit(10)->get(); #all}
                 break;
         }
 
@@ -56,10 +74,10 @@ class ExpenseController extends Controller
                 ->addColumn('btnStatus', function ($row) {
                     $payLink = '';
                     if ($row->status == 'pendente') {
-                        $payLink = '<a class="btn btn-xs btn-danger mx-1 shadow" title="Alterar para pago" href="finance-expenses/pay/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-down"></i></a>';
+                        $payLink = "<a id='status_$row->id' class=\"btn btn-xs btn-danger mx-1 shadow\" title=\"Alterar para pago\" onClick=\"pagarDespesas('pago',$row->id)\"><i class=\"fa fa-lg fa-fw fa-thumbs-down\"></i></a>";
                     }
                     if ($row->status == 'pago') {
-                        $payLink = '<a class="btn btn-xs btn-success mx-1 shadow" title="Alterar para pendente" href="finance-expenses/receive/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-up"></i></a>';
+                        $payLink = "<a id='status_$row->id' class=\"btn btn-xs btn-success mx-1 shadow\" title=\"Alterar para pendente\" onClick=\"pagarDespesas('naopago',$row->id)\"><i class=\"fa fa-lg fa-fw fa-thumbs-up\"></i></a>";
                     }
                     return $payLink;
                 })
@@ -85,18 +103,36 @@ class ExpenseController extends Controller
         }
 
         $role = Auth::user()->roles->first()->name;
+        $search = @$request->search['value'];
+        if ($search != '') {
+            $search = '';
+        } else {
+            $search = date('Y-m');
+        }
 
         switch ($role) {
             case 'Financeiro':
                 $subsidiaries = Financier::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->where('status', 'pendente')->get();
+                if ($search == '') {
+                    $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->where('status', 'pendente')->get();
+                } else {
+                    $incomes = FinanceExpense::where('due_date', 'like', "$search%")->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->where('status', 'pendente')->get();
+                }
                 break;
             case 'Gerente':
                 $subsidiaries = Manager::where('user_id', Auth::user()->id)->pluck('subsidiary_id');
-                $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->where('status', 'pendente')->get();
+                if ($search == '') {
+                    $incomes = FinanceExpense::whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->where('status', 'pendente')->get();
+                } else {
+                    $incomes = FinanceExpense::where('due_date', 'like', "$search%")->whereIn('subsidiary_id', $subsidiaries)->orWhere('subsidiary_id', null)->where('status', 'pendente')->get();
+                }
                 break;
             default:
-                $incomes = FinanceExpense::where('status', 'pendente')->get();
+                if ($search == '') {
+                    $incomes = FinanceExpense::where('status', 'pendente')->get();
+                } else {
+                    $incomes = FinanceExpense::where('due_date', 'like', "$search%")->where('status', 'pendente')->get();
+                }
                 break;
         }
 
@@ -107,7 +143,15 @@ class ExpenseController extends Controller
             return Datatables::of($incomes)
                 ->addIndexColumn()
                 ->addColumn('btnStatus', function ($row) {
-                    $payLink = '<a class="btn btn-xs btn-danger mx-1 shadow" title="Alterar para pago" href="finance-expenses/pay/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-down"></i></a>';
+                    /*  $payLink = '<a class="btn btn-xs btn-danger mx-1 shadow" title="Alterar para pago" href="finance-expenses/pay/' . $row->id . '"><i class="fa fa-lg fa-fw fa-thumbs-down"></i></a>';
+                    return $payLink; */
+                    $payLink = '';
+                    if ($row->status == 'pendente') {
+                        $payLink = "<a id='status_$row->id' class=\"btn btn-xs btn-danger mx-1 shadow\" title=\"Alterar para pago\" onClick=\"pagarDespesas('pago',$row->id)\"><i class=\"fa fa-lg fa-fw fa-thumbs-down\"></i></a>";
+                    }
+                    if ($row->status == 'pago') {
+                        $payLink = "<a id='status_$row->id' class=\"btn btn-xs btn-success mx-1 shadow\" title=\"Alterar para pendente\" onClick=\"pagarDespesas('naopago',$row->id)\"><i class=\"fa fa-lg fa-fw fa-thumbs-up\"></i></a>";
+                    }
                     return $payLink;
                 })
                 ->addColumn('action', function ($row) {
@@ -469,13 +513,25 @@ class ExpenseController extends Controller
         $invoice->status = 'pago';
 
         if ($invoice->update()) {
-            return redirect()
+            $mensagem[] = [
+                "mensagem" => 'Despesa marcada como paga!',
+                "status" => '200'
+
+            ];
+            return response()->json($mensagem, 200);
+            /*  return redirect()
                 ->back()
-                ->with('success', 'Despesa marcada como paga!');
+                ->with('success', 'Despesa marcada como paga!'); */
         } else {
-            return redirect()
+            $mensagem[] = [
+                "mensagem" => 'Erro ao atualizar!!',
+                "status" => '404'
+
+            ];
+            return response()->json($mensagem, 200);
+            /*  return redirect()
                 ->back()
-                ->with('error', 'Erro ao atualizar!');
+                ->with('error', 'Erro ao atualizar!'); */
         }
     }
 
@@ -514,13 +570,25 @@ class ExpenseController extends Controller
         $invoice->status = 'pendente';
 
         if ($invoice->update()) {
-            return redirect()
+            $mensagem[] = [
+                "mensagem" => 'Despesa marcada como paga!',
+                "status" => '200'
+
+            ];
+            return response()->json($mensagem, 200);
+            /*  return redirect()
                 ->back()
-                ->with('success', 'Despesa marcada como pendente!');
+                ->with('success', 'Despesa marcada como paga!'); */
         } else {
-            return redirect()
+            $mensagem[] = [
+                "mensagem" => 'Erro ao atualizar!!',
+                "status" => '404'
+
+            ];
+            return response()->json($mensagem, 200);
+            /*  return redirect()
                 ->back()
-                ->with('error', 'Erro ao atualizar!');
+                ->with('error', 'Erro ao atualizar!'); */
         }
     }
 
