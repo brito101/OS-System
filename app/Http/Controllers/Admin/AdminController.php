@@ -585,13 +585,7 @@ class AdminController extends Controller
             default:
                 /** Company */
                 $subsidiariesList = Subsidiary::all('alias_name');
-
-                $providers = Cache::get('default_providers_');
-                if ($providers === null) {
-                    $providers = Provider::count();
-                    Cache::put('default_providers_', $providers, 60 * 60);
-                }
-
+                $providers = Provider::count();
                 $clients = Client::all('alias_name', 'trade_status');
                 /** Users */
                 $users = ViewsUser::all('type');
@@ -619,9 +613,25 @@ class AdminController extends Controller
                 }
                 /** Service Orders */
                 $serviceOrders = ServiceOrder::all('status', 'priority', 'subsidiary');
-                $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
-                $serviceOrderBudgetSend = $serviceOrders->where('status', 'Orçamento enviado')->count();
-                $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
+
+                $serviceOrderHoldingBudget = Cache::get('serviceOrderHoldingBudget_default_');
+                if ($serviceOrderHoldingBudget == null) {
+                    $serviceOrderHoldingBudget = $serviceOrders->where('status', 'Aguardando orçamento')->count();
+                    Cache::put('serviceOrderHoldingBudget_default_', $serviceOrderHoldingBudget, 60 * 60);
+                }
+
+                $serviceOrderBudgetSend = Cache::get('serviceOrderBudgetSend_default_');
+                if ($serviceOrderBudgetSend == null) {
+                    $serviceOrderBudgetSend = $serviceOrders->where('status', 'Orçamento enviado')->count();
+                    Cache::put('serviceOrderBudgetSend_default_', $serviceOrderHoldingBudget, 60 * 60);
+                }
+
+                $serviceOrderAwaitingReport = Cache::get('serviceOrderAwaitingReport_default_');
+                if ($serviceOrderAwaitingReport == null) {
+                    $serviceOrderAwaitingReport = $serviceOrders->where('status', 'Aguardando laudo')->count();
+                    Cache::put('serviceOrderAwaitingReport_default_', $serviceOrderAwaitingReport, 60 * 60);
+                }
+
                 $serviceOrderReportSend = $serviceOrders->where('status', 'Laudo enviado')->count();
                 $serviceOrdersNotStarted = $serviceOrders->where('status', 'Não iniciado')->count();
                 $serviceOrdersLate = $serviceOrders->where('status', 'Atrasado')->count();
