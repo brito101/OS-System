@@ -17,6 +17,7 @@ class Client extends Model
         'email', 'telephone', 'cell', 'zipcode', 'street', 'number', 'complement',
         'neighborhood', 'state', 'city', 'company', 'observations', 'service', 'trade_status', 'type', 'origin', 'apartments', 'contact', 'subsidiary_id', 'seller_id', 'contact_function', 'value_per_apartment', 'total_value', 'meeting', 'status_sale', 'reason_refusal',
         'blocks', 'type_piping', 'pipe_diameter', 'pipe_space', 'age',
+        'floor_number', 'unit_floor', 'meter_unit', 'meter_common_area', 'reading_company', 'reading_method', 'year_installation', 'meter_location'
     ];
 
     /** Relationships */

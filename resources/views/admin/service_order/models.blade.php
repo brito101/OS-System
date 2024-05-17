@@ -73,6 +73,11 @@
                                                     class="list-group-item list-group-item-action">Ficha
                                                     técnica orçamentária de bloqueador de ar</a>
                                             </div>
+                                            <div class="list-group mt-3">
+                                                <a href="{{ route('admin.service-orders.create', ['model' => 'management-measurement']) }}"
+                                                    class="list-group-item list-group-item-action">Ficha técnica
+                                                    orçamentária de gestão e medição</a>
+                                            </div>
                                         </div>
                                         <div class="tab-pane fade" id="engineering" role="tabpanel"
                                             aria-labelledby="custom-tabs-engineering-tab">

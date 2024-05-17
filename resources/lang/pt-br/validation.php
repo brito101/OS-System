@@ -319,6 +319,16 @@ return [
         'type_piping' => 'tipo de tubulação', 
         'pipe_diameter' => 'diâmetro da tubulação', 
         'pipe_space' => 'espaço de tubulação',
+        'model' => 'modelo',
+        'floor_number' => 'nº de pavimentos', 
+        'unit_floor' => 'qntd. unidade por andar', 
+        'meter_unit' => 'nº de medidor/Unidade:', 
+        'meter_common_area' => 'nº de medidor na área comum', 
+        'reading_company' => 'empresa de leitura atual', 
+        'reading_method' => 'método de leitura', 
+        'year_installation' => 'ano de instalação', 
+        'meter_location' => 'localização do medidor',
+        'management_measurement' => 'tipo',
     ],
 
 ];

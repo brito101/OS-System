@@ -44,6 +44,7 @@ class ServiceOrder extends Model
         'costumer_document',
         'subsidiary_id',
         'type',
+        'management_measurement'
     ];
 
 

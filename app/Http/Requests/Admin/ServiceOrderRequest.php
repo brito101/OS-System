@@ -101,7 +101,8 @@ class ServiceOrderRequest extends FormRequest
             'costumer_name' => 'nullable|max:191',
             'costumer_document' => 'nullable|max:191',
             'subsidiary_id' => 'required|exists:subsidiaries,id',
-            'type' => 'nullable|in:comercial - bloqueador de ar',
+            'type' => 'nullable|in:comercial - bloqueador de ar,comercial - gestão e medição',
+            'management_measurement' => 'nullable|in:Bloqueador de Ar,Gestão e Medição - Água,Gestão e Medição - Gás,Gestão e Medição - Água e Gás',
         ];
     }
 

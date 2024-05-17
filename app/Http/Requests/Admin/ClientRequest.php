@@ -69,6 +69,14 @@ class ClientRequest extends FormRequest
             'pipe_diameter' => 'nullable|max:191',
             'pipe_space' => 'nullable|boolean',
             'age' => 'nullable|integer|min:0|max:9999',
+            'floor_number' => 'nullable|max:191',
+            'unit_floor' => 'nullable|max:191',
+            'meter_unit' => 'nullable|max:191',
+            'meter_common_area' => 'nullable|max:191',
+            'reading_company' => 'nullable|max:191',
+            'reading_method' => 'nullable|max:191',
+            'year_installation' => 'nullable|year',
+            'meter_location' => 'nullable|max:191',
         ];
     }
 
